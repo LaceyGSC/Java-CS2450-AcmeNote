@@ -39,6 +39,13 @@ public class Section implements Serializable
 		return notes;
 	}
 	
+	/*
+	 I am not sure what this method is supposed to do.
+	 The class diagram does not specify any arguments.
+	 The class diagram specifies that it return a boolean,
+	 so I made it return true. However, this method should
+	 be fixed to do something or else it should be removed.
+	 */
 	public boolean setNotes()
 	{
 		return true;
@@ -46,7 +53,7 @@ public class Section implements Serializable
 
 	public boolean addNote( Note note )
 	{
-		notes.add( note );
+		getNotes().add( note );
 		return true;
 	}
 	
@@ -58,7 +65,7 @@ public class Section implements Serializable
 	
 	public boolean setNote( int index, Note note )
 	{
-		getNotes().add( index, note );
+		getNotes().set( index, note );
 		return true;
 	}
 	

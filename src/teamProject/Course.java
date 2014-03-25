@@ -70,7 +70,7 @@ public class Course implements Serializable
 	
 	public Section getSection( int index )
 	{
-		return getSection( index );
+		return sections.get( index );
 	}
 	
 	public String toString()

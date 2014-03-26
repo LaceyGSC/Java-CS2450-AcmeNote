@@ -77,10 +77,10 @@ public class Section implements Serializable
 	public String toString()
 	{
 		StringBuilder sb = new StringBuilder();
-		sb.append( "Section named: " + getSectionName() + ", with the following notes");
+		sb.append( "Section: " + getSectionName() );
 		for (Note item : getNotes() )
 		{
-			sb.append( "\n\t" + item.toString() );
+			sb.append( "\n\t\t\t" + item.toString() );
 		}
 		return  sb.toString();
 	}

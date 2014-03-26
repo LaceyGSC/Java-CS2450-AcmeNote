@@ -76,10 +76,10 @@ public class Course implements Serializable
 	public String toString()
 	{
 		StringBuilder sb = new StringBuilder();
-		sb.append( "Course named: " + getCourseName() + ", with the following Sections" );
+		sb.append( "Course: " + getCourseName() );
 		for( Section item : getSections() )
 		{
-			sb.append( "\n\t" + item.toString() );
+			sb.append( "\n\t\t" + item.toString() );
 		}
 		return sb.toString();
 	}

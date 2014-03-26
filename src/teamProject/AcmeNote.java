@@ -88,7 +88,7 @@ public class AcmeNote
 	public String toString()
 	{
 		StringBuilder sb = new StringBuilder();
-		sb.append( "AcmeNote consists of the following sections:" );
+		sb.append( "AcmeNote consists of the following:" );
 		for( Course item : getCourses() )
 		{
 			sb.append( "\n\t" + item.toString() );

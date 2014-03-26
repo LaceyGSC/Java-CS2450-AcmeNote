@@ -32,9 +32,9 @@ public class AcmeNoteConsoleApp
 			selection = input.nextInt();
 			switch ( selection )
 			{
-				case 1:  currentCourse = selectCourse(); break;
-				case 2:  currentSection = selectSection(); break;
-				case 3:  currentNote = selectNote(); break;
+				case 1:  selectCourse(); break;
+				case 2:  selectSection(); break;
+				case 3:  selectNote(); break;
 				case 4:  renameCourse(); break;
 				case 5:  renameSection(); break;
 				case 6:  renameNote(); break;
@@ -53,12 +53,11 @@ public class AcmeNoteConsoleApp
 		myAcmeNote.serialize();
 	}
 
-	private static Course selectCourse()
+	private static void selectCourse()
 	{
 		if ( myAcmeNote.getCourses().isEmpty() )
 		{
 			System.out.println( "\nAcmeNote does not currently contain any Courses!\nTry: Add Course." );
-			return null;
 		} else
 		{
 			for ( int index = 0; index < myAcmeNote.getCourses().size(); index++ )
@@ -68,19 +67,20 @@ public class AcmeNoteConsoleApp
 			
 			System.out.print( "Enter the number of the Course you want to select: " );
 			Scanner input = new Scanner( System.in );
-			return myAcmeNote.getCourses().get( input.nextInt() );
+			currentNote = null;
+			currentSection = null;
+			currentCourse = myAcmeNote.getCourses().get( input.nextInt() );
 		}
 		
 	}
 
-	private static Section selectSection()
+	private static void selectSection()
 	{
 		if ( currentCourse != null )
 		{
 			if ( currentCourse.getSections().isEmpty() )
 			{
 				System.out.println( "\n" + currentCourse.getCourseName() + " does not currently have any Sections!\n Try: Add Section" );
-				return null;
 			}else
 			{
 				for ( int index = 0; index < currentCourse.getSections().size(); index++ )
@@ -90,23 +90,22 @@ public class AcmeNoteConsoleApp
 				
 				System.out.print( "Enter the number of the Section you want to select: " );
 				Scanner input = new Scanner( System.in );
-				return currentCourse.getSections().get( input.nextInt() );
+				currentNote = null;
+				currentSection = currentCourse.getSections().get( input.nextInt() );
 			}
 		} else
 		{
 			System.out.println( "\nYou must select a Course first." );
-			return null;
 		}
 	}
 
-	private static Note selectNote()
+	private static void selectNote()
 	{
 		if ( currentSection != null )
 		{
 			if ( currentSection.getNotes().isEmpty() )
 			{
 				System.out.println( "\n" + currentSection.getSectionName() + " does not currently have any Notes!\n Try: Add Note" );
-				return null;
 			}else
 			{	
 				for ( int index = 0; index < currentSection.getNotes().size(); index++ )
@@ -116,12 +115,11 @@ public class AcmeNoteConsoleApp
 				
 				System.out.print( "Enter the number of the Note you want to select: " );
 				Scanner input = new Scanner( System.in );
-				return currentSection.getNotes().get( input.nextInt() );
+				currentNote = currentSection.getNotes().get( input.nextInt() );
 			}
 		} else
 		{
 			System.out.println( "\nYou must select a Section first." );
-			return null;
 		}
 	}
 
@@ -241,7 +239,7 @@ public class AcmeNoteConsoleApp
 	{
 		if ( currentCourse == null )
 		{
-			currentCourse = selectCourse();
+			selectCourse();
 		}
 		if ( currentCourse != null )
 		{
@@ -255,7 +253,7 @@ public class AcmeNoteConsoleApp
 	{
 		if ( currentSection == null )
 		{
-			currentSection = selectSection();
+			selectSection();
 		}
 		if ( currentSection != null )
 		{

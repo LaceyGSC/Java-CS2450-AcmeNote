@@ -49,9 +49,6 @@ public class AcmeNoteConsoleApp
 				case 15: editNote(); break;
 			}
 		}while ( selection != 13 );
-		//myAcmeNote.addCourse( new Course( "CSIS 2450" ) );
-		
-		//System.out.println( myAcmeNote.toString() );
 
 		myAcmeNote.serialize();
 	}

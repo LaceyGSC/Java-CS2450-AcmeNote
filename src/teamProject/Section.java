@@ -40,14 +40,14 @@ public class Section implements Serializable
 	}
 	
 	/*
-	 I am not sure what this method is supposed to do.
-	 The class diagram does not specify any arguments.
-	 The class diagram specifies that it return a boolean,
-	 so I made it return true. However, this method should
-	 be fixed to do something or else it should be removed.
+	 I am not sure that I implemented this method as intended.
+	 The class diagram does not specify an argument.
+	 But I put one in that I thought made sense.
+	 However, this may not have been what was intended.
 	 */
-	public boolean setNotes()
+	public boolean setNotes( ArrayList<Note> notes )
 	{
+		this.notes = notes;
 		return true;
 	}
 

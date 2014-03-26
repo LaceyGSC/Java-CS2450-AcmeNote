@@ -26,6 +26,13 @@ public class AcmeNote
 		}
 	}
 	
+	/*
+	 I am not sure that I implemented this method as intended.
+	 The class diagram does not specify an argument.
+	 But I put one in that I thought made sense.
+	 However, this may not have been what was intended.
+	 I did use this method as implemented in the deserialize() method
+	 */
 	public boolean setCourses( ArrayList<Course> courses )
 	{
 		this.courses = courses;

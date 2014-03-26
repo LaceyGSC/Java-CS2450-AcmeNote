@@ -2,10 +2,8 @@ package teamProject;
 
 import java.util.Scanner;
 
-
 public class AcmeNoteConsoleApp
 {
-
 	private static Course	currentCourse;
 	private static Section	currentSection;
 	private static Note 	currentNote;
@@ -71,7 +69,6 @@ public class AcmeNoteConsoleApp
 			currentSection = null;
 			currentCourse = myAcmeNote.getCourses().get( input.nextInt() );
 		}
-		
 	}
 
 	private static void selectSection()
@@ -185,8 +182,7 @@ public class AcmeNoteConsoleApp
 		}else
 		{
 			System.out.println( "\nPlease select a Course first." );
-		}
-		
+		}	
 	}
 
 	private static void deleteSection()
@@ -230,9 +226,7 @@ public class AcmeNoteConsoleApp
 	{
 		System.out.print( "\nEnter name of Course to add: " );
 		Scanner input = new Scanner( System.in );
-		myAcmeNote.addCourse( new Course( input.nextLine() ) );
-		
-		
+		myAcmeNote.addCourse( new Course( input.nextLine() ) );	
 	}
 
 	private static void addSection()
@@ -264,7 +258,6 @@ public class AcmeNoteConsoleApp
 			String noteText = input.nextLine();
 			currentSection.addNote( new Note( noteName, noteText ) );
 		}
-		
 	}
 
 	private static void editNote()
@@ -298,5 +291,4 @@ public class AcmeNoteConsoleApp
 		System.out.println( "13. Exit             14. Display AcmeNote  15. Edit...Note" );
 		System.out.print( "Make your selection: " );
 	}
-
 }

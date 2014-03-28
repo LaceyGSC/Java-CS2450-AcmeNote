@@ -136,7 +136,6 @@ public class AcmeNoteConsoleApp
 	//		{
 	//			System.out.println( index + ". " + myAcmeNote.getCourse( index ).getCourseName() );
 	//		}
-			
 	}
 
 	private static void renameSection()

@@ -28,10 +28,12 @@ import java.io.NotSerializableException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import javax.swing.Box;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JSeparator;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -41,6 +43,8 @@ import javax.swing.event.ListSelectionListener;
  */
 public class AcmeNote extends JFrame implements ActionListener, ListSelectionListener, WindowListener
 {
+	// components
+
 	// fields
 
 	/**
@@ -55,8 +59,8 @@ public class AcmeNote extends JFrame implements ActionListener, ListSelectionLis
 	 */
 	public AcmeNote()
 	{
-		arrayListDeserialize();
-		arrayListCopy();
+		deserialize();
+		coursesCopy();
 		graphicalUserInterfaceCreate();
 		actionListenersAdd();
 		listSelectionListenersAdd();
@@ -152,10 +156,10 @@ public class AcmeNote extends JFrame implements ActionListener, ListSelectionLis
 	// serialization methods
 
 	/**
-	 * Writes <tt>ArrayList</tt> of courses, sections, and notes to disk.
+	 * Reads <tt>ArrayList</tt> of courses, sections, and notes from disk.
 	 */
 	@SuppressWarnings("unchecked")
-	public void arrayListDeserialize()
+	public void deserialize()
 	{
 		try
 		{
@@ -195,9 +199,9 @@ public class AcmeNote extends JFrame implements ActionListener, ListSelectionLis
 	}
 
 	/**
-	 * Reads <tt>ArrayList</tt> of courses, sections, and notes from disk.
+	 * Writes <tt>ArrayList</tt> of courses, sections, and notes to disk.
 	 */
-	public void arrayListSerialize()
+	public void serialize()
 	{
 		try
 		{
@@ -222,18 +226,6 @@ public class AcmeNote extends JFrame implements ActionListener, ListSelectionLis
 
 	// graphical user interface methods
 
-	private void arrayListCopy()
-	{
-	}
-
-	private void arrayListSearch()
-	{
-	}
-
-	private void arrayListSort()
-	{
-	}
-
 	private void graphicalUserInterfaceCreate()
 	{
 	}
@@ -243,15 +235,12 @@ public class AcmeNote extends JFrame implements ActionListener, ListSelectionLis
 		return new JMenuBar();
 	}
 
-	private JPanel cardsCreate()
+	private JPanel cardsAcmeNoteCreate()
 	{
 		return new JPanel();
 	}
 
-	// add methods for each panel
-
-/*
-	private JPanel panelNull()
+	private JPanel cardsNoteViewCreate()
 	{
 		return new JPanel();
 	}
@@ -300,32 +289,38 @@ public class AcmeNote extends JFrame implements ActionListener, ListSelectionLis
 	{
 		return new JPanel();
 	}
-*/
 
-	private void listNotesSetListData()
+	private JPanel panelNoteView()
 	{
+		return new JPanel();
 	}
 
-	private void fieldsClear()
+	private JPanel panelNotesSearch()
 	{
+		return new JPanel();
 	}
 
-	private void fieldsCopy()
+	private Box boxSeparator()
 	{
+		JSeparator separatorContacts = new JSeparator(JSeparator.VERTICAL);
+
+		Box boxSeparator = Box.createHorizontalBox();
+		boxSeparator.add(Box.createHorizontalStrut(10));
+		boxSeparator.add(separatorContacts);
+		boxSeparator.add(Box.createHorizontalStrut(10));
+
+		return boxSeparator;
 	}
 
-	private void fieldsValidate()
+	private JPanel panelNotesView()
 	{
+		return new JPanel();
 	}
 
-	// export javadoc method?
-
-/*
-	private URI javadocCreate() throws IOException, URISyntaxException
+	private JPanel panelNotesViewNull()
 	{
-		return new URI();
+		return new JPanel();
 	}
-*/
 
 	// register event listeners
 
@@ -370,7 +365,7 @@ public class AcmeNote extends JFrame implements ActionListener, ListSelectionLis
 	@Override
 	public void windowClosing(WindowEvent e)
 	{
-		arrayListSerialize();
+		serialize();
 	}
 
 	@Override
@@ -390,6 +385,36 @@ public class AcmeNote extends JFrame implements ActionListener, ListSelectionLis
 
 	@Override
 	public void windowOpened(WindowEvent e)
+	{
+	}
+
+	// utility methods
+
+	private void coursesCopy()
+	{
+	}
+
+	private void coursesSort()
+	{
+	}
+
+	private void notesSearch()
+	{
+	}
+
+	private void fieldsClear()
+	{
+	}
+
+	private void fieldsCopy()
+	{
+	}
+
+	private void fieldsValidate()
+	{
+	}
+
+	private void setListData()
 	{
 	}
 }

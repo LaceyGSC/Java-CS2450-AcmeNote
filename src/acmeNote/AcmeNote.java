@@ -10,11 +10,16 @@
  *
  *  Changes :  2014.03.27 by Shaun Christensen. Updated serialization methods to display a pop-up message upon error rather than print
  *  to the console. Added javadoc comments, cleaned up formatting of source code, and added header comment.
+ *             2014.03.30 by Shaun Christensen. Added method stubs for graphical user interface.
  *
  ********************************************************/
 
 package acmeNote;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -23,13 +28,18 @@ import java.io.NotSerializableException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import javax.swing.JFrame;
+import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 /**
  * <tt>AcmeNote</tt> class contains an <tt>ArrayList</tt> of <tt>Course</tt> objects.
  * @author Matthew Harker
  */
-public class AcmeNote
+public class AcmeNote extends JFrame implements ActionListener, ListSelectionListener, WindowListener
 {
 	// fields
 
@@ -45,10 +55,15 @@ public class AcmeNote
 	 */
 	public AcmeNote()
 	{
-		deserialize();
+		arrayListDeserialize();
+		arrayListCopy();
+		graphicalUserInterfaceCreate();
+		actionListenersAdd();
+		listSelectionListenersAdd();
+		windowListenersAdd();
 	}
 
-	// accessors
+	// accessor methods
 
 	/**
 	 * Return courses.
@@ -69,7 +84,7 @@ public class AcmeNote
 		return getCourses().get(index);
 	}
 
-	// mutators
+	// mutator methods
 
 	/**
 	 * Set <tt>ArrayList</tt> of <tt>Course</tt> objects.
@@ -134,13 +149,13 @@ public class AcmeNote
 		return true;
 	}
 
-	// serialization
+	// serialization methods
 
 	/**
 	 * Writes <tt>ArrayList</tt> of courses, sections, and notes to disk.
 	 */
 	@SuppressWarnings("unchecked")
-	public void deserialize()
+	public void arrayListDeserialize()
 	{
 		try
 		{
@@ -182,7 +197,7 @@ public class AcmeNote
 	/**
 	 * Reads <tt>ArrayList</tt> of courses, sections, and notes from disk.
 	 */
-	public void serialize()
+	public void arrayListSerialize()
 	{
 		try
 		{
@@ -203,5 +218,178 @@ public class AcmeNote
 		{
 			JOptionPane.showMessageDialog(null, e.getMessage(), "Input/Output Exception", JOptionPane.ERROR_MESSAGE);
 		}
+	}
+
+	// graphical user interface methods
+
+	private void arrayListCopy()
+	{
+	}
+
+	private void arrayListSearch()
+	{
+	}
+
+	private void arrayListSort()
+	{
+	}
+
+	private void graphicalUserInterfaceCreate()
+	{
+	}
+
+	private JMenuBar menuCreate()
+	{
+		return new JMenuBar();
+	}
+
+	private JPanel cardsCreate()
+	{
+		return new JPanel();
+	}
+
+	// add methods for each panel
+
+/*
+	private JPanel panelNull()
+	{
+		return new JPanel();
+	}
+
+	private JPanel panelCourseAdd()
+	{
+		return new JPanel();
+	}
+
+	private JPanel panelCourseDelete()
+	{
+		return new JPanel();
+	}
+
+	private JPanel panelCourseEdit()
+	{
+		return new JPanel();
+	}
+
+	private JPanel panelSectionAdd()
+	{
+		return new JPanel();
+	}
+
+	private JPanel panelSectionDelete()
+	{
+		return new JPanel();
+	}
+
+	private JPanel panelSectionEdit()
+	{
+		return new JPanel();
+	}
+
+	private JPanel panelNoteAdd()
+	{
+		return new JPanel();
+	}
+
+	private JPanel panelNoteDelete()
+	{
+		return new JPanel();
+	}
+
+	private JPanel panelNoteEdit()
+	{
+		return new JPanel();
+	}
+*/
+
+	private void listNotesSetListData()
+	{
+	}
+
+	private void fieldsClear()
+	{
+	}
+
+	private void fieldsCopy()
+	{
+	}
+
+	private void fieldsValidate()
+	{
+	}
+
+	// export javadoc method?
+
+/*
+	private URI javadocCreate() throws IOException, URISyntaxException
+	{
+		return new URI();
+	}
+*/
+
+	// register event listeners
+
+	private void actionListenersAdd()
+	{
+	}
+
+	private void listSelectionListenersAdd()
+	{
+	}
+
+	private void windowListenersAdd()
+	{
+	}
+
+	// action event listeners
+
+	@Override
+	public void actionPerformed(ActionEvent e)
+	{
+	}
+
+	// list selection listeners
+
+	@Override
+	public void valueChanged(ListSelectionEvent e)
+	{
+	}
+
+	// window event listeners
+
+	@Override
+	public void windowActivated(WindowEvent e)
+	{
+	}
+
+	@Override
+	public void windowClosed(WindowEvent e)
+	{
+	}
+
+	@Override
+	public void windowClosing(WindowEvent e)
+	{
+		arrayListSerialize();
+	}
+
+	@Override
+	public void windowDeactivated(WindowEvent e)
+	{
+	}
+
+	@Override
+	public void windowDeiconified(WindowEvent e)
+	{
+	}
+
+	@Override
+	public void windowIconified(WindowEvent e)
+	{
+	}
+
+	@Override
+	public void windowOpened(WindowEvent e)
+	{
 	}
 }

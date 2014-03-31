@@ -2,6 +2,11 @@ package teamProject;
 
 import java.util.Scanner;
 
+import acmeNote.AcmeNote;
+import acmeNote.Course;
+import acmeNote.Note;
+import acmeNote.Section;
+
 public class AcmeNoteConsoleApp
 {
 	private static Course	currentCourse;

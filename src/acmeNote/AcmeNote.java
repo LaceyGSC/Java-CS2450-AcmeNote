@@ -9,15 +9,22 @@
  *  associated methods.
  *
  *  Changes :  2014.03.27 by Shaun Christensen. Updated serialization methods to display a pop-up message upon error rather than print
- *  to the console. Added javadoc comments, cleaned up formatting of source code, and added header comment.
+ *             to the console. Added javadoc comments, cleaned up formatting of source code, and added header comment.
  *             2014.03.30 by Shaun Christensen. Added method stubs for graphical user interface.
+ *             2014.03.31 by Shaun Christensen. Implemented graphical user interface methods to create and launch application. Added
+ *             temporary image to default null panel, then added search panel and default null panel to frame.
  *
  ********************************************************/
 
 package acmeNote;
 
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
@@ -28,12 +35,25 @@ import java.io.NotSerializableException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+
+import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -45,7 +65,36 @@ public class AcmeNote extends JFrame implements ActionListener, ListSelectionLis
 {
 	// components
 
+	private JButton buttonSearchCancel;
+	private JButton buttonSearchSearch;
+	private CardLayout cardLayout;
+	private JComboBox<String> comboBoxCourses;
+	private JComboBox<String> comboBoxSections;
+	private JMenuItem menuItemCourseAdd;
+	private JMenuItem menuItemCourseDelete;
+	private JMenuItem menuItemCourseEdit;
+	private JMenuItem menuItemFileQuit;
+	private JMenuItem menuItemHelpAbout;
+	private JMenuItem menuItemHelpDocumentation;
+	private JMenuItem menuItemSectionAdd;
+	private JMenuItem menuItemSectionDelete;
+	private JMenuItem menuItemSectionEdit;
+	private JPanel panelCards;
+	private JTextField textFieldSearch;
+	private JList<String> listNotes;
+
 	// fields
+
+/*
+	private String[] stringCourses;
+	private String[] stringNotes;
+	private String[] stringSections;
+*/
+
+	// delete me
+	private String[] stringCourses = {"All Courses", "Course 1", "Course 2", "Course 3"};
+	private String[] stringSections = {"All Sections", "Section 1", "Section 2", "Section 3"};
+	private String[] stringNotes = {"Note 1", "Note 2", "Note 3", "Note 4", "Note 5"};
 
 	/**
 	 * <tt>ArrayList</tt> object containing <tt>Course</tt> objects.
@@ -60,11 +109,7 @@ public class AcmeNote extends JFrame implements ActionListener, ListSelectionLis
 	public AcmeNote()
 	{
 		deserialize();
-		coursesCopy();
 		graphicalUserInterfaceCreate();
-		actionListenersAdd();
-		listSelectionListenersAdd();
-		windowListenersAdd();
 	}
 
 	// accessor methods
@@ -228,21 +273,183 @@ public class AcmeNote extends JFrame implements ActionListener, ListSelectionLis
 
 	private void graphicalUserInterfaceCreate()
 	{
+		coursesCopy();
+
+		add(panelCreate());
+
+		actionListenersAdd();
+		listSelectionListenersAdd();
+		windowListenersAdd();
+	}
+
+	private JPanel panelCreate()
+	{
+		JPanel panelMenu = new JPanel(new BorderLayout());
+		panelMenu.add(menuCreate(), BorderLayout.NORTH);
+
+		JPanel panelContent = new JPanel(new BorderLayout());
+		panelContent.add((panelSearch()), BorderLayout.WEST);
+		panelContent.add(boxSeparator(), BorderLayout.CENTER);
+		panelContent.add(panelCards(), BorderLayout.EAST);
+		panelContent.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+		JPanel panel = new JPanel(new BorderLayout());
+		panel.add(panelMenu, BorderLayout.NORTH);
+		panel.add(panelContent, BorderLayout.CENTER);
+
+		return panel;
 	}
 
 	private JMenuBar menuCreate()
 	{
-		return new JMenuBar();
+		JMenuBar menuBar = new JMenuBar();
+		JMenu menu;
+
+		menuItemFileQuit = new JMenuItem("Quit", KeyEvent.VK_Q);
+		menuItemCourseAdd = new JMenuItem("Add", KeyEvent.VK_O);
+		menuItemCourseDelete = new JMenuItem("Delete", KeyEvent.VK_L);
+		menuItemCourseEdit = new JMenuItem("Edit", KeyEvent.VK_E);
+		menuItemSectionAdd = new JMenuItem("Add", KeyEvent.VK_T);
+		menuItemSectionDelete = new JMenuItem("Delete", KeyEvent.VK_I);
+		menuItemSectionEdit = new JMenuItem("Edit", KeyEvent.VK_N);
+		menuItemHelpAbout = new JMenuItem("About", KeyEvent.VK_A);
+		menuItemHelpDocumentation = new JMenuItem("Documentation", KeyEvent.VK_D);
+
+		menu = new JMenu("File");
+		menu.add(menuItemFileQuit);
+		menu.setMnemonic(KeyEvent.VK_F);
+
+		menuBar.add(menu);
+
+		menu = new JMenu("Course");
+		menu.add(menuItemCourseAdd);
+		menu.add(menuItemCourseDelete);
+		menu.add(menuItemCourseEdit);
+		menu.setMnemonic(KeyEvent.VK_C);
+
+		menuBar.add(menu);
+
+		menu = new JMenu("Section");
+		menu.add(menuItemSectionAdd);
+		menu.add(menuItemSectionDelete);
+		menu.add(menuItemSectionEdit);
+		menu.setMnemonic(KeyEvent.VK_S);
+
+		menuBar.add(menu);
+
+		menu = new JMenu("Help");
+		menu.add(menuItemHelpAbout);
+		menu.add(menuItemHelpDocumentation);
+		menu.setMnemonic(KeyEvent.VK_H);
+
+		menuBar.add(menu);
+
+		return menuBar;
 	}
 
-	private JPanel cardsAcmeNoteCreate()
+	private JPanel panelSearch()
 	{
-		return new JPanel();
+		JLabel labelCourses = new JLabel("Courses", JLabel.LEFT);
+		labelCourses.setFont(new Font("SansSerif", Font.BOLD, 11));
+
+		comboBoxCourses = new JComboBox<String>(new DefaultComboBoxModel<String>(stringCourses));
+		comboBoxCourses.setAlignmentX(LEFT_ALIGNMENT);
+		comboBoxCourses.setPreferredSize(new Dimension(200, comboBoxCourses.getPreferredSize().height));
+
+		JLabel labelSections = new JLabel("Sections", JLabel.LEFT);
+		labelSections.setFont(new Font("SansSerif", Font.BOLD, 11));
+
+		comboBoxSections = new JComboBox<String>(new DefaultComboBoxModel<String>(stringSections));
+		comboBoxSections.setAlignmentX(LEFT_ALIGNMENT);
+		comboBoxSections.setPreferredSize(new Dimension(200, comboBoxSections.getPreferredSize().height));
+
+		JLabel labelSearch = new JLabel("Search");
+		labelSearch.setFont(new Font("SansSerif", Font.BOLD, 11));
+
+		textFieldSearch = new JTextField();
+		textFieldSearch.setAlignmentX(LEFT_ALIGNMENT);
+		textFieldSearch.setPreferredSize(new Dimension(200, textFieldSearch.getPreferredSize().height));
+
+		buttonSearchCancel = new JButton("Cancel");
+		buttonSearchSearch = new JButton("Search");
+
+		Box boxSearchButtons = Box.createHorizontalBox();
+		boxSearchButtons.add(Box.createHorizontalGlue());
+		boxSearchButtons.add(buttonSearchCancel);
+		boxSearchButtons.add(Box.createHorizontalStrut(10));
+		boxSearchButtons.add(buttonSearchSearch);
+		boxSearchButtons.setAlignmentX(LEFT_ALIGNMENT);
+
+		Box boxSearch = Box.createVerticalBox();
+		boxSearch.add(labelCourses);
+		boxSearch.add(comboBoxCourses);
+		boxSearch.add(Box.createVerticalStrut(10));
+		boxSearch.add(labelSections);
+		boxSearch.add(comboBoxSections);
+		boxSearch.add(Box.createVerticalStrut(10));
+		boxSearch.add(labelSearch);
+		boxSearch.add(textFieldSearch);
+		boxSearch.add(Box.createVerticalStrut(10));
+		boxSearch.add(boxSearchButtons);
+		boxSearch.add(Box.createVerticalStrut(10));
+
+		listNotes = new JList<String>(stringNotes);
+		listNotes.setLayoutOrientation(JList.VERTICAL);
+		listNotes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+//		listNotes.setVisibleRowCount();
+
+		JScrollPane scrollPaneNotes = new JScrollPane(listNotes);
+		scrollPaneNotes.setPreferredSize(new Dimension(200, scrollPaneNotes.getPreferredSize().height));
+
+		JPanel panelSearch = new JPanel(new BorderLayout());
+		panelSearch.add(boxSearch, BorderLayout.NORTH);
+		panelSearch.add(scrollPaneNotes, BorderLayout.CENTER);
+
+		return panelSearch;
 	}
 
-	private JPanel cardsNoteViewCreate()
+	private Box boxSeparator()
 	{
-		return new JPanel();
+		Box boxSeparator = Box.createHorizontalBox();
+		boxSeparator.add(Box.createHorizontalStrut(10));
+		boxSeparator.add(new JSeparator(JSeparator.VERTICAL));
+		boxSeparator.add(Box.createHorizontalStrut(10));
+
+		return boxSeparator;
+	}
+
+	private JPanel panelCards()
+	{
+		panelCards = new JPanel(new CardLayout());
+		panelCards.add(panelNull(), "Null");
+		panelCards.add(panelCourseAdd(), "CourseAdd");
+		panelCards.add(panelCourseDelete(), "CourseDelete");
+		panelCards.add(panelCourseEdit(), "CourseEdit");
+		panelCards.add(panelSectionAdd(), "SectionAdd");
+		panelCards.add(panelSectionDelete(), "SectionDelete");
+		panelCards.add(panelSectionEdit(), "SectionEdit");
+		panelCards.add(panelNoteAdd(), "NoteAdd");
+		panelCards.add(panelNoteDelete(), "NoteDelete");
+		panelCards.add(panelNoteEdit(), "NoteEdit");
+		panelCards.add(panelNoteView(), "NoteView");
+		panelCards.setPreferredSize(new Dimension(567, 457));
+
+		cardLayout = (CardLayout)(panelCards.getLayout());
+
+		return panelCards;
+	}
+
+	private JPanel panelNull()
+	{
+		ImageIcon imageIcon = new ImageIcon(this.getClass().getResource("/images/acme.png"));
+
+		JLabel labelImageIcon = new JLabel(imageIcon);
+		labelImageIcon.setAlignmentX(RIGHT_ALIGNMENT);
+
+		JPanel panelNull = new JPanel(new BorderLayout());
+		panelNull.add(labelImageIcon, BorderLayout.CENTER);
+
+		return panelNull;
 	}
 
 	private JPanel panelCourseAdd()
@@ -291,33 +498,6 @@ public class AcmeNote extends JFrame implements ActionListener, ListSelectionLis
 	}
 
 	private JPanel panelNoteView()
-	{
-		return new JPanel();
-	}
-
-	private JPanel panelNotesSearch()
-	{
-		return new JPanel();
-	}
-
-	private Box boxSeparator()
-	{
-		JSeparator separatorContacts = new JSeparator(JSeparator.VERTICAL);
-
-		Box boxSeparator = Box.createHorizontalBox();
-		boxSeparator.add(Box.createHorizontalStrut(10));
-		boxSeparator.add(separatorContacts);
-		boxSeparator.add(Box.createHorizontalStrut(10));
-
-		return boxSeparator;
-	}
-
-	private JPanel panelNotesView()
-	{
-		return new JPanel();
-	}
-
-	private JPanel panelNotesViewNull()
 	{
 		return new JPanel();
 	}
@@ -416,5 +596,19 @@ public class AcmeNote extends JFrame implements ActionListener, ListSelectionLis
 
 	private void setListData()
 	{
+	}
+
+	// main method
+
+	public static void main(String[] args)
+	{
+		AcmeNote frame = new AcmeNote();
+
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setLocationRelativeTo(null);
+//		frame.setResizable(false);
+		frame.setTitle("AcmeNote");
+		frame.pack();
+		frame.setVisible(true);
 	}
 }

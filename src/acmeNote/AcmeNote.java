@@ -65,6 +65,8 @@ public class AcmeNote extends JFrame implements ActionListener, ListSelectionLis
 {
 	// components
 
+	private JButton buttonCourseAddCancel;
+	private JButton buttonCourseAddSubmit;
 	private JButton buttonSearchCancel;
 	private JButton buttonSearchSearch;
 	private CardLayout cardLayout;
@@ -80,8 +82,10 @@ public class AcmeNote extends JFrame implements ActionListener, ListSelectionLis
 	private JMenuItem menuItemSectionDelete;
 	private JMenuItem menuItemSectionEdit;
 	private JPanel panelCards;
+	private JTextField textFieldCourseAddCourseName;
 	private JTextField textFieldSearch;
 	private JList<String> listNotes;
+	private JScrollPane scrollPaneCourseAdd;
 
 	// fields
 
@@ -441,7 +445,7 @@ public class AcmeNote extends JFrame implements ActionListener, ListSelectionLis
 
 	private JPanel panelNull()
 	{
-		ImageIcon imageIcon = new ImageIcon(this.getClass().getResource("/images/acme.png"));
+		ImageIcon imageIcon = new ImageIcon(this.getClass().getResource("/images/AcmeNote.png"));
 
 		JLabel labelImageIcon = new JLabel(imageIcon);
 		labelImageIcon.setAlignmentX(RIGHT_ALIGNMENT);
@@ -454,7 +458,83 @@ public class AcmeNote extends JFrame implements ActionListener, ListSelectionLis
 
 	private JPanel panelCourseAdd()
 	{
-		return new JPanel();
+		JLabel labelCourseAdd = new JLabel("Add Course", JLabel.RIGHT);
+		labelCourseAdd.setFont(new Font("Serif", Font.BOLD, 25));
+
+		Box boxCourseAddLabel = Box.createHorizontalBox();
+		boxCourseAddLabel.add(Box.createHorizontalGlue());
+		boxCourseAddLabel.add(labelCourseAdd);
+		boxCourseAddLabel.setPreferredSize(new Dimension(567, boxCourseAddLabel.getPreferredSize().height));
+
+		JSeparator separator = new JSeparator();
+		separator.setPreferredSize(new Dimension(567, separator.getPreferredSize().height));
+
+		Box boxCourseAddHeader = Box.createVerticalBox();
+		boxCourseAddHeader.add(boxCourseAddLabel);
+		boxCourseAddHeader.add(Box.createVerticalStrut(10));
+		boxCourseAddHeader.add(separator);
+
+		JLabel labelCourseAddCourseName = new JLabel("Course Name", JLabel.LEFT);
+		labelCourseAddCourseName.setFont(new Font("SansSerif", Font.BOLD, 11));
+		labelCourseAddCourseName.setPreferredSize(new Dimension(567, labelCourseAddCourseName.getPreferredSize().height));
+
+		textFieldCourseAddCourseName = new JTextField();
+		textFieldCourseAddCourseName.setPreferredSize(new Dimension(567, textFieldCourseAddCourseName.getPreferredSize().height));
+
+/*
+		boxCourseAddCourseName.add(labelCourseAddCourseName);
+		boxCourseAddCourseName.add(Box.createHorizontalStrut(10));
+		boxCourseAddCourseName.add(textFieldCourseAddCourseName);
+*/
+
+		buttonCourseAddCancel = new JButton("Cancel");
+		buttonCourseAddSubmit = new JButton("Submit");
+
+		Box boxCourseAddButtons = Box.createHorizontalBox();
+		boxCourseAddButtons.add(Box.createHorizontalGlue());
+		boxCourseAddButtons.add(buttonCourseAddCancel);
+		boxCourseAddButtons.add(Box.createHorizontalStrut(10));
+		boxCourseAddButtons.add(buttonCourseAddSubmit);
+		boxCourseAddButtons.setPreferredSize(new Dimension(567, boxCourseAddButtons.getPreferredSize().height));
+
+		Box boxCourseAddBody = Box.createVerticalBox();
+		boxCourseAddBody.add(labelCourseAddCourseName);
+		boxCourseAddBody.add(Box.createVerticalStrut(10));
+		boxCourseAddBody.add(textFieldCourseAddCourseName);
+		boxCourseAddBody.add(Box.createVerticalStrut(10));
+		boxCourseAddBody.add(boxCourseAddButtons);
+
+		if (boxCourseAddHeader.getPreferredSize().height + boxCourseAddBody.getPreferredSize().height < 457)
+		{
+			boxCourseAddBody.add(Box.createVerticalStrut(457 - boxCourseAddHeader.getPreferredSize().height - boxCourseAddBody.getPreferredSize().height));
+		}
+
+		boxCourseAddBody.setPreferredSize(new Dimension(567, boxCourseAddBody.getPreferredSize().height));
+
+		// containers
+
+		scrollPaneCourseAdd = new JScrollPane(boxCourseAddBody, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPaneCourseAdd.setBorder(null);
+
+		if (boxCourseAddHeader.getPreferredSize().height + boxCourseAddBody.getPreferredSize().height > 457)
+		{
+			boxCourseAddBody.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, scrollPaneCourseAdd.getVerticalScrollBar().getPreferredSize().width + 10));
+		}
+		else
+		{
+			scrollPaneCourseAdd.getVerticalScrollBar().setPreferredSize(new Dimension(0, scrollPaneCourseAdd.getPreferredSize().height));
+		}
+
+		Box boxCourseAdd = Box.createVerticalBox();
+		boxCourseAdd.add(boxCourseAddHeader);
+		boxCourseAdd.add(Box.createVerticalStrut(10));
+		boxCourseAdd.add(scrollPaneCourseAdd);
+		boxCourseAdd.setPreferredSize(new Dimension(567, boxCourseAdd.getPreferredSize().height));
+
+		JPanel panelCourseAdd = new JPanel(new BorderLayout());
+		panelCourseAdd.add(boxCourseAdd, BorderLayout.EAST);
+
+		return panelCourseAdd;
 	}
 
 	private JPanel panelCourseDelete()
@@ -606,7 +686,7 @@ public class AcmeNote extends JFrame implements ActionListener, ListSelectionLis
 
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
-//		frame.setResizable(false);
+		frame.setResizable(false);
 		frame.setTitle("AcmeNote");
 		frame.pack();
 		frame.setVisible(true);

@@ -5,17 +5,13 @@
  *  Name    :  Matthew Harker
  *  Date    :  2014.03.24
  *
- *  Description : The AcmeNote class contains an array list of course objects. The class contains the graphical user interface and
- *  associated methods.
+ *  Description : The AcmeNote class contains an array list of course objects. The class contains the graphical user interface and associated methods.
  *
- *  Changes :  2014.03.27 by Shaun Christensen. Updated serialization methods to display a pop-up message upon error rather than print
- *             to the console. Added javadoc comments, cleaned up formatting of source code, and added header comment.
+ *  Changes :  2014.03.27 by Shaun Christensen. Updated serialization methods to display a pop-up message upon error rather than print to the console. Added javadoc comments, cleaned up formatting of source code, and added header comment.
  *             2014.03.30 by Shaun Christensen. Added method stubs for graphical user interface.
- *             2014.03.31 by Shaun Christensen. Implemented graphical user interface methods to create and launch application. Added
- *             temporary image to default null panel, then added search panel and default null panel to frame.
+ *             2014.03.31 by Shaun Christensen. Implemented graphical user interface methods to create and launch application. Added temporary image to default null panel, then added search panel and default null panel to frame.
  *             2014.04.01 by Shaun Christensen. Completed initial graphical user interface.
- *             2014.04.02 by Shaun Christensen. Migrated graphpical user interface, event listeners, and utility methods into new class
- *             GraphicalUserInterface.
+ *             2014.04.02 by Shaun Christensen. Extracted graphical user interface, event listeners, and utility methods into new class AcmeNoteGraphicalUserInterface.
  *
  ********************************************************/
 

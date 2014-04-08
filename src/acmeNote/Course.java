@@ -5,11 +5,9 @@
  *  Name    :  Matthew Harker
  *  Date    :  2014.03.24
  *
- *  Description : The Course class contains a string for the course and an array list of section objects. Includes
- *  accessor and mutator methods and an overridden toString method.
+ *  Description : The Course class contains a string for the course and an array list of section objects. Includes accessor and mutator methods and an overridden toString method.
  *
- *  Changes :  2014.03.27 by Shaun Christensen. Added check for empty string for courseName in setCourseName. Sets default course
- *  name if the string is empty. Added javadoc comments, cleaned up formatting of source code, and added header comment.
+ *  Changes :  2014.03.27 by Shaun Christensen. Added check for empty string for courseName in setCourseName. Sets default course name if the string is empty. Added javadoc comments, cleaned up formatting of source code, and added header comment.
  *
  ********************************************************/
 

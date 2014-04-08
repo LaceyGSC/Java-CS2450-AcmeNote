@@ -5,11 +5,9 @@
  *  Name    :  Matthew Harker
  *  Date    :  2014.03.24
  *
- *  Description : The Note class contains a string for the name and text of the note. Includes accessor and mutator
- *  methods and an overridden toString method.
+ *  Description : The Note class contains a string for the name and text of the note. Includes accessor and mutator methods and an overridden toString method.
  *
- *  Changes :  2014.03.27 by Shaun Christensen. Added check for empty string for noteName in setNoteName. Sets default note name if the
- *  string is empty. Added javadoc comments, cleaned up source code to SLCC coding standards, and added header comment.
+ *  Changes :  2014.03.27 by Shaun Christensen. Added check for empty string for noteName in setNoteName. Sets default note name if the string is empty. Added javadoc comments, cleaned up source code to SLCC coding standards, and added header comment.
  *
  ********************************************************/
 

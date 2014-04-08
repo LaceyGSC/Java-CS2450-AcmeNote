@@ -1,13 +1,13 @@
 /********************************************************
  *
  *  Project :  AcmeNote
- *  File    :  GraphicalUserInterface.java
+ *  File    :  AcmeNoteGraphicalUserInterface.java
  *  Name    :  Shaun Christensen
  *  Date    :  2014.04.02
  *
- *  Description : The GrphicalUserInterface class contains methods to create the graphical user interface and process user input.
+ *  Description : The AcmeNoteGrphicalUserInterface class contains methods to create the graphical user interface and process user input.
  *
- *  Changes :  
+ *  Changes :  2014.04.07 by Shaun Christensen. Registered action, list, menu, and window event listeners. Extracted utility methods into AcmeNoteGraphicalUserInterfaceUtility class. Rename class to AcmeNoteGraphicalUserInterface for consistency.
  *
  ********************************************************/
 
@@ -22,7 +22,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.DefaultComboBoxModel;
@@ -36,6 +35,7 @@ import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
@@ -44,18 +44,19 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 
 /**
- * <tt>GraphicalUserInterface</tt> class contains the graphical user interface, event listener, and utility methods to process user input.
+ * <tt>AcmeNoteGraphicalUserInterface</tt> class contains the graphical user interface; and action, list, menu, and window event listeners.
  * @author Shaun Christensen
  */
 @SuppressWarnings("serial")
-public class GraphicalUserInterface extends JFrame implements ActionListener, ListSelectionListener, WindowListener
+public class AcmeNoteGraphicalUserInterface extends JFrame implements ActionListener, ListSelectionListener, MenuListener, WindowListener
 {
 	// components
 
 	// add javadoc comments when complete
-
 	private JButton buttonCourseAddCancel;
 	private JButton buttonCourseAddSubmit;
 	private JButton buttonCourseDeleteCancel;
@@ -77,15 +78,17 @@ public class GraphicalUserInterface extends JFrame implements ActionListener, Li
 	private JButton buttonNoteViewNoteDelete;
 	private JButton buttonNoteViewNoteEdit;
 	private JButton buttonSectionAddCancel;
+	private JButton buttonSectionAddSubmit;
 	private JButton buttonSectionDeleteSubmit;
 	private JButton buttonSectionDeleteCancel;
-	private JButton buttonSectionAddSubmit;
 	private JButton buttonSectionEditCancel;
 	private JButton buttonSectionEditSubmit;
 	private CardLayout cardLayout;
 	private JCheckBox checkBoxCourseDelete;
 	private JCheckBox checkBoxNoteDelete;
 	private JCheckBox checkBoxSectionDelete;
+	private JComboBox<String> comboBoxCourseDeleteCourses;
+	private JComboBox<String> comboBoxCourseEditCourses;
 	private JComboBox<String> comboBoxNoteAddCourses;
 	private JComboBox<String> comboBoxNoteAddSections;
 	private JComboBox<String> comboBoxNoteEditCourses;
@@ -93,8 +96,11 @@ public class GraphicalUserInterface extends JFrame implements ActionListener, Li
 	private JComboBox<String> comboBoxNotesSearchCourses;
 	private JComboBox<String> comboBoxNotesSearchSections;
 	private JComboBox<String> comboBoxSectionAddCourses;
+	private JComboBox<String> comboBoxSectionDeleteCourses;
 	private JComboBox<String> comboBoxSectionEditCourses;
 	private JList<String> listNotes;
+	private JMenu menuCourse;
+	private JMenu menuSection;
 	private JMenuItem menuItemCourseAdd;
 	private JMenuItem menuItemCourseDelete;
 	private JMenuItem menuItemCourseEdit;
@@ -126,32 +132,22 @@ public class GraphicalUserInterface extends JFrame implements ActionListener, Li
 	 */
 	private AcmeNote acmeNote;
 
-/*
-	// add javadoc comments when complete
-
-	private String[] stringCourses;
-	private String[] stringNotes;
-	private String[] stringSections;
-*/
-
-	// delete me after utility methods are implemented
-
-	private String[] stringCourses = {"Course 1", "Course 2", "Course 3"};
-	private String[] stringSections = {"Section 1", "Section 2", "Section 3"};
-	private String[] stringNotes = {"Note 1", "Note 2", "Note 3", "Note 4", "Note 5"};
+	// add javadoc
+	private AcmeNoteGraphicalUserInterfaceUtility acmeNoteGraphicalUserInterfaceUtility;
 
 	// constructors
 
 	/**
 	 * No argument default constructor.
 	 */
-	public GraphicalUserInterface()
+	public AcmeNoteGraphicalUserInterface()
 	{
 		acmeNote = new AcmeNote();
+		acmeNoteGraphicalUserInterfaceUtility = new AcmeNoteGraphicalUserInterfaceUtility(acmeNote);
 
 		graphicalUserInterfaceCreate();
 	}
-	
+
 	// graphical user interface methods
 
 	/**
@@ -159,13 +155,15 @@ public class GraphicalUserInterface extends JFrame implements ActionListener, Li
 	 */
 	private void graphicalUserInterfaceCreate()
 	{
-
-		coursesCopy();
+		acmeNoteGraphicalUserInterfaceUtility.setStringCourses(acmeNote);
+		acmeNoteGraphicalUserInterfaceUtility.setStringSections(-1);
+		acmeNoteGraphicalUserInterfaceUtility.setStringNotes(-1, -1);
 
 		add(panelCreate());
 
 		actionListenersAdd();
 		listSelectionListenersAdd();
+		menuListenersAdd();
 		windowListenersAdd();
 	}
 
@@ -211,6 +209,18 @@ public class GraphicalUserInterface extends JFrame implements ActionListener, Li
 		menuItemHelpAbout = new JMenuItem("About", KeyEvent.VK_A);
 		menuItemHelpDocumentation = new JMenuItem("Documentation", KeyEvent.VK_D);
 
+		menuCourse = new JMenu("Course");
+		menuCourse.add(menuItemCourseAdd);
+		menuCourse.add(menuItemCourseDelete);
+		menuCourse.add(menuItemCourseEdit);
+		menuCourse.setMnemonic(KeyEvent.VK_C);
+
+		menuSection = new JMenu("Section");
+		menuSection.add(menuItemSectionAdd);
+		menuSection.add(menuItemSectionDelete);
+		menuSection.add(menuItemSectionEdit);
+		menuSection.setMnemonic(KeyEvent.VK_S);
+
 		// containers
 
 		JMenuBar menuBar = new JMenuBar();
@@ -221,21 +231,8 @@ public class GraphicalUserInterface extends JFrame implements ActionListener, Li
 
 		menuBar.add(menu);
 
-		menu = new JMenu("Course");
-		menu.add(menuItemCourseAdd);
-		menu.add(menuItemCourseDelete);
-		menu.add(menuItemCourseEdit);
-		menu.setMnemonic(KeyEvent.VK_C);
-
-		menuBar.add(menu);
-
-		menu = new JMenu("Section");
-		menu.add(menuItemSectionAdd);
-		menu.add(menuItemSectionDelete);
-		menu.add(menuItemSectionEdit);
-		menu.setMnemonic(KeyEvent.VK_S);
-
-		menuBar.add(menu);
+		menuBar.add(menuCourse);
+		menuBar.add(menuSection);
 
 		menu = new JMenu("Help");
 		menu.add(menuItemHelpAbout);
@@ -255,17 +252,13 @@ public class GraphicalUserInterface extends JFrame implements ActionListener, Li
 	{
 		// components
 
-		comboBoxNotesSearchCourses = new JComboBox<String>(new DefaultComboBoxModel<String>(stringCourses));
-		comboBoxNotesSearchCourses.insertItemAt("All Courses", 0);
+		comboBoxNotesSearchCourses = new JComboBox<String>(new DefaultComboBoxModel<String>(acmeNoteGraphicalUserInterfaceUtility.getStringCoursesAll()));
 		comboBoxNotesSearchCourses.setAlignmentX(LEFT_ALIGNMENT);
 		comboBoxNotesSearchCourses.setPreferredSize(new Dimension(200, comboBoxNotesSearchCourses.getPreferredSize().height));
-		comboBoxNotesSearchCourses.setSelectedIndex(0);
 
-		comboBoxNotesSearchSections = new JComboBox<String>(new DefaultComboBoxModel<String>(stringSections));
-		comboBoxNotesSearchSections.insertItemAt("All Sections", 0);
+		comboBoxNotesSearchSections = new JComboBox<String>(new DefaultComboBoxModel<String>(acmeNoteGraphicalUserInterfaceUtility.getStringSectionsAll()));
 		comboBoxNotesSearchSections.setAlignmentX(LEFT_ALIGNMENT);
 		comboBoxNotesSearchSections.setPreferredSize(new Dimension(200, comboBoxNotesSearchSections.getPreferredSize().height));
-		comboBoxNotesSearchSections.setSelectedIndex(0);
 
 		textFieldNotesSearch = new JTextField();
 		textFieldNotesSearch.setAlignmentX(LEFT_ALIGNMENT);
@@ -274,7 +267,7 @@ public class GraphicalUserInterface extends JFrame implements ActionListener, Li
 		buttonNotesSearchCancel = new JButton("Cancel");
 		buttonNotesSearchSearch = new JButton("Search");
 
-		listNotes = new JList<String>(stringNotes);
+		listNotes = new JList<String>(acmeNoteGraphicalUserInterfaceUtility.getStringNotes());
 		listNotes.setLayoutOrientation(JList.VERTICAL);
 		listNotes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -282,7 +275,7 @@ public class GraphicalUserInterface extends JFrame implements ActionListener, Li
 		scrollPaneNotes.setPreferredSize(new Dimension(200, scrollPaneNotes.getPreferredSize().height));
 
 		// containers
-		
+
 		Box boxNotesSearchButtons = Box.createHorizontalBox();
 		boxNotesSearchButtons.add(Box.createHorizontalGlue());
 		boxNotesSearchButtons.add(buttonNotesSearchCancel);
@@ -439,6 +432,10 @@ public class GraphicalUserInterface extends JFrame implements ActionListener, Li
 		JLabel labelCourseDelete = new JLabel("Delete Course");
 		labelCourseDelete.setFont(new Font("Serif", Font.BOLD, 25));
 
+		comboBoxCourseDeleteCourses = new JComboBox<String>(new DefaultComboBoxModel<String>(acmeNoteGraphicalUserInterfaceUtility.getStringCourses()));
+		comboBoxCourseDeleteCourses.setAlignmentX(LEFT_ALIGNMENT);
+		comboBoxCourseDeleteCourses.setPreferredSize(new Dimension(200, comboBoxCourseDeleteCourses.getPreferredSize().height));
+
 		checkBoxCourseDelete = new JCheckBox("Please check here to confirm deletion of the course.");
 
 		buttonCourseDeleteCancel = new JButton("Cancel");
@@ -449,6 +446,14 @@ public class GraphicalUserInterface extends JFrame implements ActionListener, Li
 		Box boxCourseDeleteHeader = Box.createHorizontalBox();
 		boxCourseDeleteHeader.add(Box.createHorizontalGlue());
 		boxCourseDeleteHeader.add(labelCourseDelete);
+
+		Box boxCourseDeleteCourseLabel = Box.createHorizontalBox();
+		boxCourseDeleteCourseLabel.add(Box.createHorizontalGlue());
+		boxCourseDeleteCourseLabel.add(new JLabel("Select Course"));
+
+		Box boxCourseDeleteCourseComboBox = Box.createHorizontalBox();
+		boxCourseDeleteCourseComboBox.add(Box.createHorizontalStrut(358));
+		boxCourseDeleteCourseComboBox.add(comboBoxCourseDeleteCourses);
 
 		Box boxCourseDeleteWarningAssociatedLabel = Box.createHorizontalBox();
 		boxCourseDeleteWarningAssociatedLabel.add(Box.createHorizontalGlue());
@@ -473,6 +478,9 @@ public class GraphicalUserInterface extends JFrame implements ActionListener, Li
 		boxCourseDelete.add(Box.createVerticalStrut(10));
 		boxCourseDelete.add(new JSeparator(JSeparator.HORIZONTAL));
 		boxCourseDelete.add(Box.createVerticalStrut(10));
+		boxCourseDelete.add(boxCourseDeleteCourseLabel);
+		boxCourseDelete.add(boxCourseDeleteCourseComboBox);
+		boxCourseDelete.add(Box.createVerticalStrut(10));
 		boxCourseDelete.add(boxCourseDeleteWarningAssociatedLabel);
 		boxCourseDelete.add(Box.createVerticalStrut(10));
 		boxCourseDelete.add(boxCourseDeleteWarningPermanentLabel);
@@ -480,7 +488,7 @@ public class GraphicalUserInterface extends JFrame implements ActionListener, Li
 		boxCourseDelete.add(boxCourseDeleteCheckBox);
 		boxCourseDelete.add(Box.createVerticalStrut(10));
 		boxCourseDelete.add(boxCourseDeleteButtons);
-		boxCourseDelete.add(Box.createVerticalStrut(290));
+		boxCourseDelete.add(Box.createVerticalStrut(239));
 
 		return boxCourseDelete;
 	}
@@ -496,6 +504,10 @@ public class GraphicalUserInterface extends JFrame implements ActionListener, Li
 		JLabel labelCourseEdit = new JLabel("Edit Course");
 		labelCourseEdit.setFont(new Font("Serif", Font.BOLD, 25));
 
+		comboBoxCourseEditCourses = new JComboBox<String>(new DefaultComboBoxModel<String>(acmeNoteGraphicalUserInterfaceUtility.getStringCourses()));
+		comboBoxCourseEditCourses.setAlignmentX(LEFT_ALIGNMENT);
+		comboBoxCourseEditCourses.setPreferredSize(new Dimension(200, comboBoxCourseEditCourses.getPreferredSize().height));
+
 		textFieldCourseEditCourseName = new JTextField();
 		textFieldCourseEditCourseName.setPreferredSize(new Dimension(200, textFieldCourseEditCourseName.getPreferredSize().height));
 
@@ -507,6 +519,14 @@ public class GraphicalUserInterface extends JFrame implements ActionListener, Li
 		Box boxCourseEditHeader = Box.createHorizontalBox();
 		boxCourseEditHeader.add(Box.createHorizontalGlue());
 		boxCourseEditHeader.add(labelCourseEdit);
+
+		Box boxCourseEditCourseLabel = Box.createHorizontalBox();
+		boxCourseEditCourseLabel.add(Box.createHorizontalGlue());
+		boxCourseEditCourseLabel.add(new JLabel("Select Course"));
+
+		Box boxCourseEditCourseComboBox = Box.createHorizontalBox();
+		boxCourseEditCourseComboBox.add(Box.createHorizontalStrut(358));
+		boxCourseEditCourseComboBox.add(comboBoxCourseEditCourses);
 
 		Box boxCourseEditCourseNameLabel = Box.createHorizontalBox();
 		boxCourseEditCourseNameLabel.add(Box.createHorizontalGlue());
@@ -527,11 +547,14 @@ public class GraphicalUserInterface extends JFrame implements ActionListener, Li
 		boxCourseEdit.add(Box.createVerticalStrut(10));
 		boxCourseEdit.add(new JSeparator(JSeparator.HORIZONTAL));
 		boxCourseEdit.add(Box.createVerticalStrut(10));
+		boxCourseEdit.add(boxCourseEditCourseLabel);
+		boxCourseEdit.add(boxCourseEditCourseComboBox);
+		boxCourseEdit.add(Box.createVerticalStrut(10));
 		boxCourseEdit.add(boxCourseEditCourseNameLabel);
 		boxCourseEdit.add(boxCourseEditCourseNameTextField);
 		boxCourseEdit.add(Box.createVerticalStrut(10));
 		boxCourseEdit.add(boxCourseEditButtons);
-		boxCourseEdit.add(Box.createVerticalStrut(330));
+		boxCourseEdit.add(Box.createVerticalStrut(279));
 
 		return boxCourseEdit;
 	}
@@ -547,7 +570,7 @@ public class GraphicalUserInterface extends JFrame implements ActionListener, Li
 		JLabel labelSectionAdd = new JLabel("Add Section");
 		labelSectionAdd.setFont(new Font("Serif", Font.BOLD, 25));
 
-		comboBoxSectionAddCourses = new JComboBox<String>(new DefaultComboBoxModel<String>(stringCourses));
+		comboBoxSectionAddCourses = new JComboBox<String>(new DefaultComboBoxModel<String>(acmeNoteGraphicalUserInterfaceUtility.getStringCourses()));
 		comboBoxSectionAddCourses.setAlignmentX(LEFT_ALIGNMENT);
 		comboBoxSectionAddCourses.setPreferredSize(new Dimension(200, comboBoxSectionAddCourses.getPreferredSize().height));
 
@@ -613,6 +636,10 @@ public class GraphicalUserInterface extends JFrame implements ActionListener, Li
 		JLabel labelSectionDelete = new JLabel("Delete Section");
 		labelSectionDelete.setFont(new Font("Serif", Font.BOLD, 25));
 
+		comboBoxSectionDeleteCourses = new JComboBox<String>(new DefaultComboBoxModel<String>(acmeNoteGraphicalUserInterfaceUtility.getStringCourses()));
+		comboBoxSectionDeleteCourses.setAlignmentX(LEFT_ALIGNMENT);
+		comboBoxSectionDeleteCourses.setPreferredSize(new Dimension(200, comboBoxSectionDeleteCourses.getPreferredSize().height));
+
 		checkBoxSectionDelete = new JCheckBox("Please check here to confirm deletion of the section.");
 
 		buttonSectionDeleteCancel = new JButton("Cancel");
@@ -623,6 +650,14 @@ public class GraphicalUserInterface extends JFrame implements ActionListener, Li
 		Box boxSectionDeleteHeader = Box.createHorizontalBox();
 		boxSectionDeleteHeader.add(Box.createHorizontalGlue());
 		boxSectionDeleteHeader.add(labelSectionDelete);
+
+		Box boxSectionDeleteCourseLabel = Box.createHorizontalBox();
+		boxSectionDeleteCourseLabel.add(Box.createHorizontalGlue());
+		boxSectionDeleteCourseLabel.add(new JLabel("Select Course"));
+
+		Box boxSectionDeleteCourseComboBox = Box.createHorizontalBox();
+		boxSectionDeleteCourseComboBox.add(Box.createHorizontalStrut(358));
+		boxSectionDeleteCourseComboBox.add(comboBoxSectionDeleteCourses);
 
 		Box boxSectionDeleteWarningAssociatedLabel = Box.createHorizontalBox();
 		boxSectionDeleteWarningAssociatedLabel.add(Box.createHorizontalGlue());
@@ -647,6 +682,9 @@ public class GraphicalUserInterface extends JFrame implements ActionListener, Li
 		boxSectionDelete.add(Box.createVerticalStrut(10));
 		boxSectionDelete.add(new JSeparator(JSeparator.HORIZONTAL));
 		boxSectionDelete.add(Box.createVerticalStrut(10));
+		boxSectionDelete.add(boxSectionDeleteCourseLabel);
+		boxSectionDelete.add(boxSectionDeleteCourseComboBox);
+		boxSectionDelete.add(Box.createVerticalStrut(10));
 		boxSectionDelete.add(boxSectionDeleteWarningAssociatedLabel);
 		boxSectionDelete.add(Box.createVerticalStrut(10));
 		boxSectionDelete.add(boxSectionDeleteWarningPermanentLabel);
@@ -654,7 +692,7 @@ public class GraphicalUserInterface extends JFrame implements ActionListener, Li
 		boxSectionDelete.add(boxSectionDeleteCheckBox);
 		boxSectionDelete.add(Box.createVerticalStrut(10));
 		boxSectionDelete.add(boxSectionDeleteButtons);
-		boxSectionDelete.add(Box.createVerticalStrut(290));
+		boxSectionDelete.add(Box.createVerticalStrut(239));
 
 		return boxSectionDelete;
 	}
@@ -670,7 +708,7 @@ public class GraphicalUserInterface extends JFrame implements ActionListener, Li
 		JLabel labelSectionEdit = new JLabel("Edit Section");
 		labelSectionEdit.setFont(new Font("Serif", Font.BOLD, 25));
 
-		comboBoxSectionEditCourses = new JComboBox<String>(new DefaultComboBoxModel<String>(stringCourses));
+		comboBoxSectionEditCourses = new JComboBox<String>(new DefaultComboBoxModel<String>(new String[0]));//stringCourses));
 		comboBoxSectionEditCourses.setAlignmentX(LEFT_ALIGNMENT);
 		comboBoxSectionEditCourses.setPreferredSize(new Dimension(200, comboBoxSectionEditCourses.getPreferredSize().height));
 
@@ -736,11 +774,11 @@ public class GraphicalUserInterface extends JFrame implements ActionListener, Li
 		JLabel labelNoteAdd = new JLabel("Add Note");
 		labelNoteAdd.setFont(new Font("Serif", Font.BOLD, 25));
 
-		comboBoxNoteAddCourses = new JComboBox<String>(new DefaultComboBoxModel<String>(stringCourses));
+		comboBoxNoteAddCourses = new JComboBox<String>(new DefaultComboBoxModel<String>(new String[0]));//stringCourses));
 		comboBoxNoteAddCourses.setAlignmentX(LEFT_ALIGNMENT);
 		comboBoxNoteAddCourses.setPreferredSize(new Dimension(200, comboBoxNoteAddCourses.getPreferredSize().height));
 
-		comboBoxNoteAddSections = new JComboBox<String>(new DefaultComboBoxModel<String>(stringSections));
+		comboBoxNoteAddSections = new JComboBox<String>(new DefaultComboBoxModel<String>(new String[0]));//stringSections));
 		comboBoxNoteAddSections.setAlignmentX(LEFT_ALIGNMENT);
 		comboBoxNoteAddSections.setPreferredSize(new Dimension(200, comboBoxNoteAddSections.getPreferredSize().height));
 
@@ -877,11 +915,11 @@ public class GraphicalUserInterface extends JFrame implements ActionListener, Li
 		JLabel labelNoteEdit = new JLabel("Edit Note");
 		labelNoteEdit.setFont(new Font("Serif", Font.BOLD, 25));
 
-		comboBoxNoteEditCourses = new JComboBox<String>(new DefaultComboBoxModel<String>(stringCourses));
+		comboBoxNoteEditCourses = new JComboBox<String>(new DefaultComboBoxModel<String>(new String[0]));//stringCourses));
 		comboBoxNoteEditCourses.setAlignmentX(LEFT_ALIGNMENT);
 		comboBoxNoteEditCourses.setPreferredSize(new Dimension(200, comboBoxNoteEditCourses.getPreferredSize().height));
 
-		comboBoxNoteEditSections = new JComboBox<String>(new DefaultComboBoxModel<String>(stringSections));
+		comboBoxNoteEditSections = new JComboBox<String>(new DefaultComboBoxModel<String>(new String[0]));//stringSections));
 		comboBoxNoteEditSections.setAlignmentX(LEFT_ALIGNMENT);
 		comboBoxNoteEditSections.setPreferredSize(new Dimension(200, comboBoxNoteEditSections.getPreferredSize().height));
 
@@ -1047,14 +1085,73 @@ public class GraphicalUserInterface extends JFrame implements ActionListener, Li
 
 	private void actionListenersAdd()
 	{
+		buttonCourseAddCancel.addActionListener(this);
+		buttonCourseAddSubmit.addActionListener(this);
+		buttonCourseDeleteCancel.addActionListener(this);
+		buttonCourseDeleteSubmit.addActionListener(this);
+		buttonCourseEditCancel.addActionListener(this);
+		buttonCourseEditSubmit.addActionListener(this);
+		buttonNoteAddCancel.addActionListener(this);
+		buttonNoteAddSubmit.addActionListener(this);
+		buttonNoteDeleteCancel.addActionListener(this);
+		buttonNoteDeleteSubmit.addActionListener(this);
+		buttonNoteEditCancel.addActionListener(this);
+		buttonNoteEditSubmit.addActionListener(this);
+		buttonNoteNullNoteAdd.addActionListener(this);
+		buttonNoteNullNoteDelete.addActionListener(this);
+		buttonNoteNullNoteEdit.addActionListener(this);
+		buttonNotesSearchCancel.addActionListener(this);
+		buttonNotesSearchSearch.addActionListener(this);
+		buttonNoteViewNoteAdd.addActionListener(this);
+		buttonNoteViewNoteDelete.addActionListener(this);
+		buttonNoteViewNoteEdit.addActionListener(this);
+		buttonSectionAddCancel.addActionListener(this);
+		buttonSectionAddSubmit.addActionListener(this);
+		buttonSectionDeleteSubmit.addActionListener(this);
+		buttonSectionDeleteCancel.addActionListener(this);
+		buttonSectionEditCancel.addActionListener(this);
+		buttonSectionEditSubmit.addActionListener(this);
+		checkBoxCourseDelete.addActionListener(this);
+		checkBoxNoteDelete.addActionListener(this);
+		checkBoxSectionDelete.addActionListener(this);
+		comboBoxCourseDeleteCourses.addActionListener(this);
+		comboBoxCourseEditCourses.addActionListener(this);
+		comboBoxNoteAddCourses.addActionListener(this);
+		comboBoxNoteAddSections.addActionListener(this);
+		comboBoxNoteEditCourses.addActionListener(this);
+		comboBoxNoteEditSections.addActionListener(this);
+		comboBoxNotesSearchCourses.addActionListener(this);
+		comboBoxNotesSearchSections.addActionListener(this);
+		comboBoxSectionAddCourses.addActionListener(this);
+		comboBoxSectionDeleteCourses.addActionListener(this);
+		comboBoxSectionEditCourses.addActionListener(this);
+		menuCourse.addActionListener(this);
+		menuSection.addActionListener(this);
+		menuItemCourseAdd.addActionListener(this);
+		menuItemCourseDelete.addActionListener(this);
+		menuItemCourseEdit.addActionListener(this);
+		menuItemFileQuit.addActionListener(this);
+		menuItemHelpAbout.addActionListener(this);
+		menuItemHelpDocumentation.addActionListener(this);
+		menuItemSectionAdd.addActionListener(this);
+		menuItemSectionDelete.addActionListener(this);
+		menuItemSectionEdit.addActionListener(this);
 	}
 
 	private void listSelectionListenersAdd()
 	{
+		listNotes.addListSelectionListener(this);
+	}
+
+	private void menuListenersAdd()
+	{
+		menuCourse.addMenuListener(this);
+		menuSection.addMenuListener(this);
 	}
 
 	private void windowListenersAdd()
 	{
+		addWindowListener(this);
 	}
 
 	// action event listeners
@@ -1062,14 +1159,403 @@ public class GraphicalUserInterface extends JFrame implements ActionListener, Li
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
+		if (e.getSource() == buttonCourseAddCancel || e.getSource() == buttonCourseDeleteCancel || e.getSource() == buttonCourseEditCancel || e.getSource() == buttonNoteAddCancel || e.getSource() == buttonNoteDeleteCancel || e.getSource() == buttonNoteEditCancel || e.getSource() == buttonSectionAddCancel || e.getSource() == buttonSectionDeleteCancel || e.getSource() == buttonSectionEditCancel)
+		{
+			// add logic later to check whether a note is selected in the list. if so, view that note, else, view note null panel
+			// otherwise, this is done for now
+
+			cardLayout.show(panelCards, "NoteNull");
+
+			buttonNotesSearchCancel.setEnabled(true);
+			buttonNotesSearchSearch.setEnabled(true);
+			comboBoxNotesSearchCourses.setEnabled(true);
+			comboBoxNotesSearchSections.setEnabled(true);
+			menuCourse.setEnabled(true);
+			menuSection.setEnabled(true);
+			listNotes.setEnabled(true);
+			textFieldNotesSearch.setEnabled(true);
+		}
+		else if (e.getSource() == buttonCourseAddSubmit)
+		{
+			// this should be done
+
+			acmeNote.addCourse(new Course(textFieldCourseAddCourseName.getText()));
+
+			acmeNoteGraphicalUserInterfaceUtility.setStringCourses(acmeNote);
+
+			comboBoxNotesSearchCourses.setModel(new DefaultComboBoxModel<String>(acmeNoteGraphicalUserInterfaceUtility.getStringCoursesAll()));
+			comboBoxNotesSearchCourses.setSelectedIndex(acmeNote.getCourses().size());
+
+			cardLayout.show(panelCards, "NoteNull");
+
+			buttonNotesSearchCancel.setEnabled(true);
+			buttonNotesSearchSearch.setEnabled(true);
+			comboBoxNotesSearchCourses.setEnabled(true);
+			comboBoxNotesSearchSections.setEnabled(true);
+			menuCourse.setEnabled(true);
+			menuSection.setEnabled(true);
+			listNotes.setEnabled(true);
+			textFieldNotesSearch.setEnabled(true);
+		}
+		else if (e.getSource() == buttonCourseDeleteSubmit)
+		{
+			// this should be done
+
+			if (acmeNote.removeCourse(comboBoxCourseDeleteCourses.getSelectedIndex()))
+			{
+				int courseIndex = 0;
+
+				if (comboBoxNotesSearchCourses.getSelectedIndex() - 1 < comboBoxCourseDeleteCourses.getSelectedIndex())
+				{
+					courseIndex = comboBoxNotesSearchCourses.getSelectedIndex();
+				}
+				else if (comboBoxNotesSearchCourses.getSelectedIndex() - 1 > comboBoxCourseDeleteCourses.getSelectedIndex())
+				{
+					courseIndex = comboBoxNotesSearchCourses.getSelectedIndex() - 1;
+				}
+				
+				acmeNoteGraphicalUserInterfaceUtility.setStringCourses(acmeNote);
+
+				comboBoxNotesSearchCourses.setModel(new DefaultComboBoxModel<String>(acmeNoteGraphicalUserInterfaceUtility.getStringCoursesAll()));
+				comboBoxNotesSearchCourses.setSelectedIndex(courseIndex);
+
+				cardLayout.show(panelCards, "NoteNull");
+
+				buttonNotesSearchCancel.setEnabled(true);
+				buttonNotesSearchSearch.setEnabled(true);
+				comboBoxNotesSearchCourses.setEnabled(true);
+				comboBoxNotesSearchSections.setEnabled(true);
+				menuCourse.setEnabled(true);
+				menuSection.setEnabled(true);
+				listNotes.setEnabled(true);
+				textFieldNotesSearch.setEnabled(true);
+			}
+			else
+			{
+				JOptionPane.showMessageDialog(null, "Error", "Unable to delete course. Please try again.", JOptionPane.ERROR_MESSAGE);
+			}
+		}
+		else if (e.getSource() == buttonCourseEditSubmit)
+		{
+			// this should be done
+
+			if (acmeNote.getCourse(comboBoxCourseEditCourses.getSelectedIndex()).setCourseName(textFieldCourseEditCourseName.getText()))
+			{
+				acmeNoteGraphicalUserInterfaceUtility.setStringCourses(acmeNote);
+
+				comboBoxNotesSearchCourses.setModel(new DefaultComboBoxModel<String>(acmeNoteGraphicalUserInterfaceUtility.getStringCoursesAll()));
+				comboBoxNotesSearchCourses.setSelectedIndex(comboBoxCourseEditCourses.getSelectedIndex() + 1);
+
+				cardLayout.show(panelCards, "NoteNull");
+
+				buttonNotesSearchCancel.setEnabled(true);
+				buttonNotesSearchSearch.setEnabled(true);
+				comboBoxNotesSearchCourses.setEnabled(true);
+				comboBoxNotesSearchSections.setEnabled(true);
+				menuCourse.setEnabled(true);
+				menuSection.setEnabled(true);
+				listNotes.setEnabled(true);
+				textFieldNotesSearch.setEnabled(true);
+			}
+			else
+			{
+				JOptionPane.showMessageDialog(null, "Error", "Unable to edit course. Please try again.", JOptionPane.ERROR_MESSAGE);
+			}
+		}
+		else if (e.getSource() == buttonNoteAddSubmit)
+		{
+			// implement
+		}
+		else if (e.getSource() == buttonNoteDeleteSubmit)
+		{
+			// implement
+		}
+		else if (e.getSource() == buttonNoteEditSubmit)
+		{
+			// implement
+		}
+		else if (e.getSource() == buttonNoteNullNoteAdd)
+		{
+			// implement
+		}
+		else if (e.getSource() == buttonNoteNullNoteDelete)
+		{
+			// implement
+		}
+		else if (e.getSource() == buttonNoteNullNoteEdit)
+		{
+			// implement
+		}
+		else if (e.getSource() == buttonNotesSearchCancel)
+		{
+			// implement
+		}
+		else if (e.getSource() == buttonNotesSearchSearch)
+		{
+			// implement
+		}
+		else if (e.getSource() == buttonNoteViewNoteAdd)
+		{
+			// implement
+		}
+		else if (e.getSource() == buttonNoteViewNoteDelete)
+		{
+			// implement
+		}
+		else if (e.getSource() == buttonNoteViewNoteEdit)
+		{
+			// implement
+		}
+		else if (e.getSource() == buttonSectionAddSubmit)
+		{
+			// implement
+		}
+		else if (e.getSource() == buttonSectionDeleteSubmit)
+		{
+			// implement
+		}
+		else if (e.getSource() == buttonSectionEditSubmit)
+		{
+			// implement
+		}
+		else if (e.getSource() == checkBoxCourseDelete)
+		{
+			// this should be done
+
+			if (checkBoxCourseDelete.isSelected() == true)
+			{
+				buttonCourseDeleteSubmit.setEnabled(true);
+			}
+			else
+			{
+				buttonCourseDeleteSubmit.setEnabled(false);
+			}
+		}
+		else if (e.getSource() == checkBoxNoteDelete)
+		{
+			// this should be done
+
+			if (checkBoxNoteDelete.isSelected() == true)
+			{
+				buttonNoteDeleteSubmit.setEnabled(true);
+			}
+			else
+			{
+				buttonNoteDeleteSubmit.setEnabled(false);
+			}
+		}
+		else if (e.getSource() == checkBoxSectionDelete)
+		{
+			// this should be done
+
+			if (checkBoxSectionDelete.isSelected() == true)
+			{
+				buttonSectionDeleteSubmit.setEnabled(true);
+			}
+			else
+			{
+				buttonSectionDeleteSubmit.setEnabled(false);
+			}
+		}
+		else if (e.getSource() == comboBoxCourseDeleteCourses)
+		{
+			// this should be done
+
+			buttonCourseDeleteSubmit.setEnabled(false);
+			checkBoxCourseDelete.setSelected(false);
+		}
+		else if (e.getSource() == comboBoxCourseEditCourses)
+		{
+			// this should be done
+
+			textFieldCourseEditCourseName.setText(comboBoxCourseEditCourses.getSelectedItem().toString());
+		}
+		else if (e.getSource() == comboBoxNoteAddCourses)
+		{
+			// implement
+		}
+		else if (e.getSource() == comboBoxNoteAddSections)
+		{
+			// implement
+		}
+		else if (e.getSource() == comboBoxNoteEditCourses)
+		{
+			// implement
+		}
+		else if (e.getSource() == comboBoxNoteEditSections)
+		{
+			// implement
+		}
+		else if (e.getSource() == comboBoxNotesSearchCourses)
+		{
+			// implement
+		}
+		else if (e.getSource() == comboBoxNotesSearchSections)
+		{
+			// implement
+		}
+		else if (e.getSource() == comboBoxSectionAddCourses)
+		{
+			// implement
+		}
+		else if (e.getSource() == comboBoxSectionDeleteCourses)
+		{
+			// implement
+		}
+		else if (e.getSource() == comboBoxSectionEditCourses)
+		{
+			// implement
+		}
+		else if (e.getSource() == menuItemFileQuit)
+		{
+			acmeNote.serialize();
+
+			System.exit(0);
+		}
+		else if (e.getSource() == menuItemCourseAdd)
+		{
+			// this should be done
+
+			buttonNotesSearchCancel.setEnabled(false);
+			buttonNotesSearchSearch.setEnabled(false);
+			comboBoxNotesSearchCourses.setEnabled(false);
+			comboBoxNotesSearchSections.setEnabled(false);
+			menuCourse.setEnabled(false);
+			menuSection.setEnabled(false);
+			listNotes.setEnabled(false);
+			textFieldNotesSearch.setEnabled(false);
+
+			textFieldCourseAddCourseName.setText("");
+
+			cardLayout.show(panelCards, "CourseAdd");
+		}
+		else if (e.getSource() == menuItemCourseDelete)
+		{
+			// this should be done
+
+			buttonCourseDeleteSubmit.setEnabled(false);
+			buttonNotesSearchCancel.setEnabled(false);
+			buttonNotesSearchSearch.setEnabled(false);
+			comboBoxNotesSearchCourses.setEnabled(false);
+			comboBoxNotesSearchSections.setEnabled(false);
+			menuCourse.setEnabled(false);
+			menuSection.setEnabled(false);
+			listNotes.setEnabled(false);
+			textFieldNotesSearch.setEnabled(false);
+
+			comboBoxCourseDeleteCourses.setModel(new DefaultComboBoxModel<String>(acmeNoteGraphicalUserInterfaceUtility.getStringCourses()));
+
+			if (comboBoxNotesSearchCourses.getSelectedIndex() - 1 >= 0)
+			{
+				comboBoxCourseDeleteCourses.setSelectedIndex(comboBoxNotesSearchCourses.getSelectedIndex() -1);
+			}
+			else
+			{
+				comboBoxCourseDeleteCourses.setSelectedIndex(0);
+			}
+
+			checkBoxCourseDelete.setSelected(false);
+			
+			cardLayout.show(panelCards, "CourseDelete");
+		}
+		else if (e.getSource() == menuItemCourseEdit)
+		{
+			// this should be done
+
+			buttonNotesSearchCancel.setEnabled(false);
+			buttonNotesSearchSearch.setEnabled(false);
+			comboBoxNotesSearchCourses.setEnabled(false);
+			comboBoxNotesSearchSections.setEnabled(false);
+			menuCourse.setEnabled(false);
+			menuSection.setEnabled(false);
+			listNotes.setEnabled(false);
+			textFieldNotesSearch.setEnabled(false);
+
+			comboBoxCourseEditCourses.setModel(new DefaultComboBoxModel<String>(acmeNoteGraphicalUserInterfaceUtility.getStringCourses()));
+
+			if (comboBoxNotesSearchCourses.getSelectedIndex() - 1 >= 0)
+			{
+				comboBoxCourseEditCourses.setSelectedIndex(comboBoxNotesSearchCourses.getSelectedIndex() -1);
+			}
+			else
+			{
+				comboBoxCourseEditCourses.setSelectedIndex(0);
+			}
+
+			textFieldCourseEditCourseName.setText(comboBoxCourseEditCourses.getSelectedItem().toString());
+
+			cardLayout.show(panelCards, "CourseEdit");
+		}
+		else if (e.getSource() == menuItemHelpAbout)
+		{
+			// implement
+		}
+		else if (e.getSource() == menuItemHelpDocumentation)
+		{
+			// implement
+		}
+		else if (e.getSource() == menuItemSectionAdd)
+		{
+			// implement
+		}
+		else if (e.getSource() == menuItemSectionDelete)
+		{
+			// implement
+		}
+		else if (e.getSource() == menuItemSectionEdit)
+		{
+			// implement
+		}
 	}
 
-	// list selection listeners
+	// list selection event listeners
 
 	@Override
 	public void valueChanged(ListSelectionEvent e)
 	{
+		if (e.getSource() == listNotes)
+		{
+			// implement
+		}
 	}
+
+	// menu event listeners
+
+	@Override
+	public void menuCanceled(MenuEvent e)
+	{
+	}
+
+	@Override
+	public void menuDeselected(MenuEvent e)
+	{
+	}
+
+	@Override
+	public void menuSelected(MenuEvent e)
+	{
+		if (e.getSource() == menuCourse)
+		{
+			// this should be done
+
+			if (acmeNote.getCourses().size() > 0)
+			{
+				menuItemCourseDelete.setEnabled(true);
+				menuItemCourseEdit.setEnabled(true);
+			}
+			else
+			{
+				menuItemCourseDelete.setEnabled(false);
+				menuItemCourseEdit.setEnabled(false);
+			}
+		}
+		else if (e.getSource() == menuSection)
+		{
+			// implement
+		}
+	}
+
+	// window event listeners
 
 	// window event listeners
 
@@ -1078,10 +1564,12 @@ public class GraphicalUserInterface extends JFrame implements ActionListener, Li
 	{
 	}
 
+
 	@Override
 	public void windowClosed(WindowEvent e)
 	{
 	}
+
 
 	@Override
 	public void windowClosing(WindowEvent e)
@@ -1089,53 +1577,27 @@ public class GraphicalUserInterface extends JFrame implements ActionListener, Li
 		acmeNote.serialize();
 	}
 
+
 	@Override
 	public void windowDeactivated(WindowEvent e)
 	{
 	}
+
 
 	@Override
 	public void windowDeiconified(WindowEvent e)
 	{
 	}
 
+
 	@Override
 	public void windowIconified(WindowEvent e)
 	{
 	}
 
+
 	@Override
 	public void windowOpened(WindowEvent e)
-	{
-	}
-
-	// utility methods
-
-	private void coursesCopy()
-	{
-	}
-
-	private void coursesSort()
-	{
-	}
-
-	private void notesSearch()
-	{
-	}
-
-	private void fieldsClear()
-	{
-	}
-
-	private void fieldsCopy()
-	{
-	}
-
-	private void fieldsValidate()
-	{
-	}
-
-	private void setListData()
 	{
 	}
 
@@ -1147,8 +1609,7 @@ public class GraphicalUserInterface extends JFrame implements ActionListener, Li
 	 */
 	public static void main(String[] args)
 	{
-		GraphicalUserInterface frame = new GraphicalUserInterface();
-
+		AcmeNoteGraphicalUserInterface frame = new AcmeNoteGraphicalUserInterface();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
 		frame.setResizable(false);

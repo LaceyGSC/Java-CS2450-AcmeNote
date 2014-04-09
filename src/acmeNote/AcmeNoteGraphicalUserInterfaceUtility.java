@@ -50,6 +50,7 @@ public class AcmeNoteGraphicalUserInterfaceUtility
 
 	public String[] getStringCourses()
 	{
+            
 		return stringCourses;
 	}
 
@@ -69,6 +70,7 @@ public class AcmeNoteGraphicalUserInterfaceUtility
 		return stringNotes;
 	}
 
+        
 	public String[] getStringSections()
 	{
 		return stringSections;

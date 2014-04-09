@@ -355,10 +355,10 @@ public class AcmeNoteGraphicalUserInterface extends JFrame implements ActionList
         buttonNoteNullNoteAdd = new JButton("Add Note");
 
         buttonNoteNullNoteDelete = new JButton("Delete Note");
-        buttonNoteNullNoteDelete.setEnabled(false);
+        buttonNoteNullNoteDelete.setEnabled(true);
 
         buttonNoteNullNoteEdit = new JButton("Edit Note");
-        buttonNoteNullNoteEdit.setEnabled(false);
+        buttonNoteNullNoteEdit.setEnabled(true);
 
 		// containers
 
@@ -1298,6 +1298,7 @@ public class AcmeNoteGraphicalUserInterface extends JFrame implements ActionList
         }
         else if (e.getSource() == buttonNoteDeleteSubmit)
         {
+           
             
             // Is the delete button going to be based only on the note chosen on the left, or are we going
             //to allow the user to choose from drop downs as before?
@@ -1321,6 +1322,17 @@ public class AcmeNoteGraphicalUserInterface extends JFrame implements ActionList
         }
         else if (e.getSource() == buttonNoteEditSubmit)
         {
+            cindex = comboBoxNoteEditCourses.getSelectedIndex();
+            sindex = comboBoxNoteEditSections.getSelectedIndex();
+           int nindex = 0;
+            
+           //These would instead need to be set by the user clicking on the note in the menu on the left
+            //textFieldNoteEditNoteName.setText(acmeNote.getCourse(cindex).getSection(sindex).getNote(nindex).getNoteName());
+            //textAreaNoteEditNoteText.setText(acmeNote.getCourse(cindex).getSection(sindex).getNote(nindex).getNoteText());
+            
+            acmeNote.getCourse(cindex).getSection(sindex).getNote(nindex).setNoteName(textFieldNoteEditNoteName.getText()); 
+            acmeNote.getCourse(cindex).getSection(sindex).getNote(nindex).setNoteText(textAreaNoteEditNoteText.getText());
+            
             cardLayout.show(panelCards, "NoteNull");
 
                 buttonNotesSearchCancel.setEnabled(true);
@@ -1360,6 +1372,8 @@ public class AcmeNoteGraphicalUserInterface extends JFrame implements ActionList
         }
         else if (e.getSource() == buttonNoteNullNoteEdit)
         {
+            
+            
             cardLayout.show(panelCards, "NoteEdit");
             
             buttonNotesSearchCancel.setEnabled(false);

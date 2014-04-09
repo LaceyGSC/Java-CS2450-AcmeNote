@@ -58,7 +58,7 @@ public class AcmeNoteGraphicalUserInterfaceUtility
 	{
 		String[] string = new String[stringCourses.length + 1];
 
-		string[0] = "All Coureses";
+		string[0] = "All Courses";
 
 		System.arraycopy(stringCourses, 0, string, 1, stringCourses.length);
 

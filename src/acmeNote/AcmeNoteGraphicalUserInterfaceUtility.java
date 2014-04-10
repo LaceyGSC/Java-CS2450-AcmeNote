@@ -48,23 +48,6 @@ public class AcmeNoteGraphicalUserInterfaceUtility
 
 	// accessors
 
-	public String[] getStringCourses()
-	{
-            
-		return stringCourses;
-	}
-
-	public String[] getStringCoursesAll()
-	{
-		String[] string = new String[stringCourses.length + 1];
-
-		string[0] = "All Courses";
-
-		System.arraycopy(stringCourses, 0, string, 1, stringCourses.length);
-
-		return string;
-	}
-
 	public String[] getStringNotes()
 	{
 		return stringNotes;
@@ -88,16 +71,6 @@ public class AcmeNoteGraphicalUserInterfaceUtility
 	}
 
 	// mutators
-
-	public void setStringCourses(AcmeNote acmeNote)
-	{
-		stringCourses = new String[acmeNote.getCourses().size()];
-
-		for (int i = 0; i < acmeNote.getCourses().size(); i++)
-		{
-			stringCourses[i] = acmeNote.getCourse(i).toString();
-		}
-	}
 
 	public void setStringNotes(int courseIndex, int sectionIndex)
 	{

@@ -28,6 +28,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.DefaultComboBoxModel;
@@ -64,7 +65,7 @@ public class AcmeNoteGraphicalUserInterface extends JFrame implements ActionList
 {
 	// components
 
-    private int cindex;
+	private int cindex;
     private int sindex;
     // add javadoc comments when complete
     private JButton buttonCourseAddCancel;
@@ -142,9 +143,6 @@ public class AcmeNoteGraphicalUserInterface extends JFrame implements ActionList
      */
     private final AcmeNote acmeNote;
 
-    // add javadoc
-    private final AcmeNoteGraphicalUserInterfaceUtility acmeNoteGraphicalUserInterfaceUtility;
-
 	// constructors
     /**
      * No argument default constructor.
@@ -152,8 +150,49 @@ public class AcmeNoteGraphicalUserInterface extends JFrame implements ActionList
     public AcmeNoteGraphicalUserInterface()
     {
         acmeNote = new AcmeNote();
-        acmeNoteGraphicalUserInterfaceUtility = new AcmeNoteGraphicalUserInterfaceUtility(acmeNote);
+/*
+        acmeNote.addCourse(new Course("Course 1"));
+        acmeNote.addCourse(new Course("Course 2"));
+        acmeNote.addCourse(new Course("Course 3"));
 
+        acmeNote.getCourse(0).addSection(new Section("Section 1"));
+        acmeNote.getCourse(0).addSection(new Section("Section 2"));
+        acmeNote.getCourse(0).addSection(new Section("Section 3"));
+        acmeNote.getCourse(1).addSection(new Section("Section 4"));
+        acmeNote.getCourse(1).addSection(new Section("Section 5"));
+        acmeNote.getCourse(1).addSection(new Section("Section 6"));
+        acmeNote.getCourse(2).addSection(new Section("Section 7"));
+        acmeNote.getCourse(2).addSection(new Section("Section 8"));
+        acmeNote.getCourse(2).addSection(new Section("Section 9"));
+
+        acmeNote.getCourse(0).getSection(0).addNote(new Note("Note Name 1", "Note Text 1"));
+        acmeNote.getCourse(0).getSection(0).addNote(new Note("Note Name 2", "Note Text 2"));
+        acmeNote.getCourse(0).getSection(0).addNote(new Note("Note Name 3", "Note Text 3"));
+        acmeNote.getCourse(0).getSection(1).addNote(new Note("Note Name 1", "Note Text 1"));
+        acmeNote.getCourse(0).getSection(1).addNote(new Note("Note Name 2", "Note Text 2"));
+        acmeNote.getCourse(0).getSection(1).addNote(new Note("Note Name 3", "Note Text 3"));
+        acmeNote.getCourse(0).getSection(2).addNote(new Note("Note Name 1", "Note Text 1"));
+        acmeNote.getCourse(0).getSection(2).addNote(new Note("Note Name 2", "Note Text 2"));
+        acmeNote.getCourse(0).getSection(2).addNote(new Note("Note Name 3", "Note Text 3"));
+        acmeNote.getCourse(1).getSection(0).addNote(new Note("Note Name 1", "Note Text 1"));
+        acmeNote.getCourse(1).getSection(0).addNote(new Note("Note Name 2", "Note Text 2"));
+        acmeNote.getCourse(1).getSection(0).addNote(new Note("Note Name 3", "Note Text 3"));
+        acmeNote.getCourse(1).getSection(1).addNote(new Note("Note Name 1", "Note Text 1"));
+        acmeNote.getCourse(1).getSection(1).addNote(new Note("Note Name 2", "Note Text 2"));
+        acmeNote.getCourse(1).getSection(1).addNote(new Note("Note Name 3", "Note Text 3"));
+        acmeNote.getCourse(1).getSection(2).addNote(new Note("Note Name 1", "Note Text 1"));
+        acmeNote.getCourse(1).getSection(2).addNote(new Note("Note Name 2", "Note Text 2"));
+        acmeNote.getCourse(1).getSection(2).addNote(new Note("Note Name 3", "Note Text 3"));
+        acmeNote.getCourse(2).getSection(0).addNote(new Note("Note Name 1", "Note Text 1"));
+        acmeNote.getCourse(2).getSection(0).addNote(new Note("Note Name 2", "Note Text 2"));
+        acmeNote.getCourse(2).getSection(0).addNote(new Note("Note Name 3", "Note Text 3"));
+        acmeNote.getCourse(2).getSection(1).addNote(new Note("Note Name 1", "Note Text 1"));
+        acmeNote.getCourse(2).getSection(1).addNote(new Note("Note Name 2", "Note Text 2"));
+        acmeNote.getCourse(2).getSection(1).addNote(new Note("Note Name 3", "Note Text 3"));
+        acmeNote.getCourse(2).getSection(2).addNote(new Note("Note Name 1", "Note Text 1"));
+        acmeNote.getCourse(2).getSection(2).addNote(new Note("Note Name 2", "Note Text 2"));
+        acmeNote.getCourse(2).getSection(2).addNote(new Note("Note Name 3", "Note Text 3"));
+*/
         graphicalUserInterfaceCreate();
     }
 
@@ -163,10 +202,6 @@ public class AcmeNoteGraphicalUserInterface extends JFrame implements ActionList
      */
     private void graphicalUserInterfaceCreate()
     {
-        acmeNoteGraphicalUserInterfaceUtility.setStringCourses(acmeNote);
-        acmeNoteGraphicalUserInterfaceUtility.setStringSections(-1);
-        acmeNoteGraphicalUserInterfaceUtility.setStringNotes(-1, -1);
-
         add(panelCreate());
 
         actionListenersAdd();
@@ -262,11 +297,11 @@ public class AcmeNoteGraphicalUserInterface extends JFrame implements ActionList
     {
 		// components
 
-        comboBoxNotesSearchCourses = new JComboBox<String>(new DefaultComboBoxModel<String>(acmeNoteGraphicalUserInterfaceUtility.getStringCoursesAll()));
+        comboBoxNotesSearchCourses = new JComboBox<String>(getStringCoursesAll());
         comboBoxNotesSearchCourses.setAlignmentX(LEFT_ALIGNMENT);
         comboBoxNotesSearchCourses.setPreferredSize(new Dimension(200, comboBoxNotesSearchCourses.getPreferredSize().height));
 
-        comboBoxNotesSearchSections = new JComboBox<String>(new DefaultComboBoxModel<String>(acmeNoteGraphicalUserInterfaceUtility.getStringSectionsAll()));
+        comboBoxNotesSearchSections = new JComboBox<String>(getStringSectionsAll(-1));
         comboBoxNotesSearchSections.setAlignmentX(LEFT_ALIGNMENT);
         comboBoxNotesSearchSections.setPreferredSize(new Dimension(200, comboBoxNotesSearchSections.getPreferredSize().height));
 
@@ -277,7 +312,7 @@ public class AcmeNoteGraphicalUserInterface extends JFrame implements ActionList
         buttonNotesSearchCancel = new JButton("Cancel");
         buttonNotesSearchSearch = new JButton("Search");
 
-        listNotes = new JList<String>(acmeNoteGraphicalUserInterfaceUtility.getStringNotes());
+        listNotes = new JList<String>(getStringNotesSearch(-1, -1, ""));
         listNotes.setLayoutOrientation(JList.VERTICAL);
         listNotes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -444,7 +479,7 @@ public class AcmeNoteGraphicalUserInterface extends JFrame implements ActionList
         JLabel labelCourseDelete = new JLabel("Delete Course");
         labelCourseDelete.setFont(new Font("Serif", Font.BOLD, 25));
 
-        comboBoxCourseDeleteCourses = new JComboBox<String>(new DefaultComboBoxModel<String>(acmeNoteGraphicalUserInterfaceUtility.getStringCourses()));
+        comboBoxCourseDeleteCourses = new JComboBox<String>(new String[0]);
         comboBoxCourseDeleteCourses.setAlignmentX(LEFT_ALIGNMENT);
         comboBoxCourseDeleteCourses.setPreferredSize(new Dimension(200, comboBoxCourseDeleteCourses.getPreferredSize().height));
 
@@ -516,7 +551,7 @@ public class AcmeNoteGraphicalUserInterface extends JFrame implements ActionList
         JLabel labelCourseEdit = new JLabel("Edit Course");
         labelCourseEdit.setFont(new Font("Serif", Font.BOLD, 25));
 
-        comboBoxCourseEditCourses = new JComboBox<String>(new DefaultComboBoxModel<String>(acmeNoteGraphicalUserInterfaceUtility.getStringCourses()));
+        comboBoxCourseEditCourses = new JComboBox<String>(new String[0]);
         comboBoxCourseEditCourses.setAlignmentX(LEFT_ALIGNMENT);
         comboBoxCourseEditCourses.setPreferredSize(new Dimension(200, comboBoxCourseEditCourses.getPreferredSize().height));
 
@@ -582,7 +617,7 @@ public class AcmeNoteGraphicalUserInterface extends JFrame implements ActionList
         JLabel labelSectionAdd = new JLabel("Add Section");
         labelSectionAdd.setFont(new Font("Serif", Font.BOLD, 25));
 
-        comboBoxSectionAddCourses = new JComboBox<String>(new DefaultComboBoxModel<String>(acmeNoteGraphicalUserInterfaceUtility.getStringCourses()));
+        comboBoxSectionAddCourses = new JComboBox<String>(new String[0]);
         comboBoxSectionAddCourses.setAlignmentX(LEFT_ALIGNMENT);
         comboBoxSectionAddCourses.setPreferredSize(new Dimension(200, comboBoxSectionAddCourses.getPreferredSize().height));
 
@@ -648,7 +683,7 @@ public class AcmeNoteGraphicalUserInterface extends JFrame implements ActionList
         JLabel labelSectionDelete = new JLabel("Delete Section");
         labelSectionDelete.setFont(new Font("Serif", Font.BOLD, 25));
 
-        comboBoxSectionDeleteCourses = new JComboBox<String>(new DefaultComboBoxModel<String>(acmeNoteGraphicalUserInterfaceUtility.getStringCourses()));
+        comboBoxSectionDeleteCourses = new JComboBox<String>(new String[0]);
         comboBoxSectionDeleteCourses.setAlignmentX(LEFT_ALIGNMENT);
         comboBoxSectionDeleteCourses.setPreferredSize(new Dimension(200, comboBoxSectionDeleteCourses.getPreferredSize().height));
 
@@ -720,7 +755,7 @@ public class AcmeNoteGraphicalUserInterface extends JFrame implements ActionList
         JLabel labelSectionEdit = new JLabel("Edit Section");
         labelSectionEdit.setFont(new Font("Serif", Font.BOLD, 25));
 
-        comboBoxSectionEditCourses = new JComboBox<String>(new DefaultComboBoxModel<String>(acmeNoteGraphicalUserInterfaceUtility.getStringCourses()));//stringCourses));
+        comboBoxSectionEditCourses = new JComboBox<String>(new String[0]);
         comboBoxSectionEditCourses.setAlignmentX(LEFT_ALIGNMENT);
         comboBoxSectionEditCourses.setPreferredSize(new Dimension(200, comboBoxSectionEditCourses.getPreferredSize().height));
 
@@ -786,11 +821,11 @@ public class AcmeNoteGraphicalUserInterface extends JFrame implements ActionList
         JLabel labelNoteAdd = new JLabel("Add Note");
         labelNoteAdd.setFont(new Font("Serif", Font.BOLD, 25));
 
-        comboBoxNoteAddCourses = new JComboBox<String>(new DefaultComboBoxModel<String>(acmeNoteGraphicalUserInterfaceUtility.getStringCourses()));
+        comboBoxNoteAddCourses = new JComboBox<String>(new String[0]);
         comboBoxNoteAddCourses.setAlignmentX(LEFT_ALIGNMENT);
         comboBoxNoteAddCourses.setPreferredSize(new Dimension(200, comboBoxNoteAddCourses.getPreferredSize().height));
 
-        comboBoxNoteAddSections = new JComboBox<String>(new DefaultComboBoxModel<String>(acmeNoteGraphicalUserInterfaceUtility.getStringSections()));//stringSections));
+        comboBoxNoteAddSections = new JComboBox<String>(new String[0]);
         comboBoxNoteAddSections.setAlignmentX(LEFT_ALIGNMENT);
         comboBoxNoteAddSections.setPreferredSize(new Dimension(200, comboBoxNoteAddSections.getPreferredSize().height));
 
@@ -929,11 +964,11 @@ public class AcmeNoteGraphicalUserInterface extends JFrame implements ActionList
         JLabel labelNoteEdit = new JLabel("Edit Note");
         labelNoteEdit.setFont(new Font("Serif", Font.BOLD, 25));
 
-        comboBoxNoteEditCourses = new JComboBox<>(new DefaultComboBoxModel<>(acmeNoteGraphicalUserInterfaceUtility.getStringCourses()));//stringCourses));
+        comboBoxNoteEditCourses = new JComboBox<>(new String[0]);
         comboBoxNoteEditCourses.setAlignmentX(LEFT_ALIGNMENT);
         comboBoxNoteEditCourses.setPreferredSize(new Dimension(200, comboBoxNoteEditCourses.getPreferredSize().height));
 
-        comboBoxNoteEditSections = new JComboBox<>(new DefaultComboBoxModel<>(acmeNoteGraphicalUserInterfaceUtility.getStringSections()));//stringSections));
+        comboBoxNoteEditSections = new JComboBox<>(new String[0]);
         comboBoxNoteEditSections.setAlignmentX(LEFT_ALIGNMENT);
         comboBoxNoteEditSections.setPreferredSize(new Dimension(200, comboBoxNoteEditSections.getPreferredSize().height));
 
@@ -1170,8 +1205,6 @@ public class AcmeNoteGraphicalUserInterface extends JFrame implements ActionList
     @Override
     public void actionPerformed(ActionEvent e)
     {
-
-        System.out.println(e.paramString());
         if (e.getSource() == buttonCourseAddCancel || e.getSource() == buttonCourseDeleteCancel || e.getSource() == buttonCourseEditCancel || e.getSource() == buttonNoteAddCancel || e.getSource() == buttonNoteDeleteCancel || e.getSource() == buttonNoteEditCancel || e.getSource() == buttonSectionAddCancel || e.getSource() == buttonSectionDeleteCancel || e.getSource() == buttonSectionEditCancel)
         {
         // add logic later to check whether a note is selected in the list. if so, view that note, else, view note null panel
@@ -1194,9 +1227,7 @@ public class AcmeNoteGraphicalUserInterface extends JFrame implements ActionList
 
             acmeNote.addCourse(new Course(textFieldCourseAddCourseName.getText()));
 
-            acmeNoteGraphicalUserInterfaceUtility.setStringCourses(acmeNote);
-
-            comboBoxNotesSearchCourses.setModel(new DefaultComboBoxModel<String>(acmeNoteGraphicalUserInterfaceUtility.getStringCoursesAll()));
+            comboBoxNotesSearchCourses.setModel(new DefaultComboBoxModel<String>(getStringCoursesAll()));
             comboBoxNotesSearchCourses.setSelectedIndex(acmeNote.getCourses().size());
 
             cardLayout.show(panelCards, "NoteNull");
@@ -1227,9 +1258,7 @@ public class AcmeNoteGraphicalUserInterface extends JFrame implements ActionList
                     courseIndex = comboBoxNotesSearchCourses.getSelectedIndex() - 1;
                 }
 
-                acmeNoteGraphicalUserInterfaceUtility.setStringCourses(acmeNote);
-
-                comboBoxNotesSearchCourses.setModel(new DefaultComboBoxModel<String>(acmeNoteGraphicalUserInterfaceUtility.getStringCoursesAll()));
+                comboBoxNotesSearchCourses.setModel(new DefaultComboBoxModel<String>(getStringCoursesAll()));
                 comboBoxNotesSearchCourses.setSelectedIndex(courseIndex);
 
                 cardLayout.show(panelCards, "NoteNull");
@@ -1254,9 +1283,7 @@ public class AcmeNoteGraphicalUserInterface extends JFrame implements ActionList
 
             if (acmeNote.getCourse(comboBoxCourseEditCourses.getSelectedIndex()).setCourseName(textFieldCourseEditCourseName.getText()))
             {
-                acmeNoteGraphicalUserInterfaceUtility.setStringCourses(acmeNote);
-
-                comboBoxNotesSearchCourses.setModel(new DefaultComboBoxModel<String>(acmeNoteGraphicalUserInterfaceUtility.getStringCoursesAll()));
+                comboBoxNotesSearchCourses.setModel(new DefaultComboBoxModel<String>(getStringCoursesAll()));
                 comboBoxNotesSearchCourses.setSelectedIndex(comboBoxCourseEditCourses.getSelectedIndex() + 1);
 
                 cardLayout.show(panelCards, "NoteNull");
@@ -1387,11 +1414,12 @@ public class AcmeNoteGraphicalUserInterface extends JFrame implements ActionList
         }
         else if (e.getSource() == buttonNotesSearchCancel)
         {
-            textFieldNotesSearch.setText("");
+        	textFieldNotesSearch.setText("");
+        	listNotes.setModel(new DefaultComboBoxModel<String>(getStringNotesSearch(comboBoxNotesSearchCourses.getSelectedIndex() - 1, comboBoxNotesSearchSections.getSelectedIndex() - 1, textFieldNotesSearch.getText())));
         }
         else if (e.getSource() == buttonNotesSearchSearch)
         {
-            acmeNoteGraphicalUserInterfaceUtility.notesSearch();
+        	listNotes.setModel(new DefaultComboBoxModel<String>(getStringNotesSearch(comboBoxNotesSearchCourses.getSelectedIndex() - 1, comboBoxNotesSearchSections.getSelectedIndex() - 1, textFieldNotesSearch.getText())));
         }
         else if (e.getSource() == buttonNoteViewNoteAdd)
         {
@@ -1545,11 +1573,12 @@ public class AcmeNoteGraphicalUserInterface extends JFrame implements ActionList
         }
         else if (e.getSource() == comboBoxNotesSearchCourses)
         {
-            // implement
+        	comboBoxNotesSearchSections.setModel(new DefaultComboBoxModel<String>(getStringSectionsAll(comboBoxNotesSearchCourses.getSelectedIndex() - 1)));
+        	listNotes.setModel(new DefaultComboBoxModel<String>(getStringNotesSearch(comboBoxNotesSearchCourses.getSelectedIndex() - 1, comboBoxNotesSearchSections.getSelectedIndex() - 1, textFieldNotesSearch.getText())));
         }
         else if (e.getSource() == comboBoxNotesSearchSections)
         {
-            // implement
+        	listNotes.setModel(new DefaultComboBoxModel<String>(getStringNotesSearch(comboBoxNotesSearchCourses.getSelectedIndex() - 1, comboBoxNotesSearchSections.getSelectedIndex() - 1, textFieldNotesSearch.getText())));
         }
         else if (e.getSource() == comboBoxSectionAddCourses)
         {
@@ -1600,7 +1629,7 @@ public class AcmeNoteGraphicalUserInterface extends JFrame implements ActionList
             listNotes.setEnabled(false);
             textFieldNotesSearch.setEnabled(false);
 
-            comboBoxCourseDeleteCourses.setModel(new DefaultComboBoxModel<String>(acmeNoteGraphicalUserInterfaceUtility.getStringCourses()));
+            comboBoxCourseDeleteCourses.setModel(new DefaultComboBoxModel<String>(getStringCourses()));
 
             if (comboBoxNotesSearchCourses.getSelectedIndex() - 1 >= 0)
             {
@@ -1628,7 +1657,7 @@ public class AcmeNoteGraphicalUserInterface extends JFrame implements ActionList
             listNotes.setEnabled(false);
             textFieldNotesSearch.setEnabled(false);
 
-            comboBoxCourseEditCourses.setModel(new DefaultComboBoxModel<String>(acmeNoteGraphicalUserInterfaceUtility.getStringCourses()));
+            comboBoxCourseEditCourses.setModel(new DefaultComboBoxModel<String>(getStringCourses()));
 
             if (comboBoxNotesSearchCourses.getSelectedIndex() - 1 >= 0)
             {
@@ -1684,7 +1713,7 @@ public class AcmeNoteGraphicalUserInterface extends JFrame implements ActionList
             listNotes.setEnabled(false);
             textFieldNotesSearch.setEnabled(false);
 
-            comboBoxCourseDeleteCourses.setModel(new DefaultComboBoxModel<String>(acmeNoteGraphicalUserInterfaceUtility.getStringCourses()));
+            comboBoxCourseDeleteCourses.setModel(new DefaultComboBoxModel<String>(getStringCourses()));
 
             checkBoxCourseDelete.setSelected(false);
 
@@ -1757,7 +1786,7 @@ public class AcmeNoteGraphicalUserInterface extends JFrame implements ActionList
     }
 
 	// window event listeners
-	// window event listeners
+
     @Override
     public void windowActivated(WindowEvent e)
     {
@@ -1794,10 +1823,106 @@ public class AcmeNoteGraphicalUserInterface extends JFrame implements ActionList
     {
     }
 
+    // utility methods
+
+    private String[] getStringCourses()
+    {
+    	String[] string = new String[acmeNote.getCourses().size()];
+
+    	for (int i = 0; i < acmeNote.getCourses().size(); i++)
+    	{
+    		string[i] = acmeNote.getCourse(i).toString();
+    	}
+
+		return string;
+    }
+
+    private String[] getStringCoursesAll()
+    {
+    	String[] string = new String[acmeNote.getCourses().size() + 1];
+
+		string[0] = "All Courses";
+
+		System.arraycopy(getStringCourses(), 0, string, 1, acmeNote.getCourses().size());
+
+		return string;
+    }
+
+    private String[] getStringNotes(int course, int section)
+    {
+    	String[] string = new String[acmeNote.getCourse(course).getSection(section).getNotes().size()];
+
+    	for (int i = 0; i < acmeNote.getCourse(course).getSection(section).getNotes().size(); i++)
+    	{
+    		string[i] = acmeNote.getCourse(course).getSection(section).getNote(i).toString();
+    	}
+
+		return string;
+    }
+
+    private String[] getStringNotesSearch(int course, int section, String search)
+    {
+    	if (course >= 0)
+    	{
+    		// pick up here
+    	}
+    	return new String[0];
+    }
+
+    private String[] getStringSections(int course)
+    {
+    	String[] string = new String[acmeNote.getCourse(course).getSections().size()];
+
+    	for (int j = 0; j < acmeNote.getCourse(course).getSections().size(); j++)
+    	{
+    		string[j] = acmeNote.getCourse(course).getSection(j).toString();
+    	}
+
+		return string;
+	}
+
+	private String[] getStringSectionsAll(int course)
+	{
+		String[] string = null;
+
+		if (course >= 0)
+		{
+			string = new String[acmeNote.getCourse(course).getSections().size() + 1];
+
+			string[0] = "All Sections";
+			
+			System.arraycopy(getStringSections(course), 0, string, 1, acmeNote.getCourse(course).getSections().size());
+		}
+		else
+		{
+			int i = 0;
+
+			for (int j = 0; j < acmeNote.getCourses().size(); j++)
+			{
+				i += acmeNote.getCourse(j).getSections().size();
+			}
+
+			string = new String[i + 1];
+
+			string[0] = "All Sections";
+
+			i = 1;
+
+			for (int j = 0; j < acmeNote.getCourses().size(); j++)
+			{
+				System.arraycopy(getStringSections(j), 0, string, i, acmeNote.getCourse(j).getSections().size());
+
+				i += acmeNote.getCourse(j).getSections().size();
+			}
+		}
+
+		return string;
+    }
+
 	// main method
-    /**
+
+	/**
      * Main method to launch graphical user interface.
-     *
      * @param args <tt>String</tt> <tt>Array</tt> of arguments.
      */
     public static void main(String[] args)

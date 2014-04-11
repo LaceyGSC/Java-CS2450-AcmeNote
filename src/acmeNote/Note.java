@@ -17,9 +17,10 @@ import java.io.Serializable;
 
 /**
  * <tt>Note</tt> class contains <tt>String</tt> objects for note name and note text.
+ * 
  * @author Matthew Harker
  */
-public class Note implements Serializable
+public final class Note implements Serializable
 {
 	// fields
 
@@ -50,6 +51,7 @@ public class Note implements Serializable
 
 	/**
 	 * Parameterized constructor with noteName and noteText arguments.
+	 * 
 	 * @param noteName <tt>String</tt> object containing note name.
 	 * @param noteText <tt>String</tt> object containing note text.
 	 */
@@ -63,6 +65,7 @@ public class Note implements Serializable
 
 	/**
 	 * Return note name.
+	 * 
 	 * @return <tt>String</tt> object containing note name. 
 	 */
 	public String getNoteName()
@@ -72,6 +75,7 @@ public class Note implements Serializable
 
 	/**
 	 * Return note text.
+	 * 
 	 * @return <tt>String</tt> object containing note text.
 	 */
 	public String getNoteText()
@@ -92,6 +96,7 @@ public class Note implements Serializable
 
 	/**
 	 * Set note name.
+	 * 
 	 * @param noteName <tt>String</tt> object containing note name.
 	 * @return <tt>boolean</tt> value of set operation.
 	 */
@@ -111,6 +116,7 @@ public class Note implements Serializable
 
 	/**
 	 * Set note text.
+	 * 
 	 * @param noteText <tt>String</tt> object containing note text.
 	 * @return <tt>boolean</tt> value of set operation.
 	 */

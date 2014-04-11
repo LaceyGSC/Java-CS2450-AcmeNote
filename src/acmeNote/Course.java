@@ -18,9 +18,10 @@ import java.util.ArrayList;
 
 /**
  * <tt>Course</tt> class contains a <tt>String</tt> object for section name and an <tt>ArrayList</tt> of <tt>Section</tt> objects.
+ * 
  * @author Matthew Harker
  */
-public class Course implements Serializable
+public final class Course implements Serializable
 {
 	// fields
 
@@ -64,6 +65,7 @@ public class Course implements Serializable
 
 	/**
 	 * Return course name.
+	 * 
 	 * @return <tt>String</tt> object containing course name. 
 	 */
 	public String getCourseName()
@@ -73,6 +75,7 @@ public class Course implements Serializable
 
 	/**
 	 * Return sections.
+	 * 
 	 * @return <tt>ArrayList</tt> object containing <tt>Section</tt> objects.
 	 */
 	public ArrayList<Section> getSections()
@@ -82,6 +85,7 @@ public class Course implements Serializable
 
 	/**
 	 * Return section object.
+	 * 
 	 * @param index <tt>int</tt> value of <tt>Section</tt> object within the <tt>ArrayList</tt> of sections.  
 	 * @return <tt>Section</tt> object.
 	 */
@@ -103,6 +107,7 @@ public class Course implements Serializable
 
 	/**
 	 * Set course name.
+	 * 
 	 * @param sectionName <tt>String</tt> object containing course name.
 	 * @return <tt>boolean</tt> value of set operation.
 	 */
@@ -122,6 +127,7 @@ public class Course implements Serializable
 
 	/**
 	 * Set <tt>ArrayList</tt> of <tt>Section</tt> objects.
+	 * 
 	 * @param notes <tt>ArrayList</tt> of <tt>Section</tt> objects.
 	 * @return <tt>boolean</tt> value of set operation.
 	 */
@@ -134,6 +140,7 @@ public class Course implements Serializable
 	
 	/**
 	 * Add <tt>Section</tt> object to <tt>ArrayList</tt>.
+	 * 
 	 * @param note <tt>Section</tt> object.
 	 * @return <tt>boolean</tt> value of set operation.
 	 */
@@ -146,6 +153,7 @@ public class Course implements Serializable
 	
 	/**
 	 * Remove <tt>Section</tt> object from <tt>ArrayList</tt>.
+	 * 
 	 * @param index <tt>int</tt> value of <tt>Section</tt> object in <tt>ArrayList</tt>.
 	 * @return <tt>boolean</tt> value of set operation.
 	 */
@@ -165,6 +173,7 @@ public class Course implements Serializable
 	
 	/**
 	 * Set <tt>Section</tt> object in <tt>ArrayList</tt>.
+	 * 
 	 * @param index <tt>int</tt> value of <tt>Section</tt> object in <tt>ArrayList</tt>.
 	 * @param note <tt>Section</tt> object to set in <tt>ArrayList</tt>.
 	 * @return <tt>boolean</tt> value of set operation.

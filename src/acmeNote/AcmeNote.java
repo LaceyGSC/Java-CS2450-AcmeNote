@@ -31,7 +31,7 @@ import javax.swing.JOptionPane;
  * <tt>AcmeNote</tt> class contains an <tt>ArrayList</tt> of <tt>Course</tt> objects and associated serialization methods.
  * @author Matthew Harker
  */
-public class AcmeNote
+public final class AcmeNote
 {
 	// fields
 
@@ -63,6 +63,7 @@ public class AcmeNote
 
 	/**
 	 * Return course object.
+	 * 
 	 * @param index <tt>int</tt> value of <tt>Course</tt> object within the <tt>ArrayList</tt> of sections.  
 	 * @return <tt>Course</tt> object.
 	 */
@@ -75,6 +76,7 @@ public class AcmeNote
 
 	/**
 	 * Set <tt>ArrayList</tt> of <tt>Course</tt> objects.
+	 * 
 	 * @param notes <tt>ArrayList</tt> of <tt>Course</tt> objects.
 	 * @return <tt>boolean</tt> value of set operation.
 	 */
@@ -87,6 +89,7 @@ public class AcmeNote
 
 	/**
 	 * Add <tt>Course</tt> object to <tt>ArrayList</tt>.
+	 * 
 	 * @param note <tt>Course</tt> object.
 	 * @return <tt>boolean</tt> value of set operation.
 	 */
@@ -99,6 +102,7 @@ public class AcmeNote
 
 	/**
 	 * Remove <tt>Course</tt> object from <tt>ArrayList</tt>.
+	 * 
 	 * @param index <tt>int</tt> value of <tt>Course</tt> object in <tt>ArrayList</tt>.
 	 * @return <tt>boolean</tt> value of set operation.
 	 */
@@ -118,6 +122,7 @@ public class AcmeNote
 
 	/**
 	 * Set <tt>Course</tt> object in <tt>ArrayList</tt>.
+	 * 
 	 * @param index <tt>int</tt> value of <tt>Course</tt> object in <tt>ArrayList</tt>.
 	 * @param note <tt>Course</tt> object to set in <tt>ArrayList</tt>.
 	 * @return <tt>boolean</tt> value of set operation.

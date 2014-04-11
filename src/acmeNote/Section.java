@@ -18,9 +18,10 @@ import java.util.ArrayList;
 
 /**
  * <tt>Section</tt> class contains a <tt>String</tt> object for section name and an <tt>ArrayList</tt> of <tt>Note</tt> objects.
+ * 
  * @author Matthew Harker
  */
-public class Section implements Serializable
+public final class Section implements Serializable
 {
 	// fields
 
@@ -51,6 +52,7 @@ public class Section implements Serializable
 
 	/**
 	 * Parameterized constructor with sectionName argument.
+	 * 
 	 * @param noteName <tt>String</tt> object containing section name.
 	 */
 	public Section(String sectionName)
@@ -64,6 +66,7 @@ public class Section implements Serializable
 
 	/**
 	 * Return section name.
+	 * 
 	 * @return <tt>String</tt> object containing section name. 
 	 */
 	public String getSectionName()
@@ -73,6 +76,7 @@ public class Section implements Serializable
 
 	/**
 	 * Return notes.
+	 * 
 	 * @return <tt>ArrayList</tt> object containing <tt>Note</tt> objects.
 	 */
 	public ArrayList<Note> getNotes()
@@ -82,6 +86,7 @@ public class Section implements Serializable
 
 	/**
 	 * Return note object.
+	 * 
 	 * @param index <tt>int</tt> value of <tt>Note</tt> object within the <tt>ArrayList</tt> of notes.  
 	 * @return <tt>Note</tt> object.
 	 */
@@ -103,6 +108,7 @@ public class Section implements Serializable
 
 	/**
 	 * Set section name.
+	 * 
 	 * @param sectionName <tt>String</tt> object containing section name.
 	 * @return <tt>boolean</tt> value of set operation.
 	 */
@@ -122,6 +128,7 @@ public class Section implements Serializable
 
 	/**
 	 * Set <tt>ArrayList</tt> of <tt>Note</tt> objects.
+	 * 
 	 * @param notes <tt>ArrayList</tt> of <tt>Note</tt> objects.
 	 * @return <tt>boolean</tt> value of set operation.
 	 */
@@ -134,6 +141,7 @@ public class Section implements Serializable
 
 	/**
 	 * Add <tt>Note</tt> object to <tt>ArrayList</tt>.
+	 * 
 	 * @param note <tt>Note</tt> object.
 	 * @return <tt>boolean</tt> value of set operation.
 	 */
@@ -146,6 +154,7 @@ public class Section implements Serializable
 
 	/**
 	 * Remove <tt>Note</tt> object from <tt>ArrayList</tt>.
+	 * 
 	 * @param index <tt>int</tt> value of <tt>Note</tt> object in <tt>ArrayList</tt>.
 	 * @return <tt>boolean</tt> value of set operation.
 	 */
@@ -165,6 +174,7 @@ public class Section implements Serializable
 
 	/**
 	 * Set <tt>Note</tt> object in <tt>ArrayList</tt>.
+	 * 
 	 * @param index <tt>int</tt> value of <tt>Note</tt> object in <tt>ArrayList</tt>.
 	 * @param note <tt>Note</tt> object to set in <tt>ArrayList</tt>.
 	 * @return <tt>boolean</tt> value of set operation.

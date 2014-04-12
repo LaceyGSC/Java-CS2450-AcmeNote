@@ -19,7 +19,7 @@ import java.util.ArrayList;
 /**
  * <tt>Section</tt> class contains a <tt>String</tt> object for section name and an <tt>ArrayList</tt> of <tt>Note</tt> objects.
  * 
- * @author Matthew Harker
+ * @author Matthew Harker, Shaun Christensen
  */
 public final class Section implements Serializable
 {

@@ -18,7 +18,7 @@ import java.io.Serializable;
 /**
  * <tt>Note</tt> class contains <tt>String</tt> objects for note name and note text.
  * 
- * @author Matthew Harker
+ * @author Matthew Harker, Shaun Christensen
  */
 public final class Note implements Serializable
 {

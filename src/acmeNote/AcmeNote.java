@@ -29,7 +29,8 @@ import javax.swing.JOptionPane;
 
 /**
  * <tt>AcmeNote</tt> class contains an <tt>ArrayList</tt> of <tt>Course</tt> objects and associated serialization methods.
- * @author Matthew Harker
+ * 
+ * @author Matthew Harker, Shaun Christensen
  */
 public final class AcmeNote
 {
@@ -54,6 +55,7 @@ public final class AcmeNote
 
 	/**
 	 * Return courses.
+	 * 
 	 * @return <tt>ArrayList</tt> object containing <tt>Course</tt> objects.
 	 */
 	public ArrayList<Course> getCourses()

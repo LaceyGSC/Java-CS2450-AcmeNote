@@ -8,6 +8,7 @@
  * Description : The AcmeNoteGrphicalUserInterface class contains methods to create the graphical user interface and process user input.
  *
  * Changes : 2014.04.07 by Shaun Christensen. Registered action, list, menu, and window event listeners. Extracted utility methods into AcmeNoteGraphicalUserInterfaceUtility class. Renamed class to AcmeNoteGraphicalUserInterface for consistency.
+ *           2014.04.10 by Shaun Christensen. Refactored graphical user interface and utility methods.
  *
 ********************************************************/
 
@@ -15,7 +16,6 @@ package acmeNote;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -24,7 +24,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.ArrayList;
-
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.DefaultComboBoxModel;
@@ -102,7 +101,9 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	private JComboBox<String> comboBoxNotesSearchSections;
 	private JComboBox<String> comboBoxSectionAddCourses;
 	private JComboBox<String> comboBoxSectionDeleteCourses;
+	private JComboBox<String> comboBoxSectionDeleteSections;
 	private JComboBox<String> comboBoxSectionEditCourses;
+	private JComboBox<String> comboBoxSectionEditSections;
 	private JList<String> listNotes;
 	private JMenu menuCourse;
 	private JMenu menuSection;
@@ -177,75 +178,28 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	{
 		acmeNote = new AcmeNote();
 
-/*
-		// set up default courses, sections, and notes
-
-		acmeNote.getCourses().clear();
-
-		acmeNote.addCourse(new Course("Course 1"));
-		acmeNote.addCourse(new Course("Course 2"));
-		acmeNote.addCourse(new Course("Course 3"));
-
-		acmeNote.getCourse(0).addSection(new Section("Section 1"));
-		acmeNote.getCourse(0).addSection(new Section("Section 2"));
-		acmeNote.getCourse(0).addSection(new Section("Section 3"));
-		acmeNote.getCourse(1).addSection(new Section("Section 4"));
-		acmeNote.getCourse(1).addSection(new Section("Section 5"));
-		acmeNote.getCourse(1).addSection(new Section("Section 6"));
-		acmeNote.getCourse(2).addSection(new Section("Section 7"));
-		acmeNote.getCourse(2).addSection(new Section("Section 8"));
-		acmeNote.getCourse(2).addSection(new Section("Section 9"));
-
-		acmeNote.getCourse(0).getSection(0).addNote(new Note("Note Name 1", "Note Text 1"));
-		acmeNote.getCourse(0).getSection(0).addNote(new Note("Note Name 2", "Note Text 2"));
-		acmeNote.getCourse(0).getSection(0).addNote(new Note("Note Name 3", "Note Text 3"));
-		acmeNote.getCourse(0).getSection(1).addNote(new Note("Note Name 1", "Note Text 1"));
-		acmeNote.getCourse(0).getSection(1).addNote(new Note("Note Name 2", "Note Text 2"));
-		acmeNote.getCourse(0).getSection(1).addNote(new Note("Note Name 3", "Note Text 3"));
-		acmeNote.getCourse(0).getSection(2).addNote(new Note("Note Name 1", "Note Text 1"));
-		acmeNote.getCourse(0).getSection(2).addNote(new Note("Note Name 2", "Note Text 2"));
-		acmeNote.getCourse(0).getSection(2).addNote(new Note("Note Name 3", "Note Text 3"));
-		acmeNote.getCourse(1).getSection(0).addNote(new Note("Note Name 1", "Note Text 1"));
-		acmeNote.getCourse(1).getSection(0).addNote(new Note("Note Name 2", "Note Text 2"));
-		acmeNote.getCourse(1).getSection(0).addNote(new Note("Note Name 3", "Note Text 3"));
-		acmeNote.getCourse(1).getSection(1).addNote(new Note("Note Name 1", "Note Text 1"));
-		acmeNote.getCourse(1).getSection(1).addNote(new Note("Note Name 2", "Note Text 2"));
-		acmeNote.getCourse(1).getSection(1).addNote(new Note("Note Name 3", "Note Text 3"));
-		acmeNote.getCourse(1).getSection(2).addNote(new Note("Note Name 1", "Note Text 1"));
-		acmeNote.getCourse(1).getSection(2).addNote(new Note("Note Name 2", "Note Text 2"));
-		acmeNote.getCourse(1).getSection(2).addNote(new Note("Note Name 3", "Note Text 3"));
-		acmeNote.getCourse(2).getSection(0).addNote(new Note("Note Name 1", "Note Text 1"));
-		acmeNote.getCourse(2).getSection(0).addNote(new Note("Note Name 2", "Note Text 2"));
-		acmeNote.getCourse(2).getSection(0).addNote(new Note("Note Name 3", "Note Text 3"));
-		acmeNote.getCourse(2).getSection(1).addNote(new Note("Note Name 1", "Note Text 1"));
-		acmeNote.getCourse(2).getSection(1).addNote(new Note("Note Name 2", "Note Text 2"));
-		acmeNote.getCourse(2).getSection(1).addNote(new Note("Note Name 3", "Note Text 3"));
-		acmeNote.getCourse(2).getSection(2).addNote(new Note("Note Name 1", "Note Text 1"));
-		acmeNote.getCourse(2).getSection(2).addNote(new Note("Note Name 2", "Note Text 2"));
-		acmeNote.getCourse(2).getSection(2).addNote(new Note("Note Name 3", "Note Text 3"));
-*/
-
 		graphicalUserInterfaceCreate();
 	}
 
 	// graphical user interface methods
 
 	/**
-	* Calls associated methods to create graphical user interface.
-	*/
+	 * Calls associated methods to create graphical user interface.
+	 */
 	private void graphicalUserInterfaceCreate()
 	{
+		setIndex("course", -1);
+		setIndex("section", -1);
+		setIndex("note", -1);
 		setCoursesAll();
-		setSectionsAll(-1);
-		searchNotes(-1, -1, "");
-
+		setSectionsAll(intCourseIndex);
+		setNotesAll(intCourseIndex, intSectionIndex);
 		add(panelCreate());
-
 		actionListenersAdd();
 		listSelectionListenersAdd();
 		menuListenersAdd();
 		windowListenersAdd();
-		}
+	}
 
 	/**
 	 * Calls associated methods to create menu and content cards.
@@ -519,7 +473,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 		JLabel labelCourseDelete = new JLabel("Delete Course");
 		labelCourseDelete.setFont(new Font("Serif", Font.BOLD, 25));
 	
-		comboBoxCourseDeleteCourses = new JComboBox<String>(new String[0]);
+		comboBoxCourseDeleteCourses = new JComboBox<String>(stringTemporaryCourses);
 		comboBoxCourseDeleteCourses.setAlignmentX(LEFT_ALIGNMENT);
 		comboBoxCourseDeleteCourses.setPreferredSize(new Dimension(200, comboBoxCourseDeleteCourses.getPreferredSize().height));
 	
@@ -592,7 +546,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 		JLabel labelCourseEdit = new JLabel("Edit Course");
 		labelCourseEdit.setFont(new Font("Serif", Font.BOLD, 25));
 		
-		comboBoxCourseEditCourses = new JComboBox<String>(new String[0]);
+		comboBoxCourseEditCourses = new JComboBox<String>(stringTemporaryCourses);
 		comboBoxCourseEditCourses.setAlignmentX(LEFT_ALIGNMENT);
 		comboBoxCourseEditCourses.setPreferredSize(new Dimension(200, comboBoxCourseEditCourses.getPreferredSize().height));
 		
@@ -659,7 +613,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 		JLabel labelSectionAdd = new JLabel("Add Section");
 		labelSectionAdd.setFont(new Font("Serif", Font.BOLD, 25));
 		
-		comboBoxSectionAddCourses = new JComboBox<String>(new String[0]);
+		comboBoxSectionAddCourses = new JComboBox<String>(stringTemporaryCourses);
 		comboBoxSectionAddCourses.setAlignmentX(LEFT_ALIGNMENT);
 		comboBoxSectionAddCourses.setPreferredSize(new Dimension(200, comboBoxSectionAddCourses.getPreferredSize().height));
 		
@@ -669,7 +623,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 		buttonSectionAddCancel = new JButton("Cancel");
 		buttonSectionAddSubmit = new JButton("Submit");
 		
-				// containers
+		// containers
 		
 		Box boxSectionAddHeader = Box.createHorizontalBox();
 		boxSectionAddHeader.add(Box.createHorizontalGlue());
@@ -726,9 +680,13 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 		JLabel labelSectionDelete = new JLabel("Delete Section");
 		labelSectionDelete.setFont(new Font("Serif", Font.BOLD, 25));
 		
-		comboBoxSectionDeleteCourses = new JComboBox<String>(new String[0]);
+		comboBoxSectionDeleteCourses = new JComboBox<String>(stringTemporaryCourses);
 		comboBoxSectionDeleteCourses.setAlignmentX(LEFT_ALIGNMENT);
 		comboBoxSectionDeleteCourses.setPreferredSize(new Dimension(200, comboBoxSectionDeleteCourses.getPreferredSize().height));
+		
+		comboBoxSectionDeleteSections = new JComboBox<String>(stringTemporarySections);
+		comboBoxSectionDeleteSections.setAlignmentX(LEFT_ALIGNMENT);
+		comboBoxSectionDeleteSections.setPreferredSize(new Dimension(200, comboBoxSectionDeleteSections.getPreferredSize().height));
 		
 		checkBoxSectionDelete = new JCheckBox("Please check here to confirm deletion of the section.");
 		
@@ -748,6 +706,14 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 		Box boxSectionDeleteCourseComboBox = Box.createHorizontalBox();
 		boxSectionDeleteCourseComboBox.add(Box.createHorizontalStrut(358));
 		boxSectionDeleteCourseComboBox.add(comboBoxSectionDeleteCourses);
+		
+		Box boxSectionDeleteSectionLabel = Box.createHorizontalBox();
+		boxSectionDeleteSectionLabel.add(Box.createHorizontalGlue());
+		boxSectionDeleteSectionLabel.add(new JLabel("Select Section"));
+		
+		Box boxSectionDeleteSectionComboBox = Box.createHorizontalBox();
+		boxSectionDeleteSectionComboBox.add(Box.createHorizontalStrut(358));
+		boxSectionDeleteSectionComboBox.add(comboBoxSectionDeleteSections);
 		
 		Box boxSectionDeleteWarningAssociatedLabel = Box.createHorizontalBox();
 		boxSectionDeleteWarningAssociatedLabel.add(Box.createHorizontalGlue());
@@ -775,6 +741,9 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 		boxSectionDelete.add(boxSectionDeleteCourseLabel);
 		boxSectionDelete.add(boxSectionDeleteCourseComboBox);
 		boxSectionDelete.add(Box.createVerticalStrut(10));
+		boxSectionDelete.add(boxSectionDeleteSectionLabel);
+		boxSectionDelete.add(boxSectionDeleteSectionComboBox);
+		boxSectionDelete.add(Box.createVerticalStrut(10));
 		boxSectionDelete.add(boxSectionDeleteWarningAssociatedLabel);
 		boxSectionDelete.add(Box.createVerticalStrut(10));
 		boxSectionDelete.add(boxSectionDeleteWarningPermanentLabel);
@@ -782,7 +751,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 		boxSectionDelete.add(boxSectionDeleteCheckBox);
 		boxSectionDelete.add(Box.createVerticalStrut(10));
 		boxSectionDelete.add(boxSectionDeleteButtons);
-		boxSectionDelete.add(Box.createVerticalStrut(239));
+		boxSectionDelete.add(Box.createVerticalStrut(188));
 		
 		return boxSectionDelete;
 	}
@@ -799,9 +768,13 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 		JLabel labelSectionEdit = new JLabel("Edit Section");
 		labelSectionEdit.setFont(new Font("Serif", Font.BOLD, 25));
 		
-		comboBoxSectionEditCourses = new JComboBox<String>(new String[0]);
+		comboBoxSectionEditCourses = new JComboBox<String>(stringTemporaryCourses);
 		comboBoxSectionEditCourses.setAlignmentX(LEFT_ALIGNMENT);
 		comboBoxSectionEditCourses.setPreferredSize(new Dimension(200, comboBoxSectionEditCourses.getPreferredSize().height));
+		
+		comboBoxSectionEditSections = new JComboBox<String>(stringTemporarySections);
+		comboBoxSectionEditSections.setAlignmentX(LEFT_ALIGNMENT);
+		comboBoxSectionEditSections.setPreferredSize(new Dimension(200, comboBoxSectionEditSections.getPreferredSize().height));
 		
 		textFieldSectionEditSectionName = new JTextField();
 		textFieldSectionEditSectionName.setPreferredSize(new Dimension(200, textFieldSectionEditSectionName.getPreferredSize().height));
@@ -809,7 +782,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 		buttonSectionEditCancel = new JButton("Cancel");
 		buttonSectionEditSubmit = new JButton("Submit");
 		
-				// containers
+		// containers
 		
 		Box boxSectionEditHeader = Box.createHorizontalBox();
 		boxSectionEditHeader.add(Box.createHorizontalGlue());
@@ -822,6 +795,14 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 		Box boxSectionEditCourseComboBox = Box.createHorizontalBox();
 		boxSectionEditCourseComboBox.add(Box.createHorizontalStrut(358));
 		boxSectionEditCourseComboBox.add(comboBoxSectionEditCourses);
+		
+		Box boxSectionEditSectionLabel = Box.createHorizontalBox();
+		boxSectionEditSectionLabel.add(Box.createHorizontalGlue());
+		boxSectionEditSectionLabel.add(new JLabel("Select Section"));
+		
+		Box boxSectionEditSectionComboBox = Box.createHorizontalBox();
+		boxSectionEditSectionComboBox.add(Box.createHorizontalStrut(358));
+		boxSectionEditSectionComboBox.add(comboBoxSectionEditSections);
 		
 		Box boxSectionEditSectionNameLabel = Box.createHorizontalBox();
 		boxSectionEditSectionNameLabel.add(Box.createHorizontalGlue());
@@ -845,11 +826,14 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 		boxSectionEdit.add(boxSectionEditCourseLabel);
 		boxSectionEdit.add(boxSectionEditCourseComboBox);
 		boxSectionEdit.add(Box.createVerticalStrut(10));
+		boxSectionEdit.add(boxSectionEditSectionLabel);
+		boxSectionEdit.add(boxSectionEditSectionComboBox);
+		boxSectionEdit.add(Box.createVerticalStrut(10));
 		boxSectionEdit.add(boxSectionEditSectionNameLabel);
 		boxSectionEdit.add(boxSectionEditCourseNameTextField);
 		boxSectionEdit.add(Box.createVerticalStrut(10));
 		boxSectionEdit.add(boxSectionEditButtons);
-		boxSectionEdit.add(Box.createVerticalStrut(279));
+		boxSectionEdit.add(Box.createVerticalStrut(228));
 		
 		return boxSectionEdit;
 	}
@@ -866,11 +850,11 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 		JLabel labelNoteAdd = new JLabel("Add Note");
 		labelNoteAdd.setFont(new Font("Serif", Font.BOLD, 25));
 		
-		comboBoxNoteAddCourses = new JComboBox<String>(new String[0]);
+		comboBoxNoteAddCourses = new JComboBox<String>(stringTemporaryCourses);
 		comboBoxNoteAddCourses.setAlignmentX(LEFT_ALIGNMENT);
 		comboBoxNoteAddCourses.setPreferredSize(new Dimension(200, comboBoxNoteAddCourses.getPreferredSize().height));
 		
-		comboBoxNoteAddSections = new JComboBox<String>(new String[0]);
+		comboBoxNoteAddSections = new JComboBox<String>(stringTemporarySections);
 		comboBoxNoteAddSections.setAlignmentX(LEFT_ALIGNMENT);
 		comboBoxNoteAddSections.setPreferredSize(new Dimension(200, comboBoxNoteAddSections.getPreferredSize().height));
 		
@@ -887,7 +871,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 		buttonNoteAddCancel = new JButton("Cancel");
 		buttonNoteAddSubmit = new JButton("Submit");
 		
-				// containers
+		// containers
 		
 		Box boxNoteAddHeader = Box.createHorizontalBox();
 		boxNoteAddHeader.add(Box.createHorizontalGlue());
@@ -1008,11 +992,11 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 		JLabel labelNoteEdit = new JLabel("Edit Note");
 		labelNoteEdit.setFont(new Font("Serif", Font.BOLD, 25));
 		
-		comboBoxNoteEditCourses = new JComboBox<>(new String[0]);
+		comboBoxNoteEditCourses = new JComboBox<>(stringTemporaryCourses);
 		comboBoxNoteEditCourses.setAlignmentX(LEFT_ALIGNMENT);
 		comboBoxNoteEditCourses.setPreferredSize(new Dimension(200, comboBoxNoteEditCourses.getPreferredSize().height));
 		
-		comboBoxNoteEditSections = new JComboBox<>(new String[0]);
+		comboBoxNoteEditSections = new JComboBox<>(stringTemporarySections);
 		comboBoxNoteEditSections.setAlignmentX(LEFT_ALIGNMENT);
 		comboBoxNoteEditSections.setPreferredSize(new Dimension(200, comboBoxNoteEditSections.getPreferredSize().height));
 		
@@ -1029,7 +1013,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 		buttonNoteEditCancel = new JButton("Cancel");
 		buttonNoteEditSubmit = new JButton("Submit");
 		
-				// containers
+		// containers
 		
 		Box boxNoteEditHeader = Box.createHorizontalBox();
 		boxNoteEditHeader.add(Box.createHorizontalGlue());
@@ -1122,7 +1106,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 		JScrollPane scrollPaneNoteViewNoteText = new JScrollPane(textAreaNoteViewNoteText);
 		scrollPaneNoteViewNoteText.setPreferredSize(new Dimension(558, 255));
 		
-				// containers
+		// containers
 		
 		Box boxNoteViewHeader = Box.createHorizontalBox();
 		boxNoteViewHeader.add(buttonNoteViewNoteAdd);
@@ -1218,7 +1202,9 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 		comboBoxNotesSearchSections.addActionListener(this);
 		comboBoxSectionAddCourses.addActionListener(this);
 		comboBoxSectionDeleteCourses.addActionListener(this);
+		comboBoxSectionDeleteSections.addActionListener(this);
 		comboBoxSectionEditCourses.addActionListener(this);
+		comboBoxSectionEditSections.addActionListener(this);
 		menuCourse.addActionListener(this);
 		menuSection.addActionListener(this);
 		menuItemCourseAdd.addActionListener(this);
@@ -1257,7 +1243,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 		{
 			for (ListSelectionListener l : listNotes.getListSelectionListeners())
 			{
-				l.valueChanged(new ListSelectionEvent(listNotes, listNotes.getSelectedIndex(), listNotes.getSelectedIndex(), false));
+				l.valueChanged(new ListSelectionEvent(listNotes, intNoteIndex, intNoteIndex, false));
 			}
 
 			enableComponents();
@@ -1266,383 +1252,469 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 		{
 			if (acmeNote.addCourse(new Course(textFieldCourseAddCourseName.getText())))
 			{
-				setCourses();
-			
-				comboBoxNotesSearchCourses.setModel(new DefaultComboBoxModel<String>(stringCourses));
-				comboBoxNotesSearchCourses.setSelectedIndex(acmeNote.getCourses().size());
-			/// set courses
-			/// set sections
-			/// set notes
-
-				intCourseIndex = acmeNote.getCourses().size();
-				intSectionIndex = -1;
-				intNoteIndex = -1;
-			
-				cardLayout.show(panelCards, "NoteNull");
-
+				setCoursesAll();
+				setComboBoxSelectedIndex(comboBoxNotesSearchCourses, stringCourses, acmeNote.getCourses().size());
+				showCard("NoteNull");
 				enableComponents();
 			}
 			else
 			{
-				JOptionPane.showMessageDialog(null, "Error", "Unable to add course. Please try again.", JOptionPane.ERROR_MESSAGE);
+				showErrorMessage("Unable to add course. Please try again.");
 			}
 		}
 		else if (e.getSource() == buttonCourseDeleteSubmit)
 		{
-			if (acmeNote.removeCourse(comboBoxCourseDeleteCourses.getSelectedIndex()))
+			if (acmeNote.removeCourse(intCourseIndex))
 			{
-				if (comboBoxNotesSearchCourses.getSelectedIndex() - 1 < comboBoxCourseDeleteCourses.getSelectedIndex())
+				if (intCourses[comboBoxNotesSearchCourses.getSelectedIndex()] > intCourseIndex)
 				{
-					intCourseIndex = comboBoxNotesSearchCourses.getSelectedIndex();
+					comboBoxNotesSearchCourses.setSelectedIndex(comboBoxNotesSearchCourses.getSelectedIndex() - 1);
 				}
-				else if (comboBoxNotesSearchCourses.getSelectedIndex() - 1 > comboBoxCourseDeleteCourses.getSelectedIndex())
+				else if (intCourses[comboBoxNotesSearchCourses.getSelectedIndex()] == intCourseIndex)
 				{
-					intCourseIndex = comboBoxNotesSearchCourses.getSelectedIndex() - 1;
+					comboBoxNotesSearchCourses.setSelectedIndex(0);
 				}
-				else
-				{
-					intCourseIndex = 0;
-				}
-		
-				setCourses();
-		
-				comboBoxNotesSearchCourses.setModel(new DefaultComboBoxModel<String>(stringCourses));
-				comboBoxNotesSearchCourses.setSelectedIndex(intCourseIndex);
-/// set course
-				/// set sections
-				/// set notes
 
-				cardLayout.show(panelCards, "NoteNull");
-		
+				setCoursesAll();
+				setComboBoxSelectedIndex(comboBoxNotesSearchCourses, stringCourses, comboBoxNotesSearchCourses.getSelectedIndex());
+				showCard("NoteNull");		
 				enableComponents();
 			}
 			else
 			{
-				JOptionPane.showMessageDialog(null, "Error", "Unable to delete course. Please try again.", JOptionPane.ERROR_MESSAGE);
+				showErrorMessage("Unable to delete course. Please try again.");
 			}
 		}
 		else if (e.getSource() == buttonCourseEditSubmit)
 		{
-			if (acmeNote.getCourse(comboBoxCourseEditCourses.getSelectedIndex()).setCourseName(textFieldCourseEditCourseName.getText()))
+			if (acmeNote.getCourse(intCourseIndex).setCourseName(textFieldCourseEditCourseName.getText()))
 			{
-				setCourses();
-		
-				comboBoxNotesSearchCourses.setModel(new DefaultComboBoxModel<String>(stringCourses));
-				comboBoxNotesSearchCourses.setSelectedIndex(comboBoxCourseEditCourses.getSelectedIndex() + 1);
-				/// set course
-				/// set sections
-				/// set notes
-		
-				cardLayout.show(panelCards, "NoteNull");
-
+				setCoursesAll();
+				setComboBoxSelectedIndex(comboBoxNotesSearchCourses, stringCourses, intCourseIndex + 1);
+				showCard("NoteNull");
 				enableComponents();
 			}
 			else
 			{
-				JOptionPane.showMessageDialog(null, "Error", "Unable to edit course. Please try again.", JOptionPane.ERROR_MESSAGE);
+				showErrorMessage("Unable to edit course. Please try again.");
 			}
 		}
 		else if (e.getSource() == buttonNoteAddSubmit)
 		{
-		
-		//Technically, if the user chooses not to add a note name or text, it won't break anything.
-		//Do we want to allow this?
-//		cindex = comboBoxNoteAddCourses.getSelectedIndex();
-//		sindex = comboBoxNoteAddSections.getSelectedIndex();
-	//	acmeNote.getCourse(cindex).getSection(sindex).addNote(new Note(textFieldNoteAddNoteName.getText(),textAreaNoteAddNoteText.getText()));
-		
-		
-		cardLayout.show(panelCards, "NoteNull");
+			if (acmeNote.getCourse(intCourseIndex).getSection(intSectionIndex).addNote(new Note(textFieldNoteAddNoteName.getText(), textAreaNoteAddNoteText.getText())))
+			{
+				int section = intSectionIndex + 1;
+				int note = acmeNote.getCourse(intCourseIndex).getSection(intSectionIndex).getNotes().size() - 1;
 
-		enableComponents();
+				setComboBoxSelectedIndex(comboBoxNotesSearchCourses, stringCourses, intCourseIndex + 1);
+				setComboBoxSelectedIndex(comboBoxNotesSearchSections, stringSections, section);
+				setListSelectedIndex(listNotes, stringNotes, note);
+				showCard("NoteView");
+				enableComponents();
+			}
+			else
+			{
+				showErrorMessage("Unable to add note. Please try again.");
+			}
 		}
 		else if (e.getSource() == buttonNoteDeleteSubmit)
 		{
-		
-		
-		// Is the delete button going to be based only on the note chosen on the left, or are we going
-		//to allow the user to choose from drop downs as before?
-		
-		// cindex = comboBoxNoteDeleteCourses.getSelectedIndex();
-		// sindex = comboBoxNoteAddSections.getSelectedIndex();
-		// int nindex = comboBoxNoteDelete
-		
-		// acmeNote.getCourse(cindex).getSection(sindex).removeNote(cindex)
-		
-		cardLayout.show(panelCards, "NoteNull");
-
-		enableComponents();
+			if (acmeNote.getCourse(intCourseIndex).getSection(intSectionIndex).removeNote(intNoteIndex))
+			{
+				setNotesAll(intCourseIndex, intSectionIndex);
+				setListSelectedIndex(listNotes, stringNotes, -1);
+				showCard("NoteNull");
+				enableComponents();
+			}
+			else
+			{
+				showErrorMessage("Unable to delete note. Please try again.");
+			}
 		}
 		else if (e.getSource() == buttonNoteEditSubmit)
 		{
-//		cindex = comboBoxNoteEditCourses.getSelectedIndex();
-//		sindex = comboBoxNoteEditSections.getSelectedIndex();
-		int nindex = 0;
-		
-		//These would instead need to be set by the user clicking on the note in the menu on the left
-		//textFieldNoteEditNoteName.setText(acmeNote.getCourse(cindex).getSection(sindex).getNote(nindex).getNoteName());
-		//textAreaNoteEditNoteText.setText(acmeNote.getCourse(cindex).getSection(sindex).getNote(nindex).getNoteText());
-		
-//		acmeNote.getCourse(cindex).getSection(sindex).getNote(nindex).setNoteName(textFieldNoteEditNoteName.getText()); 
-//		acmeNote.getCourse(cindex).getSection(sindex).getNote(nindex).setNoteText(textAreaNoteEditNoteText.getText());
-		
-		cardLayout.show(panelCards, "NoteNull");
+			if (intNoteCourses[listNotes.getSelectedIndex()] == intCourseIndex && intNoteSections[listNotes.getSelectedIndex()] == intSectionIndex)
+			{
+				if (acmeNote.getCourse(intCourseIndex).getSection(intSectionIndex).getNote(intNoteIndex).setNoteName(textFieldNoteEditNoteName.getText()) && acmeNote.getCourse(intCourseIndex).getSection(intSectionIndex).getNote(intNoteIndex).setNoteName(textAreaNoteEditNoteText.getText()))
+				{
+					setNotesAll(intCourseIndex, intSectionIndex);
+					setListSelectedIndex(listNotes, stringNotes, intNoteIndex);
+				}
+				else
+				{
+					showErrorMessage("Unable to edit note. Please try again.");
+				}
+			}
+			else
+			{
+				if (acmeNote.getCourse(intCourseIndex).getSection(intSectionIndex).addNote(new Note(textFieldNoteEditNoteName.getText(), textAreaNoteEditNoteText.getText())))
+				{
+					if (acmeNote.getCourse(intNoteCourses[listNotes.getSelectedIndex()]).getSection(intNoteSections[listNotes.getSelectedIndex()]).removeNote(intNotes[listNotes.getSelectedIndex()]))
+					{
+						int section = intSectionIndex + 1;
+						int note = acmeNote.getCourse(intCourseIndex).getSection(intSectionIndex).getNotes().size() - 1;
 
-		enableComponents();
+						setComboBoxSelectedIndex(comboBoxNotesSearchCourses, stringCourses, intCourseIndex + 1);
+						setComboBoxSelectedIndex(comboBoxNotesSearchSections, stringSections, section);
+						setListSelectedIndex(listNotes, stringNotes, note);
+					}
+					else
+					{
+						showErrorMessage("Unable to edit note. Please try again.");
+					}
+				}
+				else
+				{
+					showErrorMessage("Unable to edit note. Please try again.");
+				}
+			}
+
+			showCard("NoteView");
+			enableComponents();
 		}
-		else if (e.getSource() == buttonNoteNullNoteAdd)
+		else if (e.getSource() == buttonNoteNullNoteAdd || e.getSource() == buttonNoteViewNoteAdd)
 		{
-		
-		cardLayout.show(panelCards, "NoteAdd");
-
-		disableComponents();
-		}
-		else if (e.getSource() == buttonNoteNullNoteDelete)
-		{
-
 			disableComponents();
-		}
-		else if (e.getSource() == buttonNoteNullNoteEdit)
-		{
-		
-		
-		cardLayout.show(panelCards, "NoteEdit");
 
-		disableComponents();
+			if (intCourseIndex < 0 && intSectionIndex < 0)
+			{
+				setIndex("course", 0);
+				setIndex("section", 0);
+			}
+			else if (intCourseIndex < 0)
+			{
+				setIndex("course", intSectionCourses[comboBoxNotesSearchSections.getSelectedIndex()]);
+			}
+			else if (intSectionIndex < 0)
+			{
+				setIndex("section", 0);
+			}
+
+			int section = intSectionIndex;
+
+			setCourses();
+			setComboBoxSelectedIndex(comboBoxNoteAddCourses, stringTemporaryCourses, intCourseIndex);
+			setSections(intCourseIndex);
+			setComboBoxSelectedIndex(comboBoxNoteAddSections, stringTemporarySections, section);
+			showCard("NoteAdd");
+
+			comboBoxNoteAddCourses.requestFocus();
 		}
 		else if (e.getSource() == buttonNotesSearchCancel)
 		{
 			textFieldNotesSearch.setText("");
-		
-			searchNotes(intCourses[comboBoxNotesSearchCourses.getSelectedIndex()], intSections[comboBoxNotesSearchSections.getSelectedIndex()], textFieldNotesSearch.getText());
 
-			listNotes.setModel(new DefaultComboBoxModel<String>(stringNotes));
+			setIndex("note", -1);
+			setNotesAll(intCourseIndex, intSectionIndex);
+			setListSelectedIndex(listNotes, stringNotes, intNoteIndex);
 		}
 		else if (e.getSource() == buttonNotesSearchSearch)
 		{
-			searchNotes(intCourses[comboBoxNotesSearchCourses.getSelectedIndex()], intSections[comboBoxNotesSearchSections.getSelectedIndex()], textFieldNotesSearch.getText());
-
-			listNotes.setModel(new DefaultComboBoxModel<String>(stringNotes));
-		}
-		else if (e.getSource() == buttonNoteViewNoteAdd)
-		{
-		//implement
+			setIndex("note", -1);
+			setNotesAll(intCourseIndex, intSectionIndex);
+			searchNotes(textFieldNotesSearch.getText());
+			setListSelectedIndex(listNotes, stringNotes, intNoteIndex);
 		}
 		else if (e.getSource() == buttonNoteViewNoteDelete)
 		{
-		// implement
+			disableComponents();
+
+			buttonNoteDeleteSubmit.setEnabled(false);
+			checkBoxNoteDelete.setSelected(false);
+
+			showCard("NoteDelete");
+
+			checkBoxNoteDelete.requestFocus();
 		}
 		else if (e.getSource() == buttonNoteViewNoteEdit)
 		{
-		// implement
+			disableComponents();
+
+			if (intCourseIndex < 0 && intSectionIndex < 0)
+			{
+				setIndex("course", 0);
+				setIndex("section", 0);
+			}
+			else if (intCourseIndex < 0)
+			{
+				setIndex("course", intSectionCourses[comboBoxNotesSearchSections.getSelectedIndex()]);
+			}
+			else if (intSectionIndex < 0)
+			{
+				setIndex("section", 0);
+			}
+
+			int section = intSectionIndex;
+
+			setCourses();
+			setComboBoxSelectedIndex(comboBoxNoteEditCourses, stringTemporaryCourses, intCourseIndex);
+			setSections(intCourseIndex);
+			setComboBoxSelectedIndex(comboBoxNoteEditSections, stringTemporarySections, section);
+			showCard("NoteEdit");
+
+			comboBoxNoteEditCourses.requestFocus();
 		}
 		else if (e.getSource() == buttonSectionAddSubmit)
 		{
-//		cindex = comboBoxSectionAddCourses.getSelectedIndex();
-		
-		
-//		acmeNote.getCourse(cindex).addSection(new Section(textFieldSectionAddSectionName.getText())); 
-		
-		cardLayout.show(panelCards, "NoteNull");
+			if (acmeNote.getCourse(intCourseIndex).addSection(new Section(textFieldSectionAddSectionName.getText())))
+			{
+				int section = acmeNote.getCourse(intCourseIndex).getSections().size();
 
-		enableComponents();
+				setComboBoxSelectedIndex(comboBoxNotesSearchCourses, stringCourses, intCourseIndex + 1);
+				setComboBoxSelectedIndex(comboBoxNotesSearchSections, stringSections, section);
+				showCard("NoteNull");
+				enableComponents();
+			}
+			else
+			{
+				showErrorMessage("Unable to add section. Please try again.");
+			}
 		}
 		else if (e.getSource() == buttonSectionDeleteSubmit)
 		{
-		
-		//needs a dropdown menu to select the section
-		
-		
-//		cindex = comboBoxSectionDeleteCourses.getSelectedIndex();
-		//sindex = comboBoxSelectionDeleteSection.getSelectedIndex();
-		
-		
-		//Leaving the index as a non-selection, will need to take in a value from the dropdown
-		// will be sindex
-		
-//		acmeNote.getCourse(cindex).removeSection(0);
-		
-		
-		cardLayout.show(panelCards, "NoteNull");
+			if (acmeNote.getCourse(intCourseIndex).removeSection(intSectionIndex))
+			{
+				if (intCourses[comboBoxNotesSearchCourses.getSelectedIndex()] != intCourseIndex)
+				{
+					setIndex("course", intCourses[comboBoxNotesSearchCourses.getSelectedIndex()]);
+					setIndex("section", intSections[comboBoxNotesSearchSections.getSelectedIndex()]);
+				}
+				else if (intSections[comboBoxNotesSearchSections.getSelectedIndex()] > intSectionIndex)
+				{
+					comboBoxNotesSearchSections.setSelectedIndex(comboBoxNotesSearchSections.getSelectedIndex() - 1);
+				}
+				else if (intSections[comboBoxNotesSearchSections.getSelectedIndex()] == intSectionIndex)
+				{
+					comboBoxNotesSearchSections.setSelectedIndex(0);
+				}
 
-		enableComponents();
+				setSectionsAll(intCourseIndex);
+				setComboBoxSelectedIndex(comboBoxNotesSearchSections, stringSections, comboBoxNotesSearchSections.getSelectedIndex());
+				showCard("NoteNull");
+				enableComponents();
+			}
+			else
+			{
+				showErrorMessage("Unable to delete section. Please try again.");
+			}
 		}
 		else if (e.getSource() == buttonSectionEditSubmit)
 		{
-		//needs a dropdown menu to select the section
-		
-//		cindex = comboBoxSectionEditCourses.getSelectedIndex();
-		//sindex = comboBoxSectionDeleteSection.getSelectedIndex();
-		
-		
-		//Leaving the index as a non-selection, will need to take in a value from the dropdown
-		// will be sindex
-		
-//		acmeNote.getCourse(cindex).getSection(0).setSectionName(textFieldSectionEditSectionName.getText());
-		
-		
-		cardLayout.show(panelCards, "NoteNull");
+			if (acmeNote.getCourse(intCourseIndex).getSection(intSectionIndex).setSectionName(textFieldSectionEditSectionName.getText()))
+			{
+				if (intCourses[comboBoxNotesSearchCourses.getSelectedIndex()] != intCourseIndex)
+				{
+					setIndex("course", intCourses[comboBoxNotesSearchCourses.getSelectedIndex()]);
+					setIndex("section", intSections[comboBoxNotesSearchSections.getSelectedIndex()]);
+				}
 
-		enableComponents();
+				setSectionsAll(intCourseIndex);
+				setComboBoxSelectedIndex(comboBoxNotesSearchSections, stringSections, comboBoxNotesSearchSections.getSelectedIndex());
+				showCard("NoteNull");
+				enableComponents();
+			}
+			else
+			{
+				showErrorMessage("Unable to edit section. Please try again.");
+			}
 		}
 		else if (e.getSource() == checkBoxCourseDelete)
 		{
-		// this should be done
-		
-		if (checkBoxCourseDelete.isSelected() == true)
-		{
-		buttonCourseDeleteSubmit.setEnabled(true);
-		}
-		else
-		{
-		buttonCourseDeleteSubmit.setEnabled(false);
-		}
+			if (checkBoxCourseDelete.isSelected() == true)
+			{
+				buttonCourseDeleteSubmit.setEnabled(true);
+			}
+			else
+			{
+				buttonCourseDeleteSubmit.setEnabled(false);
+			}
 		}
 		else if (e.getSource() == checkBoxNoteDelete)
 		{
-		// this should be done
-		
-		if (checkBoxNoteDelete.isSelected() == true)
-		{
-		buttonNoteDeleteSubmit.setEnabled(true);
-		}
-		else
-		{
-		buttonNoteDeleteSubmit.setEnabled(false);
-		}
+			if (checkBoxNoteDelete.isSelected() == true)
+			{
+				buttonNoteDeleteSubmit.setEnabled(true);
+			}
+			else
+			{
+				buttonNoteDeleteSubmit.setEnabled(false);
+			}
 		}
 		else if (e.getSource() == checkBoxSectionDelete)
 		{
-		// this should be done
-		
-		if (checkBoxSectionDelete.isSelected() == true)
-		{
-		buttonSectionDeleteSubmit.setEnabled(true);
-		}
-		else
-		{
-		buttonSectionDeleteSubmit.setEnabled(false);
-		}
+			if (checkBoxSectionDelete.isSelected() == true)
+			{
+				buttonSectionDeleteSubmit.setEnabled(true);
+			}
+			else
+			{
+				buttonSectionDeleteSubmit.setEnabled(false);
+			}
 		}
 		else if (e.getSource() == comboBoxCourseDeleteCourses)
 		{
-		// this should be done
-		
-		buttonCourseDeleteSubmit.setEnabled(false);
-		checkBoxCourseDelete.setSelected(false);
+			setIndex("course", intTemporaryCourses[comboBoxCourseDeleteCourses.getSelectedIndex()]);
+
+			buttonCourseDeleteSubmit.setEnabled(false);
+			checkBoxCourseDelete.setSelected(false);
 		}
 		else if (e.getSource() == comboBoxCourseEditCourses)
 		{
-		// this should be done
-		
-		textFieldCourseEditCourseName.setText(comboBoxCourseEditCourses.getSelectedItem().toString());
+			setIndex("course", intTemporaryCourses[comboBoxCourseEditCourses.getSelectedIndex()]);
+			
+			textFieldCourseEditCourseName.setText(comboBoxCourseEditCourses.getSelectedItem().toString());
 		}
 		else if (e.getSource() == comboBoxNoteAddCourses)
 		{
-		//Send index number to seach button, if zero search all
+			setIndex("course", intTemporaryCourses[comboBoxNoteAddCourses.getSelectedIndex()]);
+			setIndex("section", 0);
+			setSections(intCourseIndex);
+			setComboBoxSelectedIndex(comboBoxNoteAddSections, stringTemporarySections, intSectionIndex);
 		}
 		else if (e.getSource() == comboBoxNoteAddSections)
 		{
-		//Send index number to search button, if zero search all
+			setIndex("section", intTemporaryCourses[comboBoxNoteAddSections.getSelectedIndex()]);
 		}
 		else if (e.getSource() == comboBoxNoteEditCourses)
 		{
-		// implement
+			setIndex("course", intTemporaryCourses[comboBoxNoteEditCourses.getSelectedIndex()]);
+			setIndex("section", 0);
+			setSections(intCourseIndex);
+			setComboBoxSelectedIndex(comboBoxNoteAddSections, stringTemporarySections, intSectionIndex);
 		}
 		else if (e.getSource() == comboBoxNoteEditSections)
 		{
-		// implement
+			setIndex("section", intTemporaryCourses[comboBoxNoteEditSections.getSelectedIndex()]);
 		}
 		else if (e.getSource() == comboBoxNotesSearchCourses)
 		{
-			setSectionsAll(intCourses[comboBoxNotesSearchCourses.getSelectedIndex()]);
-		
-			comboBoxNotesSearchSections.setModel(new DefaultComboBoxModel<String>(stringSections));
-		
-			searchNotes(intCourses[comboBoxNotesSearchCourses.getSelectedIndex()], intSections[comboBoxNotesSearchSections.getSelectedIndex()], textFieldNotesSearch.getText());
-		
-			listNotes.setModel(new DefaultComboBoxModel<String>(stringNotes));
+			setIndex("course", intCourses[comboBoxNotesSearchCourses.getSelectedIndex()]);
+			setIndex("section", -1);
+			setIndex("note", -1);
+			setSectionsAll(intCourseIndex);
+			setComboBoxSelectedIndex(comboBoxNotesSearchSections, stringSections, intSectionIndex);
+			setNotesAll(intCourseIndex, intSectionIndex);
+			setListSelectedIndex(listNotes, stringNotes, intNoteIndex);
 		}
 		else if (e.getSource() == comboBoxNotesSearchSections)
 		{
-			searchNotes(intCourses[comboBoxNotesSearchCourses.getSelectedIndex()], intSections[comboBoxNotesSearchSections.getSelectedIndex()], textFieldNotesSearch.getText());
-		
-			listNotes.setModel(new DefaultComboBoxModel<String>(stringNotes));
+			setIndex("section", intSections[comboBoxNotesSearchSections.getSelectedIndex()]);
+			setIndex("note", -1);
+			setNotesAll(intCourseIndex, intSectionIndex);
+			setListSelectedIndex(listNotes, stringNotes, intNoteIndex);
 		}
 		else if (e.getSource() == comboBoxSectionAddCourses)
 		{
-		// implement
+			setIndex("course", intTemporaryCourses[comboBoxSectionAddCourses.getSelectedIndex()]);
 		}
 		else if (e.getSource() == comboBoxSectionDeleteCourses)
 		{
-		// implement
+			setIndex("course", intTemporaryCourses[comboBoxSectionDeleteCourses.getSelectedIndex()]);
+			setIndex("section", 0);
+			setSections(intCourseIndex);
+			setComboBoxSelectedIndex(comboBoxSectionDeleteSections, stringTemporarySections, intSectionIndex);
+
+			if (acmeNote.getCourse(intCourseIndex).getSections().size() > 0)
+			{
+				checkBoxSectionDelete.setEnabled(true);
+				comboBoxSectionDeleteSections.setEnabled(true);
+			}
+			else
+			{
+				checkBoxSectionDelete.setEnabled(false);
+				comboBoxSectionDeleteSections.setEnabled(false);
+			}
+
+			buttonSectionDeleteSubmit.setEnabled(false);
+			checkBoxSectionDelete.setSelected(false);
+		}
+		else if (e.getSource() == comboBoxSectionDeleteSections)
+		{
+			setIndex("section", intTemporarySections[comboBoxSectionDeleteSections.getSelectedIndex()]);
+
+			buttonSectionDeleteSubmit.setEnabled(false);
+			checkBoxSectionDelete.setSelected(false);
 		}
 		else if (e.getSource() == comboBoxSectionEditCourses)
 		{
-		// implement
+			setIndex("course", intTemporaryCourses[comboBoxSectionEditCourses.getSelectedIndex()]);
+			setIndex("section", 0);
+			setSections(intCourseIndex);
+			setComboBoxSelectedIndex(comboBoxSectionEditSections, stringTemporarySections, intSectionIndex);
+
+			if (acmeNote.getCourse(intCourseIndex).getSections().size() > 0)
+			{
+				buttonSectionEditSubmit.setEnabled(true);
+				comboBoxSectionEditSections.setEnabled(true);
+				textFieldSectionEditSectionName.setEnabled(true);
+				textFieldSectionEditSectionName.setText(comboBoxSectionEditSections.getSelectedItem().toString());
+			}
+			else
+			{
+				buttonSectionEditSubmit.setEnabled(false);
+				comboBoxSectionEditSections.setEnabled(false);
+				textFieldSectionEditSectionName.setEnabled(false);
+				textFieldSectionEditSectionName.setText("");
+			}
 		}
-		else if (e.getSource() == menuItemFileQuit)
+		else if (e.getSource() == comboBoxSectionEditSections)
 		{
-		acmeNote.serialize();
-		
-		System.exit(0);
+			setIndex("section", intTemporarySections[comboBoxSectionEditSections.getSelectedIndex()]);
+
+			textFieldSectionEditSectionName.setText(comboBoxSectionEditSections.getSelectedItem().toString());
 		}
 		else if (e.getSource() == menuItemCourseAdd)
 		{
-		// this should be done
+			disableComponents();
 		
+			textFieldCourseAddCourseName.setText("");
 
-		disableComponents();
-		
-		textFieldCourseAddCourseName.setText("");
-		
-		cardLayout.show(panelCards, "CourseAdd");
+			showCard("CourseAdd");
+
+			textFieldCourseAddCourseName.requestFocus();
 		}
 		else if (e.getSource() == menuItemCourseDelete)
 		{
-		// this should be done
-
 			disableComponents();
-		
-		setCourses();
-		
-		comboBoxCourseDeleteCourses.setModel(new DefaultComboBoxModel<String>(stringTemporaryCourses));
-		
-		if (comboBoxNotesSearchCourses.getSelectedIndex() - 1 >= 0)
-		{
-		comboBoxCourseDeleteCourses.setSelectedIndex(comboBoxNotesSearchCourses.getSelectedIndex() - 1);
-		}
-		else
-		{
-		comboBoxCourseDeleteCourses.setSelectedIndex(0);
-		}
-		
-		checkBoxCourseDelete.setSelected(false);
-		
-		cardLayout.show(panelCards, "CourseDelete");
+
+			if (intCourseIndex < 0)
+			{
+				setIndex("course", 0);
+			}
+
+			setCourses();
+			setComboBoxSelectedIndex(comboBoxCourseDeleteCourses, stringTemporaryCourses, intCourseIndex);
+
+			buttonCourseDeleteSubmit.setEnabled(false);
+			checkBoxCourseDelete.setSelected(false);
+
+			showCard("CourseDelete");
+
+			comboBoxCourseDeleteCourses.requestFocus();
 		}
 		else if (e.getSource() == menuItemCourseEdit)
 		{
-		// this should be done
-
 			disableComponents();
-		
-		setCourses();
-		
-		comboBoxCourseEditCourses.setModel(new DefaultComboBoxModel<String>(stringCourses));
-		
-		if (comboBoxNotesSearchCourses.getSelectedIndex() - 1 >= 0)
-		{
-		comboBoxCourseEditCourses.setSelectedIndex(comboBoxNotesSearchCourses.getSelectedIndex() - 1);
+
+			if (intCourseIndex < 0)
+			{
+				setIndex("course", 0);
+			}
+
+			setCourses();
+			setComboBoxSelectedIndex(comboBoxCourseEditCourses, stringTemporaryCourses, intCourseIndex);
+
+			textFieldCourseEditCourseName.setText(comboBoxCourseEditCourses.getSelectedItem().toString());
+			
+			showCard("CourseEdit");
+
+			comboBoxCourseEditCourses.requestFocus();
 		}
-		else
+		else if (e.getSource() == menuItemFileQuit)
 		{
-		comboBoxCourseEditCourses.setSelectedIndex(0);
-		}
+			acmeNote.serialize();
 		
-		textFieldCourseEditCourseName.setText(comboBoxCourseEditCourses.getSelectedItem().toString());
-		
-		cardLayout.show(panelCards, "CourseEdit");
+			System.exit(0);
 		}
 		else if (e.getSource() == menuItemHelpAbout)
 		{
@@ -1654,39 +1726,108 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 		}
 		else if (e.getSource() == menuItemSectionAdd)
 		{
-		comboBoxSectionAddCourses.setSelectedIndex(comboBoxNotesSearchCourses.getSelectedIndex()-1);
+			disableComponents();
 
-		disableComponents();
-		
-		textFieldSectionAddSectionName.setText("");
-		
-		cardLayout.show(panelCards, "SectionAdd");
+			if (intCourseIndex < 0)
+			{
+				setIndex("course", 0);
+			}
+
+			setCourses();
+			setComboBoxSelectedIndex(comboBoxSectionAddCourses, stringTemporaryCourses, intCourseIndex);
+			
+			textFieldSectionAddSectionName.setText("");
+
+			showCard("SectionAdd");
+			
+			comboBoxSectionAddCourses.requestFocus();
 		}
 		else if (e.getSource() == menuItemSectionDelete)
 		{
-		comboBoxSectionDeleteCourses.setSelectedIndex(comboBoxNotesSearchCourses.getSelectedIndex()-1);
-		//Combobox to set section to delete
-		// comboBoxSectionDeleteSection.setSelectedIndex(comboBoxNotesSearchSections.getSelectedIndex()-1);
+			disableComponents();
 
-		disableComponents();
-		
-		// comboBoxCourseDeleteCourses.setModel(new DefaultComboBoxModel<String>(getStringCourses()));
-		
-		checkBoxCourseDelete.setSelected(false);
-		
-		cardLayout.show(panelCards, "SectionDelete");
+			if (intCourseIndex < 0 && intSectionIndex < 0)
+			{
+				setIndex("course", 0);
+				setIndex("section", 0);
+			}
+			else if (intCourseIndex < 0)
+			{
+				setIndex("course", intSectionCourses[comboBoxNotesSearchSections.getSelectedIndex()]);
+			}
+			else if (intSectionIndex < 0)
+			{
+				setIndex("section", 0);
+			}
+
+			int section = intSectionIndex;
+
+			setCourses();
+			setComboBoxSelectedIndex(comboBoxSectionDeleteCourses, stringTemporaryCourses, intCourseIndex);
+			setSections(intCourseIndex);
+			setComboBoxSelectedIndex(comboBoxSectionDeleteSections, stringTemporarySections, section);
+
+			if (acmeNote.getCourse(intCourseIndex).getSections().size() > 0)
+			{
+				checkBoxSectionDelete.setEnabled(true);
+				comboBoxSectionDeleteSections.setEnabled(true);
+			}
+			else
+			{
+				checkBoxSectionDelete.setEnabled(false);
+				comboBoxSectionDeleteSections.setEnabled(false);
+			}
+
+			buttonSectionDeleteSubmit.setEnabled(false);
+			checkBoxSectionDelete.setSelected(false);
+
+			showCard("SectionDelete");
+			
+			comboBoxSectionDeleteCourses.requestFocus();
 		}
 		else if (e.getSource() == menuItemSectionEdit)
 		{
-		comboBoxSectionEditCourses.setSelectedIndex(comboBoxNotesSearchCourses.getSelectedIndex()-1);
-		//Combobox to set section to delete
-		// comboBoxSectionEditSection.setSelectedIndex(comboBoxNotesSearchSections.getSelectedIndex()-1);
+			disableComponents();
 
-		disableComponents();
-		
-		textFieldSectionEditSectionName.setText("");
-		
-		cardLayout.show(panelCards, "SectionEdit");
+			if (intCourseIndex < 0 && intSectionIndex < 0)
+			{
+				setIndex("course", 0);
+				setIndex("section", 0);
+			}
+			else if (intCourseIndex < 0)
+			{
+				setIndex("course", intSectionCourses[comboBoxNotesSearchSections.getSelectedIndex()]);
+			}
+			else if (intSectionIndex < 0)
+			{
+				setIndex("section", 0);
+			}
+
+			int section = intSectionIndex;
+
+			setCourses();
+			setComboBoxSelectedIndex(comboBoxSectionEditCourses, stringTemporaryCourses, intCourseIndex);
+			setSections(intCourseIndex);
+			setComboBoxSelectedIndex(comboBoxSectionEditSections, stringTemporarySections, section);
+
+			if (acmeNote.getCourse(intCourseIndex).getSections().size() > 0)
+			{
+				buttonSectionEditSubmit.setEnabled(true);
+				comboBoxSectionEditSections.setEnabled(true);
+				textFieldSectionEditSectionName.setEnabled(true);
+				textFieldSectionEditSectionName.setText(comboBoxSectionEditSections.getSelectedItem().toString());
+			}
+			else
+			{
+				buttonSectionEditSubmit.setEnabled(false);
+				comboBoxSectionEditSections.setEnabled(false);
+				textFieldSectionEditSectionName.setEnabled(false);
+				textFieldSectionEditSectionName.setText("");
+			}
+
+			showCard("SectionEdit");
+			
+			comboBoxSectionEditCourses.requestFocus();
 		}
 	}
 	
@@ -1697,25 +1838,25 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	{
 		if (e.getSource() == listNotes)
 		{
-			///
 			if (listNotes.getSelectedIndex() >= 0)
 			{
-				intCourseIndex = intNoteCourses[listNotes.getSelectedIndex()];
-				intSectionIndex = intNoteSections[listNotes.getSelectedIndex()];
-				intNoteIndex = intNotes[listNotes.getSelectedIndex()];
-
+				setIndex("course", intNoteCourses[listNotes.getSelectedIndex()]);
+				setIndex("section", intNoteSections[listNotes.getSelectedIndex()]);
+				setIndex("note", intNotes[listNotes.getSelectedIndex()]);
+				
 				textFieldNoteViewCourseName.setText(acmeNote.getCourse(intCourseIndex).getCourseName());
 				textFieldNoteViewSectionName.setText(acmeNote.getCourse(intCourseIndex).getSection(intSectionIndex).getSectionName());
 				textFieldNoteViewNoteName.setText(acmeNote.getCourse(intCourseIndex).getSection(intSectionIndex).getNote(intNoteIndex).getNoteName());
 				textAreaNoteViewNoteText.setText(acmeNote.getCourse(intCourseIndex).getSection(intSectionIndex).getNote(intNoteIndex).getNoteText());
 
-				cardLayout.show(panelCards, "NoteView");
+				showCard("NoteView");
 			}
 			else
 			{
-				intNoteIndex = -1;
-
-				cardLayout.show(panelCards, "NoteNull");
+				setIndex("course", intCourses[comboBoxNotesSearchCourses.getSelectedIndex()]);
+				setIndex("section", intSections[comboBoxNotesSearchSections.getSelectedIndex()]);
+				setIndex("note", -1);
+				showCard("NoteNull");
 			}
 		}
 	}
@@ -1737,8 +1878,6 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	{
 		if (e.getSource() == menuCourse)
 		{
-			// this should be done
-	
 			if (acmeNote.getCourses().size() > 0)
 			{
 				menuItemCourseDelete.setEnabled(true);
@@ -1752,7 +1891,50 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 		}
 		else if (e.getSource() == menuSection)
 		{
-			// implement
+			if (acmeNote.getCourses().size() > 0)
+			{
+				menuItemSectionAdd.setEnabled(true);
+				
+				if (intCourseIndex >= 0)
+				{
+					if (acmeNote.getCourse(intCourseIndex).getSections().size() > 0)
+					{
+						menuItemSectionDelete.setEnabled(true);
+						menuItemSectionEdit.setEnabled(true);
+					}
+					else
+					{
+						menuItemSectionDelete.setEnabled(false);
+						menuItemSectionEdit.setEnabled(false);
+					}
+				}
+				else
+				{
+					int i = 0;
+
+					for (int j = 0; j < acmeNote.getCourses().size(); j++)
+					{
+						i += acmeNote.getCourse(j).getSections().size();
+					}
+
+					if (i > 0)
+					{
+						menuItemSectionDelete.setEnabled(true);
+						menuItemSectionEdit.setEnabled(true);
+					}
+					else
+					{
+						menuItemSectionDelete.setEnabled(false);
+						menuItemSectionEdit.setEnabled(false);
+					}
+				}
+			}
+			else
+			{
+				menuItemSectionAdd.setEnabled(false);
+				menuItemSectionDelete.setEnabled(false);
+				menuItemSectionEdit.setEnabled(false);
+			}
 		}
 	}
 	
@@ -1820,7 +2002,125 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 		textFieldNotesSearch.setEnabled(true);
 	}
 
-	private void searchNotes(int course, int section, String search)
+	private void searchNotes(String string)
+	{
+		if (!string.equals(""))
+		{
+			int i = 0;
+
+			ArrayList<Integer> arrayListIntegerNoteCourses = new ArrayList<Integer>();
+			ArrayList<Integer> arrayListIntegerNoteSections = new ArrayList<Integer>();
+			ArrayList<Integer> arrayListIntegerNotes = new ArrayList<Integer>();
+			ArrayList<String> arrayListStringNotes = new ArrayList<String>();
+
+			for (int j = 0; j < stringNotes.length; j++)
+			{
+				if (acmeNote.getCourse(intNoteCourses[j]).getSection(intNoteSections[j]).getNote(intNotes[j]).getNoteName().matches(".*" + string + ".*") || acmeNote.getCourse(intNoteCourses[j]).getSection(intNoteSections[j]).getNote(intNotes[j]).getNoteText().matches(".*" + string + ".*"))
+				{
+					arrayListIntegerNoteCourses.add(intNoteCourses[j]);
+					arrayListIntegerNoteSections.add(intNoteSections[j]);
+					arrayListIntegerNotes.add(intNotes[j]);
+					arrayListStringNotes.add(stringNotes[j]);
+
+					i++;
+				}
+			}
+
+			intNoteCourses = new int[i];
+			intNoteSections = new int[i];
+			intNotes = new int[i];
+			stringNotes = new String[i];
+
+			for (int j = 0; j < i; j++)
+			{
+				intNoteCourses[j] = arrayListIntegerNoteCourses.get(j);
+				intNoteSections[j] = arrayListIntegerNoteSections.get(j);
+				intNotes[j] = arrayListIntegerNotes.get(j);
+				stringNotes[j] = arrayListStringNotes.get(j);
+			}
+		}
+	}
+
+	private void setComboBoxSelectedIndex(JComboBox<String> comboBox, String[] string, int index)
+	{
+		if (index < 0)
+		{
+			index = 0;
+		}
+
+		comboBox.setModel(new DefaultComboBoxModel<String>(string));
+
+		if (string.length > 0)
+		{
+			comboBox.setSelectedIndex(index);
+		}
+	}
+
+	private void setCourses()
+	{
+		intTemporaryCourses = new int[acmeNote.getCourses().size()];
+		stringTemporaryCourses = new String[acmeNote.getCourses().size()];
+	
+		for (int i = 0; i < acmeNote.getCourses().size(); i++)
+		{
+			intTemporaryCourses[i] = i;
+			stringTemporaryCourses[i] = acmeNote.getCourse(i).getCourseName();
+		}
+	}
+	
+	private void setCoursesAll()
+	{
+		intCourses = new int[acmeNote.getCourses().size() + 1];
+		intCourses[0] = -1;
+	
+		stringCourses = new String[acmeNote.getCourses().size() + 1];
+		stringCourses[0] = "All Courses";
+	
+		setCourses();
+	
+		System.arraycopy(intTemporaryCourses, 0, intCourses, 1, acmeNote.getCourses().size());
+		System.arraycopy(stringTemporaryCourses, 0, stringCourses, 1, acmeNote.getCourses().size());
+	}
+
+	private void setIndex(String string, int index)
+	{
+		if (string.equals("course"))
+		{
+			intCourseIndex = index;
+		}
+		else if (string.equals("note"))
+		{
+			intNoteIndex = index;
+		}
+		else if (string.equals("section"))
+		{
+			intSectionIndex = index;
+		}
+	}
+
+	private void setListSelectedIndex(JList<String> list, String[] string, int index)
+	{
+		list.setModel(new DefaultComboBoxModel<String>(string));
+		list.setSelectedIndex(index);
+	}
+
+	private void setNotes(int course, int section)
+	{
+		intTemporaryNoteCourses = new int[acmeNote.getCourse(course).getSection(section).getNotes().size()];
+		intTemporaryNoteSections = new int[acmeNote.getCourse(course).getSection(section).getNotes().size()];
+		intTemporaryNotes = new int[acmeNote.getCourse(course).getSection(section).getNotes().size()];
+		stringTemporaryNotes = new String[acmeNote.getCourse(course).getSection(section).getNotes().size()];
+	
+		for (int i = 0; i < acmeNote.getCourse(course).getSection(section).getNotes().size(); i++)
+		{
+			intTemporaryNoteCourses[i] = course;
+			intTemporaryNoteSections[i] = section;
+			intTemporaryNotes[i] = i;
+			stringTemporaryNotes[i] = acmeNote.getCourse(course).getSection(section).getNote(i).getNoteName();
+		}
+	}
+	
+	private void setNotesAll(int course, int section)
 	{
 		if (course >= 0 && section >= 0)
 		{
@@ -1912,86 +2212,8 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 				}
 			}
 		}
-	
-		if (!search.equals(""))
-		{
-			int i = 0;
-
-			ArrayList<Integer> arrayListIntegerNoteCourses = new ArrayList<Integer>();
-			ArrayList<Integer> arrayListIntegerNoteSections = new ArrayList<Integer>();
-			ArrayList<Integer> arrayListIntegerNotes = new ArrayList<Integer>();
-			ArrayList<String> arrayListStringNotes = new ArrayList<String>();
-
-			for (int j = 0; j < stringNotes.length; j++)
-			{
-				if (acmeNote.getCourse(intNoteCourses[j]).getSection(intNoteSections[j]).getNote(intNotes[j]).getNoteName().matches(".*" + search + ".*") || acmeNote.getCourse(intNoteCourses[j]).getSection(intNoteSections[j]).getNote(intNotes[j]).getNoteText().matches(".*" + search + ".*"))
-				{
-					arrayListIntegerNoteCourses.add(intNoteCourses[j]);
-					arrayListIntegerNoteSections.add(intNoteSections[j]);
-					arrayListIntegerNotes.add(intNotes[j]);
-					arrayListStringNotes.add(stringNotes[j]);
-
-					i++;
-				}
-			}
-
-			intNoteCourses = new int[i];
-			intNoteSections = new int[i];
-			intNotes = new int[i];
-			stringNotes = new String[i];
-
-			for (int j = 0; j < i; j++)
-			{
-				intNoteCourses[j] = arrayListIntegerNoteCourses.get(j);
-				intNoteSections[j] = arrayListIntegerNoteSections.get(j);
-				intNotes[j] = arrayListIntegerNotes.get(j);
-				stringNotes[j] = arrayListStringNotes.get(j);
-			}
-		}
 	}
-	
-	private void setCourses()
-	{
-		intTemporaryCourses = new int[acmeNote.getCourses().size()];
-		stringTemporaryCourses = new String[acmeNote.getCourses().size()];
-	
-		for (int i = 0; i < acmeNote.getCourses().size(); i++)
-		{
-			intTemporaryCourses[i] = i;
-			stringTemporaryCourses[i] = acmeNote.getCourse(i).getCourseName();
-		}
-	}
-	
-	private void setCoursesAll()
-	{
-		intCourses = new int[acmeNote.getCourses().size() + 1];
-		intCourses[0] = -1;
-	
-		stringCourses = new String[acmeNote.getCourses().size() + 1];
-		stringCourses[0] = "All Courses";
-	
-		setCourses();
-	
-		System.arraycopy(intTemporaryCourses, 0, intCourses, 1, acmeNote.getCourses().size());
-		System.arraycopy(stringTemporaryCourses, 0, stringCourses, 1, acmeNote.getCourses().size());
-	}
-	
-	private void setNotes(int course, int section)
-	{
-		intTemporaryNoteCourses = new int[acmeNote.getCourse(course).getSection(section).getNotes().size()];
-		intTemporaryNoteSections = new int[acmeNote.getCourse(course).getSection(section).getNotes().size()];
-		intTemporaryNotes = new int[acmeNote.getCourse(course).getSection(section).getNotes().size()];
-		stringTemporaryNotes = new String[acmeNote.getCourse(course).getSection(section).getNotes().size()];
-	
-		for (int i = 0; i < acmeNote.getCourse(course).getSection(section).getNotes().size(); i++)
-		{
-			intTemporaryNoteCourses[i] = course;
-			intTemporaryNoteSections[i] = section;
-			intTemporaryNotes[i] = i;
-			stringTemporaryNotes[i] = acmeNote.getCourse(course).getSection(section).getNote(i).getNoteName();
-		}
-	}
-	
+
 	private void setSections(int course)
 	{
 		intTemporarySectionCourses = new int[acmeNote.getCourse(course).getSections().size()];
@@ -2004,7 +2226,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 			intTemporarySections[i] = i;
 			stringTemporarySections[i] = acmeNote.getCourse(course).getSection(i).getSectionName();
 		}
-		}
+	}
 	
 		private void setSectionsAll(int course)
 		{
@@ -2057,7 +2279,17 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 				}
 			}
 	}
-	
+
+	private void showCard(String string)
+	{
+		cardLayout.show(panelCards, string);
+	}
+
+	private void showErrorMessage(String string)
+	{
+		JOptionPane.showMessageDialog(null, "Error", string, JOptionPane.ERROR_MESSAGE);
+	}
+
 	// main method
 	
 	/**

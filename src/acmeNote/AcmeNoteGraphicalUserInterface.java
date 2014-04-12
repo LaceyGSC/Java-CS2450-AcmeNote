@@ -1404,12 +1404,16 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 		{
 			textFieldNotesSearch.setText("");
 
+			setIndex("course", intCourses[comboBoxNotesSearchCourses.getSelectedIndex()]);
+			setIndex("section", intSections[comboBoxNotesSearchSections.getSelectedIndex()]);
 			setIndex("note", -1);
 			setNotesAll(intCourseIndex, intSectionIndex);
 			setListSelectedIndex(listNotes, stringNotes, intNoteIndex);
 		}
 		else if (e.getSource() == buttonNotesSearchSearch)
 		{
+			setIndex("course", intCourses[comboBoxNotesSearchCourses.getSelectedIndex()]);
+			setIndex("section", intSections[comboBoxNotesSearchSections.getSelectedIndex()]);
 			setIndex("note", -1);
 			setNotesAll(intCourseIndex, intSectionIndex);
 			searchNotes(textFieldNotesSearch.getText());

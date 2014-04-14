@@ -86,7 +86,7 @@ public final class Course implements Serializable
 	/**
 	 * Return section object.
 	 * 
-	 * @param index <tt>int</tt> value of <tt>Section</tt> object within the <tt>ArrayList</tt> of sections.  
+	 * @param index <tt>Integer</tt> value of <tt>Section</tt> object within the <tt>ArrayList</tt> of sections.  
 	 * @return <tt>Section</tt> object.
 	 */
 	public Section getSection(int index)
@@ -108,8 +108,8 @@ public final class Course implements Serializable
 	/**
 	 * Set course name.
 	 * 
-	 * @param sectionName <tt>String</tt> object containing course name.
-	 * @return <tt>boolean</tt> value of set operation.
+	 * @param courseName <tt>String</tt> object containing course name.
+	 * @return <tt>Boolean</tt> value of set operation.
 	 */
 	public boolean setCourseName(String courseName)
 	{
@@ -128,8 +128,8 @@ public final class Course implements Serializable
 	/**
 	 * Set <tt>ArrayList</tt> of <tt>Section</tt> objects.
 	 * 
-	 * @param notes <tt>ArrayList</tt> of <tt>Section</tt> objects.
-	 * @return <tt>boolean</tt> value of set operation.
+	 * @param sections <tt>ArrayList</tt> of <tt>Section</tt> objects.
+	 * @return <tt>Boolean</tt> value of set operation.
 	 */
 	public boolean setSections(ArrayList<Section> sections)
 	{
@@ -141,8 +141,8 @@ public final class Course implements Serializable
 	/**
 	 * Add <tt>Section</tt> object to <tt>ArrayList</tt>.
 	 * 
-	 * @param note <tt>Section</tt> object.
-	 * @return <tt>boolean</tt> value of set operation.
+	 * @param section <tt>Section</tt> object.
+	 * @return <tt>Boolean</tt> value of set operation.
 	 */
 	public boolean addSection(Section section)
 	{
@@ -154,8 +154,8 @@ public final class Course implements Serializable
 	/**
 	 * Remove <tt>Section</tt> object from <tt>ArrayList</tt>.
 	 * 
-	 * @param index <tt>int</tt> value of <tt>Section</tt> object in <tt>ArrayList</tt>.
-	 * @return <tt>boolean</tt> value of set operation.
+	 * @param index <tt>Integer</tt> value of <tt>Section</tt> object in <tt>ArrayList</tt>.
+	 * @return <tt>Boolean</tt> value of set operation.
 	 */
 	public boolean removeSection(int index)
 	{
@@ -174,9 +174,9 @@ public final class Course implements Serializable
 	/**
 	 * Set <tt>Section</tt> object in <tt>ArrayList</tt>.
 	 * 
-	 * @param index <tt>int</tt> value of <tt>Section</tt> object in <tt>ArrayList</tt>.
-	 * @param note <tt>Section</tt> object to set in <tt>ArrayList</tt>.
-	 * @return <tt>boolean</tt> value of set operation.
+	 * @param index <tt>Integer</tt> value of <tt>Section</tt> object in <tt>ArrayList</tt>.
+	 * @param section <tt>Section</tt> object to set in <tt>ArrayList</tt>.
+	 * @return <tt>Boolean</tt> value of set operation.
 	 */
 	public boolean setSection(int index, Section section)
 	{

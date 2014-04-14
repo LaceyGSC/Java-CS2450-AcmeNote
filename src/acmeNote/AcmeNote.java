@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 /**
- * <tt>AcmeNote</tt> class contains an <tt>ArrayList</tt> of <tt>Course</tt> objects and associated serialization methods.
+ * <tt>AcmeNote</tt> class contains an <tt>ArrayList</tt> of <tt>Course</tt> objects and serialization methods.
  * 
  * @author Matthew Harker, Shaun Christensen
  */
@@ -66,7 +66,7 @@ public final class AcmeNote
 	/**
 	 * Return course object.
 	 * 
-	 * @param index <tt>int</tt> value of <tt>Course</tt> object within the <tt>ArrayList</tt> of sections.  
+	 * @param index <tt>Integer</tt> value of <tt>Course</tt> object within the <tt>ArrayList</tt> of sections.  
 	 * @return <tt>Course</tt> object.
 	 */
 	public Course getCourse(int index)
@@ -79,8 +79,8 @@ public final class AcmeNote
 	/**
 	 * Set <tt>ArrayList</tt> of <tt>Course</tt> objects.
 	 * 
-	 * @param notes <tt>ArrayList</tt> of <tt>Course</tt> objects.
-	 * @return <tt>boolean</tt> value of set operation.
+	 * @param courses <tt>ArrayList</tt> of <tt>Course</tt> objects.
+	 * @return <tt>Boolean</tt> value of set operation.
 	 */
 	public boolean setCourses(ArrayList<Course> courses)
 	{
@@ -92,8 +92,8 @@ public final class AcmeNote
 	/**
 	 * Add <tt>Course</tt> object to <tt>ArrayList</tt>.
 	 * 
-	 * @param note <tt>Course</tt> object.
-	 * @return <tt>boolean</tt> value of set operation.
+	 * @param course <tt>Course</tt> object.
+	 * @return <tt>Boolean</tt> value of set operation.
 	 */
 	public boolean addCourse(Course course)
 	{
@@ -105,8 +105,8 @@ public final class AcmeNote
 	/**
 	 * Remove <tt>Course</tt> object from <tt>ArrayList</tt>.
 	 * 
-	 * @param index <tt>int</tt> value of <tt>Course</tt> object in <tt>ArrayList</tt>.
-	 * @return <tt>boolean</tt> value of set operation.
+	 * @param index <tt>Integer</tt> value of <tt>Course</tt> object in <tt>ArrayList</tt>.
+	 * @return <tt>Boolean</tt> value of set operation.
 	 */
 	public boolean removeCourse(int index)
 	{
@@ -125,9 +125,9 @@ public final class AcmeNote
 	/**
 	 * Set <tt>Course</tt> object in <tt>ArrayList</tt>.
 	 * 
-	 * @param index <tt>int</tt> value of <tt>Course</tt> object in <tt>ArrayList</tt>.
-	 * @param note <tt>Course</tt> object to set in <tt>ArrayList</tt>.
-	 * @return <tt>boolean</tt> value of set operation.
+	 * @param index <tt>Integer</tt> value of <tt>Course</tt> object in <tt>ArrayList</tt>.
+	 * @param course <tt>Course</tt> object to set in <tt>ArrayList</tt>.
+	 * @return <tt>Boolean</tt> value of set operation.
 	 */
 	public boolean setCourse(int index, Course course)
 	{

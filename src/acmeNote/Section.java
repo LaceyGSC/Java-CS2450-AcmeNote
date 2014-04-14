@@ -53,7 +53,7 @@ public final class Section implements Serializable
 	/**
 	 * Parameterized constructor with sectionName argument.
 	 * 
-	 * @param noteName <tt>String</tt> object containing section name.
+	 * @param sectionName <tt>String</tt> object containing section name.
 	 */
 	public Section(String sectionName)
 	{
@@ -87,7 +87,7 @@ public final class Section implements Serializable
 	/**
 	 * Return note object.
 	 * 
-	 * @param index <tt>int</tt> value of <tt>Note</tt> object within the <tt>ArrayList</tt> of notes.  
+	 * @param index <tt>Integer</tt> value of <tt>Note</tt> object within the <tt>ArrayList</tt> of notes.  
 	 * @return <tt>Note</tt> object.
 	 */
 	public Note getNote(int index)
@@ -110,7 +110,7 @@ public final class Section implements Serializable
 	 * Set section name.
 	 * 
 	 * @param sectionName <tt>String</tt> object containing section name.
-	 * @return <tt>boolean</tt> value of set operation.
+	 * @return <tt>Boolean</tt> value of set operation.
 	 */
 	public boolean setSectionName(String sectionName)
 	{
@@ -130,7 +130,7 @@ public final class Section implements Serializable
 	 * Set <tt>ArrayList</tt> of <tt>Note</tt> objects.
 	 * 
 	 * @param notes <tt>ArrayList</tt> of <tt>Note</tt> objects.
-	 * @return <tt>boolean</tt> value of set operation.
+	 * @return <tt>Boolean</tt> value of set operation.
 	 */
 	public boolean setNotes(ArrayList<Note> notes)
 	{
@@ -143,7 +143,7 @@ public final class Section implements Serializable
 	 * Add <tt>Note</tt> object to <tt>ArrayList</tt>.
 	 * 
 	 * @param note <tt>Note</tt> object.
-	 * @return <tt>boolean</tt> value of set operation.
+	 * @return <tt>Boolean</tt> value of set operation.
 	 */
 	public boolean addNote(Note note)
 	{
@@ -155,8 +155,8 @@ public final class Section implements Serializable
 	/**
 	 * Remove <tt>Note</tt> object from <tt>ArrayList</tt>.
 	 * 
-	 * @param index <tt>int</tt> value of <tt>Note</tt> object in <tt>ArrayList</tt>.
-	 * @return <tt>boolean</tt> value of set operation.
+	 * @param index <tt>Integer</tt> value of <tt>Note</tt> object in <tt>ArrayList</tt>.
+	 * @return <tt>Boolean</tt> value of set operation.
 	 */
 	public boolean removeNote(int index)
 	{
@@ -175,9 +175,9 @@ public final class Section implements Serializable
 	/**
 	 * Set <tt>Note</tt> object in <tt>ArrayList</tt>.
 	 * 
-	 * @param index <tt>int</tt> value of <tt>Note</tt> object in <tt>ArrayList</tt>.
+	 * @param index <tt>Integer</tt> value of <tt>Note</tt> object in <tt>ArrayList</tt>.
 	 * @param note <tt>Note</tt> object to set in <tt>ArrayList</tt>.
-	 * @return <tt>boolean</tt> value of set operation.
+	 * @return <tt>Boolean</tt> value of set operation.
 	 */
 	public boolean setNote(int index, Note note)
 	{

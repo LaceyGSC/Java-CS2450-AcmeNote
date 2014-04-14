@@ -98,7 +98,7 @@ public final class Note implements Serializable
 	 * Set note name.
 	 * 
 	 * @param noteName <tt>String</tt> object containing note name.
-	 * @return <tt>boolean</tt> value of set operation.
+	 * @return <tt>Boolean</tt> value of set operation.
 	 */
 	public boolean setNoteName(String noteName)
 	{
@@ -118,7 +118,7 @@ public final class Note implements Serializable
 	 * Set note text.
 	 * 
 	 * @param noteText <tt>String</tt> object containing note text.
-	 * @return <tt>boolean</tt> value of set operation.
+	 * @return <tt>Boolean</tt> value of set operation.
 	 */
 	public boolean setNoteText(String noteText)
 	{

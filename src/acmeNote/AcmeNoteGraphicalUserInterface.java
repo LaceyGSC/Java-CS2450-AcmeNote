@@ -11,6 +11,8 @@
  *           2014.04.08 by Lacey Taylor. Implemented section and note add, delete, edit methods.
  *           2014.04.11 by Shaun Christensen. Refactored graphical user interface and utility methods.
  *           2014.04.12 by Shaun Christensen. Added javadoc comments to class. Implemented Help About and Documentation methods.
+ *           2014.04.13 by Shaun Christensen. Fixed bugs relating to selecting courses without sections when adding or editing notes.
+ *           2014.04.14 by Shaun Christensen. Added JUnit test suites for AcmeNote, Course, Section, and Note classes.
  *
 ********************************************************/
 
@@ -18,6 +20,7 @@ package acmeNote;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -74,187 +77,470 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 {
 	// components
 
+	/**
+	 * <tt>JButton</tt> object to cancel add <tt>Course</tt> object.
+	 */
 	private JButton buttonCourseAddCancel;
+
+	/**
+	 * <tt>JButton</tt> object to submit add <tt>Course</tt> object.
+	 */
 	private JButton buttonCourseAddSubmit;
+
+	/**
+	 * <tt>JButton</tt> object to cancel delete <tt>Course</tt> object.
+	 */
 	private JButton buttonCourseDeleteCancel;
+
+	/**
+	 * <tt>JButton</tt> object to submit delete <tt>Course</tt> object.
+	 */
 	private JButton buttonCourseDeleteSubmit;
+
+	/**
+	 * <tt>JButton</tt> object to cancel edit <tt>Course</tt> object.
+	 */
 	private JButton buttonCourseEditCancel;
+
+	/**
+	 * <tt>JButton</tt> object to submit edit <tt>Course</tt> object.
+	 */
 	private JButton buttonCourseEditSubmit;
+
+	/**
+	 * <tt>JButton</tt> object to cancel add <tt>Note</tt> object.
+	 */
 	private JButton buttonNoteAddCancel;
+
+	/**
+	 * <tt>JButton</tt> object to submit add <tt>Note</tt> object.
+	 */
 	private JButton buttonNoteAddSubmit;
+
+	/**
+	 * <tt>JButton</tt> object to cancel delete <tt>Note</tt> object.
+	 */
 	private JButton buttonNoteDeleteCancel;
+
+	/**
+	 * <tt>JButton</tt> object to submit delete <tt>Note</tt> object.
+	 */
 	private JButton buttonNoteDeleteSubmit;
+
+	/**
+	 * <tt>JButton</tt> object to cancel edit <tt>Note</tt> object.
+	 */
 	private JButton buttonNoteEditCancel;
+
+	/**
+	 * <tt>JButton</tt> object to submit edit <tt>Note</tt> object.
+	 */
 	private JButton buttonNoteEditSubmit;
+
+	/**
+	 * <tt>JButton</tt> object to add <tt>Note</tt> object.
+	 */
 	private JButton buttonNoteNullNoteAdd;
+
+	/**
+	 * <tt>JButton</tt> object to delete <tt>Note</tt> object.
+	 */
 	private JButton buttonNoteNullNoteDelete;
+
+	/**
+	 * <tt>JButton</tt> object to edit <tt>Note</tt> object.
+	 */
 	private JButton buttonNoteNullNoteEdit;
+
+	/**
+	 * <tt>JButton</tt> object to cancel <tt>Note</tt> objects search.
+	 */
 	private JButton buttonNotesSearchCancel;
+
+	/**
+	 * <tt>JButton</tt> object to submit <tt>Note</tt> objects search.
+	 */
 	private JButton buttonNotesSearchSearch;
+
+	/**
+	 * <tt>JButton</tt> object to add <tt>Note</tt> object.
+	 */
 	private JButton buttonNoteViewNoteAdd;
+
+	/**
+	 * <tt>JButton</tt> object to delete <tt>Note</tt> object.
+	 */
 	private JButton buttonNoteViewNoteDelete;
+
+	/**
+	 * <tt>JButton</tt> object to edit <tt>Note</tt> object.
+	 */
 	private JButton buttonNoteViewNoteEdit;
+
+	/**
+	 * <tt>JButton</tt> object to cancel add <tt>Section</tt> object.
+	 */
 	private JButton buttonSectionAddCancel;
+
+	/**
+	 * <tt>JButton</tt> object to submit add <tt>Section</tt> object.
+	 */
 	private JButton buttonSectionAddSubmit;
-	private JButton buttonSectionDeleteSubmit;
+
+	/**
+	 * <tt>JButton</tt> object to cancel delete <tt>Section</tt> object.
+	 */
 	private JButton buttonSectionDeleteCancel;
+
+	/**
+	 * <tt>JButton</tt> object to submit delete <tt>Section</tt> object.
+	 */
+	private JButton buttonSectionDeleteSubmit;
+
+	/**
+	 * <tt>JButton</tt> object to cancel edit <tt>Section</tt> object.
+	 */
 	private JButton buttonSectionEditCancel;
+
+	/**
+	 * <tt>JButton</tt> object to submit edit <tt>Section</tt> object.
+	 */
 	private JButton buttonSectionEditSubmit;
+
+	/**
+	 * <tt>CardLayout</tt> object switches views between multiple <tt>JPanel</tt> objects.
+	 */
 	private CardLayout cardLayout;
+
+	/**
+	 * <tt>JCheckBox</tt> object to confirm <tt>Course</tt> object deletion.
+	 */
 	private JCheckBox checkBoxCourseDelete;
+
+	/**
+	 * <tt>JCheckBox</tt> object to confirm <tt>Note</tt> object deletion.
+	 */
 	private JCheckBox checkBoxNoteDelete;
+
+	/**
+	 * <tt>JCheckBox</tt> object to confirm <tt>Section</tt> object deletion.
+	 */
 	private JCheckBox checkBoxSectionDelete;
+
+	/**
+	 * <tt>JComboBox</tt> object to select <tt>Course</tt> object to delete.
+	 */
 	private JComboBox<String> comboBoxCourseDeleteCourses;
+
+	/**
+	 * <tt>JComboBox</tt> object to select <tt>Course</tt> object to edit.
+	 */
 	private JComboBox<String> comboBoxCourseEditCourses;
+
+	/**
+	 * <tt>JComboBox</tt> object to select <tt>Course</tt> object to set for <tt>Note</tt> object to add.
+	 */
 	private JComboBox<String> comboBoxNoteAddCourses;
+
+	/**
+	 * <tt>JComboBox</tt> object to select <tt>Section</tt> object to set for <tt>Note</tt> object to add.
+	 */
 	private JComboBox<String> comboBoxNoteAddSections;
+
+	/**
+	 * <tt>JComboBox</tt> object to select <tt>Course</tt> object to set for <tt>Note</tt> object to edit.
+	 */
 	private JComboBox<String> comboBoxNoteEditCourses;
+
+	/**
+	 * <tt>JComboBox</tt> object to select <tt>Section</tt> object to set for <tt>Note</tt> object to edit.
+	 */
 	private JComboBox<String> comboBoxNoteEditSections;
+
+	/**
+	 * <tt>JComboBox</tt> object to select <tt>Course</tt> object to set for <tt>Note</tt> objects to search
+	 */
 	private JComboBox<String> comboBoxNotesSearchCourses;
+
+	/**
+	 * <tt>JComboBox</tt> object to select <tt>Section</tt> object to set for <tt>Note</tt> objects to search
+	 */
 	private JComboBox<String> comboBoxNotesSearchSections;
+
+	/**
+	 * <tt>JComboBox</tt> object to select <tt>Course</tt> object to set for <tt>Section</tt> object to add.
+	 */
 	private JComboBox<String> comboBoxSectionAddCourses;
+
+	/**
+	 * <tt>JComboBox</tt> object to select <tt>Course</tt> object to set for <tt>Section</tt> object to delete.
+	 */
 	private JComboBox<String> comboBoxSectionDeleteCourses;
+
+	/**
+	 * <tt>JComboBox</tt> object to select <tt>Section</tt> object to delete.
+	 */
 	private JComboBox<String> comboBoxSectionDeleteSections;
+
+	/**
+	 * <tt>JComboBox</tt> object to select <tt>Course</tt> object to set for <tt>Section</tt> object to edit.
+	 */
 	private JComboBox<String> comboBoxSectionEditCourses;
+
+	/**
+	 * <tt>JComboBox</tt> object to select <tt>Section</tt> object to edit.
+	 */
 	private JComboBox<String> comboBoxSectionEditSections;
+
+	/**
+	 * <tt>JList</tt> object to select <tt>Note</tt> object to view.
+	 */
 	private JList<String> listNotes;
+
+	/**
+	 * <tt>JMenu</tt> object to select <tt>JMenuItem</tt> objects to add, delete, or edit <tt>Course</tt> objects.
+	 */
 	private JMenu menuCourse;
+
+	/**
+	 * <tt>JMenu</tt> object to select <tt>JMenuItem</tt> objects to add, delete, or edit <tt>Section</tt> objects.
+	 */
 	private JMenu menuSection;
+
+	/**
+	 * <tt>JMenuItem</tt> object to add <tt>Course</tt> object.
+	 */
 	private JMenuItem menuItemCourseAdd;
+
+	/**
+	 * <tt>JMenuItem</tt> object to delete <tt>Course</tt> object.
+	 */
 	private JMenuItem menuItemCourseDelete;
+
+	/**
+	 * <tt>JMenuItem</tt> object to edit <tt>Course</tt> object.
+	 */
 	private JMenuItem menuItemCourseEdit;
+
+	/**
+	 * <tt>JMenuItem</tt> object to exit application.
+	 */
 	private JMenuItem menuItemFileQuit;
+
+	/**
+	 * <tt>JMenuItem</tt> object to view information about the AcmeNote application.
+	 */
 	private JMenuItem menuItemHelpAbout;
+
+	/**
+	 * <tt>JMenuItem</tt> object to view documentation about the AcmeNote application.
+	 */
 	private JMenuItem menuItemHelpDocumentation;
+
+	/**
+	 * <tt>JMenuItem</tt> object view shortcut keys for the AcmeNote application.
+	 */
 	private JMenuItem menuItemHelpShortcutKeys;
+
+	/**
+	 * <tt>JMenuItem</tt> object to add <tt>Section</tt> object.
+	 */
 	private JMenuItem menuItemSectionAdd;
+
+	/**
+	 * <tt>JMenuItem</tt> object to delete <tt>Section</tt> object.
+	 */
 	private JMenuItem menuItemSectionDelete;
+
+	/**
+	 * <tt>JMenuItem</tt> object to edit <tt>Section</tt> object.
+	 */
 	private JMenuItem menuItemSectionEdit;
+
+	/**
+	 * <tt>JPanel</tt> object to contain multiple <tt>JPanel</tt> objects.
+	 */
 	private JPanel panelCards;
+
+	/**
+	 * <tt>JTextArea</tt> object to set <tt>Note</tt> object's note text.
+	 */
 	private JTextArea textAreaNoteAddNoteText;
+
+	/**
+	 * <tt>JTextArea</tt> object to set <tt>Note</tt> object's note text.
+	 */
 	private JTextArea textAreaNoteEditNoteText;
+
+	/**
+	 * <tt>JTextArea</tt> object to view <tt>Note</tt> object's note text.
+	 */
 	private JTextArea textAreaNoteViewNoteText;
+
+	/**
+	 * <tt>JTextField</tt> object to set <tt>Course</tt> object's course name.
+	 */
 	private JTextField textFieldCourseAddCourseName;
+
+	/**
+	 * <tt>JTextField</tt> object to set <tt>Course</tt> object's course name.
+	 */
 	private JTextField textFieldCourseEditCourseName;
+
+	/**
+	 * <tt>JTextField</tt> object to set <tt>Note</tt> object's note name.
+	 */
 	private JTextField textFieldNoteAddNoteName;
+
+	/**
+	 * <tt>JTextField</tt> object to set <tt>Note</tt> object's note name.
+	 */
 	private JTextField textFieldNoteEditNoteName;
+
+	/**
+	 * <tt>JTextField</tt> object to search for <tt>Note</tt> objects' note names and note text.
+	 */
 	private JTextField textFieldNotesSearch;
+
+	/**
+	 * <tt>JTextField</tt> object to view <tt>Note</tt> object's course name.
+	 */
 	private JTextField textFieldNoteViewCourseName;
+
+	/**
+	 * <tt>JTextField</tt> object to view <tt>Note</tt> object's note name.
+	 */
 	private JTextField textFieldNoteViewNoteName;
+
+	/**
+	 * <tt>JTextField</tt> object to view <tt>Note</tt> object's section name.
+	 */
 	private JTextField textFieldNoteViewSectionName;
+
+	/**
+	 * <tt>JTextField</tt> object to set <tt>Section</tt> object's section name.
+	 */
 	private JTextField textFieldSectionAddSectionName;
+
+	/**
+	 * <tt>JTextField</tt> object to set <tt>Section</tt> object's section name.
+	 */
 	private JTextField textFieldSectionEditSectionName;
+
+	/**
+	 * <tt>URI</tt> object to link to AcmeNote documentation.
+	 */
 	private URI uniformResourceIdentifier;
 
 	// fields
 
 	/**
-	 * <tt>AcmeNote</tt> object containing the <tt>ArrayList</tt> of <tt>Course</tt>, <tt>Section</tt>, and <tt>Note</tt> objects, including serialization methods.
+	 * <tt>AcmeNote</tt> object containing <tt>ArrayList</tt> of <tt>Course</tt> objects and associated <tt>Section</tt> and <tt>Note</tt> objects.
 	 */
 	private AcmeNote acmeNote;
 
 	/**
-	 * <tt>Integer</tt> of <tt>Course</tt> object.
+	 * <tt>Integer</tt> index of <tt>Course</tt> object.
 	 */
 	private int intCourseIndex;
 
 	/**
-	 * <tt>Integer</tt> of <tt>Note</tt> object.
+	 * <tt>Integer</tt> index of <tt>Note</tt> object.
 	 */
 	private int intNoteIndex;
 
 	/**
-	 * <tt>Integer</tt> Index of <tt>Section</tt> object. 
+	 * <tt>Integer</tt> index of <tt>Section</tt> object. 
 	 */
 	private int intSectionIndex;
 
 	/**
-	 * <tt>Integer</tt> <tt>Array</tt> of <tt>Course</tt> object indices.
+	 * <tt>Integer</tt> <tt>Array</tt> of indices of <tt>Course</tt> objects.
 	 */
 	private int[] intCourses;
 
 	/**
-	 * <tt>Integer</tt> <tt>Array</tt> of <tt>Note</tt> object <tt>Course</tt> object indices.
+	 * <tt>Integer</tt> <tt>Array</tt> of indices of <tt>Note</tt> objects' associated <tt>Course</tt> objects.
 	 */
 	private int[] intNoteCourses;
 
 	/**
-	 * <tt>Integer</tt> <tt>Array</tt> of <tt>Note</tt> object indices.
+	 * <tt>Integer</tt> <tt>Array</tt> of indices of <tt>Note</tt> objects.
 	 */
 	private int[] intNotes;
 
 	/**
-	 * <tt>Integer</tt> <tt>Array</tt> of <tt>Note</tt> object <tt>Section</tt> object indices.
+	 * <tt>Integer</tt> <tt>Array</tt> of indices of <tt>Note</tt> objects' associated <tt>Section</tt> objects.
 	 */
 	private int[] intNoteSections;
 
 	/**
-	 * <tt>Integer</tt> <tt>Array</tt> of <tt>Note</tt> object <tt>Course</tt> object indices.
+	 * <tt>Integer</tt> <tt>Array</tt> of indices of <tt>Section</tt> objects' associated <tt>Course</tt> objects.
 	 */
 	private int[] intSectionCourses;
 
 	/**
-	 * <tt>Integer</tt> <tt>Array</tt> of <tt>Section</tt> object indices.
+	 * <tt>Integer</tt> <tt>Array</tt> of indices of <tt>Section</tt> objects.
 	 */
 	private int[] intSections;
 
 	/**
-	 * Temporary <tt>Integer</tt> <tt>Array</tt> of <tt>Course</tt> object indices.
+	 * Temporary <tt>Integer</tt> <tt>Array</tt> of indices of <tt>Course</tt> objects.
 	 */
 	private int[] intTemporaryCourses;
 
 	/**
-	 * Temporary <tt>Integer</tt> <tt>Array</tt> of <tt>Note</tt> object <tt>Course</tt> object indices.
+	 * Temporary <tt>Integer</tt> <tt>Array</tt> of indices of <tt>Note</tt> objects' associated <tt>Course</tt> objects.
 	 */
 	private int[] intTemporaryNoteCourses;
 
 	/**
-	 * Temporary <tt>Integer</tt> <tt>Array</tt> of <tt>Note</tt> object indices.
+	 * Temporary <tt>Integer</tt> <tt>Array</tt> of indices of <tt>Note</tt> objects.
 	 */
 	private int[] intTemporaryNotes;
 
 	/**
-	 * Temporary <tt>Integer</tt> <tt>Array</tt> of <tt>Note</tt> object <tt>Section</tt> object indices.
+	 * Temporary <tt>Integer</tt> <tt>Array</tt> of indices of <tt>Note</tt> objects' associated <tt>Section</tt> objects.
 	 */
 	private int[] intTemporaryNoteSections;
 
 	/**
-	 * Temporary <tt>Integer</tt> <tt>Array</tt> of <tt>Section</tt> object <tt>Course</tt> object indices.
+	 * Temporary <tt>Integer</tt> <tt>Array</tt> of indices of <tt>Section</tt> objects' associated <tt>Course</tt> objects.
 	 */
 	private int[] intTemporarySectionCourses;
 
 	/**
-	 * Temporary array of <tt>Section</tt> object indices.
+	 * Temporary <tt>Integer</tt> <tt>Array</tt> of indices of <tt>Section</tt> objects.
 	 */
 	private int[] intTemporarySections;
 
 	/**
-	 * <tt>String</tt> <tt>Array</tt> of <tt>Course</tt> object course name.
+	 * <tt>String</tt> <tt>Array</tt> of <tt>Course</tt> objects' course names.
 	 */
 	private String[] stringCourses;
 
 	/**
-	 * <tt>String</tt> <tt>Array</tt> of <tt>Note</tt> object note name.
+	 * <tt>String</tt> <tt>Array</tt> of <tt>Note</tt> objects' note names.
 	 */
 	private String[] stringNotes;
 
 	/**
-	 * <tt>String</tt> <tt>Array</tt> of <tt>Section</tt> object course name.
+	 * <tt>String</tt> <tt>Array</tt> of <tt>Section</tt> objects' section names.
 	 */
 	private String[] stringSections;
 
 	/**
-	 * Temporary <tt>String</tt> <tt>Array</tt> of <tt>Course</tt> object course name.
+	 * Temporary <tt>String</tt> <tt>Array</tt> of <tt>Course</tt> objects' course names.
 	 */
 	private String[] stringTemporaryCourses;
 
 	/**
-	 * Temporary <tt>String</tt> <tt>Array</tt> of <tt>Note</tt> object course name.
+	 * Temporary <tt>String</tt> <tt>Array</tt> of <tt>Note</tt> object's note names.
 	 */
 	private String[] stringTemporaryNotes;
 
 	/**
-	 * Temporary <tt>String</tt> <tt>Array</tt> of <tt>Section</tt> object course name.
+	 * Temporary <tt>String</tt> <tt>Array</tt> of <tt>Section</tt> objects' section names.
 	 */
 	private String[] stringTemporarySections;
 
@@ -273,234 +559,6 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	// graphical user interface methods
 
 	/**
-	 * Calls associated methods to create graphical user interface.
-	 */
-	private void graphicalUserInterfaceCreate()
-	{
-		setIndex("course", -1);
-		setIndex("section", -1);
-		setIndex("note", -1);
-		setCoursesAll();
-		setSectionsAll(intCourseIndex);
-		setNotesAll(intCourseIndex, intSectionIndex);
-		add(panelCreate());
-		actionListenersAdd();
-		listSelectionListenersAdd();
-		menuListenersAdd();
-		windowListenersAdd();
-	}
-
-	/**
-	 * Calls associated methods to create menu and content cards.
-	 *
-	 * @return <tt>JPanel</tt> object.
-	 */
-	private JPanel panelCreate()
-	{
-		JPanel panelMenu = new JPanel(new BorderLayout());
-		panelMenu.add(menuCreate(), BorderLayout.NORTH);
-
-		Box boxContent = Box.createHorizontalBox();
-		boxContent.add((panelNotesSearch()));
-		boxContent.add(Box.createHorizontalStrut(10));
-		boxContent.add(new JSeparator(JSeparator.VERTICAL));
-		boxContent.add(Box.createHorizontalStrut(10));
-		boxContent.add(panelCards());
-		boxContent.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
-		JPanel panel = new JPanel(new BorderLayout());
-		panel.add(panelMenu, BorderLayout.NORTH);
-		panel.add(boxContent, BorderLayout.WEST);
-
-		return panel;
-	}
-
-	/**
-	 * Creates menu.
-	 *
-	 * @return <tt>JMenuBar</tt> object.
-	 */
-	private JMenuBar menuCreate()
-	{
-		// components
-
-		menuItemFileQuit = new JMenuItem("Quit", KeyEvent.VK_Q);
-		menuItemCourseAdd = new JMenuItem("Add", KeyEvent.VK_O);
-		menuItemCourseDelete = new JMenuItem("Delete", KeyEvent.VK_U);
-		menuItemCourseEdit = new JMenuItem("Edit", KeyEvent.VK_R);
-		menuItemSectionAdd = new JMenuItem("Add", KeyEvent.VK_T);
-		menuItemSectionDelete = new JMenuItem("Delete", KeyEvent.VK_I);
-		menuItemSectionEdit = new JMenuItem("Edit", KeyEvent.VK_E);
-		menuItemHelpAbout = new JMenuItem("About", KeyEvent.VK_A);
-		menuItemHelpDocumentation = new JMenuItem("Documentation", KeyEvent.VK_D);
-		menuItemHelpShortcutKeys = new JMenuItem("Shortcut Keys", KeyEvent.VK_K);
-
-		menuCourse = new JMenu("Course");
-		menuCourse.add(menuItemCourseAdd);
-		menuCourse.add(menuItemCourseDelete);
-		menuCourse.add(menuItemCourseEdit);
-		menuCourse.setMnemonic(KeyEvent.VK_C);
-
-		menuSection = new JMenu("Section");
-		menuSection.add(menuItemSectionAdd);
-		menuSection.add(menuItemSectionDelete);
-		menuSection.add(menuItemSectionEdit);
-		menuSection.setMnemonic(KeyEvent.VK_S);
-
-		// containers
-
-		JMenuBar menuBar = new JMenuBar();
-
-		JMenu menu = new JMenu("File");
-		menu.add(menuItemFileQuit);
-		menu.setMnemonic(KeyEvent.VK_F);
-
-		menuBar.add(menu);
-
-		menuBar.add(menuCourse);
-		menuBar.add(menuSection);
-
-		menu = new JMenu("Help");
-		menu.add(menuItemHelpAbout);
-		menu.add(menuItemHelpDocumentation);
-		menu.add(menuItemHelpShortcutKeys);
-		menu.setMnemonic(KeyEvent.VK_H);
-
-		menuBar.add(menu);
-
-		return menuBar;
-	}
-
-	/**
-	 * Creates notes search panel.
-	 *
-	 * @return <tt>JPanel</tt> object.
-	 */
-	private JPanel panelNotesSearch()
-	{
-		// components
-
-		comboBoxNotesSearchCourses = new JComboBox<String>(stringCourses);
-		comboBoxNotesSearchCourses.setAlignmentX(LEFT_ALIGNMENT);
-		comboBoxNotesSearchCourses.setPreferredSize(new Dimension(200, comboBoxNotesSearchCourses.getPreferredSize().height));
-
-		comboBoxNotesSearchSections = new JComboBox<String>(stringSections);
-		comboBoxNotesSearchSections.setAlignmentX(LEFT_ALIGNMENT);
-		comboBoxNotesSearchSections.setPreferredSize(new Dimension(200, comboBoxNotesSearchSections.getPreferredSize().height));
-
-		textFieldNotesSearch = new JTextField();
-		textFieldNotesSearch.setAlignmentX(LEFT_ALIGNMENT);
-		textFieldNotesSearch.setPreferredSize(new Dimension(200, textFieldNotesSearch.getPreferredSize().height));
-
-		buttonNotesSearchCancel = new JButton("Cancel");
-		buttonNotesSearchSearch = new JButton("Search");
-
-		listNotes = new JList<String>(stringNotes);
-		listNotes.setLayoutOrientation(JList.VERTICAL);
-		listNotes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-		JScrollPane scrollPaneNotes = new JScrollPane(listNotes);
-		scrollPaneNotes.setPreferredSize(new Dimension(200, scrollPaneNotes.getPreferredSize().height));
-
-		// containers
-
-		Box boxNotesSearchButtons = Box.createHorizontalBox();
-		boxNotesSearchButtons.add(Box.createHorizontalGlue());
-		boxNotesSearchButtons.add(buttonNotesSearchCancel);
-		boxNotesSearchButtons.add(Box.createHorizontalStrut(10));
-		boxNotesSearchButtons.add(buttonNotesSearchSearch);
-		boxNotesSearchButtons.setAlignmentX(LEFT_ALIGNMENT);
-
-		Box boxNotesSearch = Box.createVerticalBox();
-		boxNotesSearch.add(new JLabel("Select Course"));
-		boxNotesSearch.add(comboBoxNotesSearchCourses);
-		boxNotesSearch.add(Box.createVerticalStrut(10));
-		boxNotesSearch.add(new JLabel("Select Section"));
-		boxNotesSearch.add(comboBoxNotesSearchSections);
-		boxNotesSearch.add(Box.createVerticalStrut(10));
-		boxNotesSearch.add(new JLabel("Search"));
-		boxNotesSearch.add(textFieldNotesSearch);
-		boxNotesSearch.add(Box.createVerticalStrut(10));
-		boxNotesSearch.add(boxNotesSearchButtons);
-		boxNotesSearch.add(Box.createVerticalStrut(10));
-
-		JPanel panelNotesSearch = new JPanel(new BorderLayout());
-		panelNotesSearch.add(boxNotesSearch, BorderLayout.NORTH);
-		panelNotesSearch.add(scrollPaneNotes, BorderLayout.CENTER);
-
-		return panelNotesSearch;
-	}
-
-	/**
-	 * Creates card layout containing the associated panels for each task.
-	 *
-	 * @return <tt>JPanel</tt> object.
-	 */
-	private JPanel panelCards()
-	{
-		panelCards = new JPanel(new CardLayout());
-		panelCards.add(panelNoteNull(), "NoteNull");
-		panelCards.add(boxCourseAdd(), "CourseAdd");
-		panelCards.add(boxCourseDelete(), "CourseDelete");
-		panelCards.add(boxCourseEdit(), "CourseEdit");
-		panelCards.add(boxSectionAdd(), "SectionAdd");
-		panelCards.add(boxSectionDelete(), "SectionDelete");
-		panelCards.add(boxSectionEdit(), "SectionEdit");
-		panelCards.add(boxNoteAdd(), "NoteAdd");
-		panelCards.add(boxNoteDelete(), "NoteDelete");
-		panelCards.add(boxNoteEdit(), "NoteEdit");
-		panelCards.add(boxNoteView(), "NoteView");
-
-		cardLayout = (CardLayout) (panelCards.getLayout());
-
-		JPanel panel = new JPanel(new BorderLayout());
-		panel.add(panelCards, BorderLayout.NORTH);
-
-		return panel;
-	}
-
-	/**
-	 * Creates default panel.
-	 *
-	 * @return <tt>JPanel</tt> object.
-	 */
-	private JPanel panelNoteNull()
-	{
-		// components
-
-		JLabel labelImageIcon = new JLabel(new ImageIcon(this.getClass().getResource("/images/AcmeNote.png")));
-		labelImageIcon.setPreferredSize(new Dimension(labelImageIcon.getPreferredSize().width, 419));
-
-		buttonNoteNullNoteAdd = new JButton("Add Note");
-
-		buttonNoteNullNoteDelete = new JButton("Delete Note");
-		buttonNoteNullNoteDelete.setEnabled(false);
-
-		buttonNoteNullNoteEdit = new JButton("Edit Note");
-		buttonNoteNullNoteEdit.setEnabled(false);
-
-		// containers
-
-		Box boxNoteNullHeader = Box.createHorizontalBox();
-		boxNoteNullHeader.add(buttonNoteNullNoteAdd);
-		boxNoteNullHeader.add(Box.createHorizontalGlue());
-		boxNoteNullHeader.add(buttonNoteNullNoteDelete);
-		boxNoteNullHeader.add(Box.createHorizontalStrut(10));
-		boxNoteNullHeader.add(buttonNoteNullNoteEdit);
-
-		Box boxNoteNull = Box.createVerticalBox();
-		boxNoteNull.add(boxNoteNullHeader);
-		boxNoteNull.add(Box.createVerticalStrut(10));
-		boxNoteNull.add(new JSeparator(JSeparator.HORIZONTAL));
-
-		JPanel panelNoteNull = new JPanel(new BorderLayout());
-		panelNoteNull.add(boxNoteNull, BorderLayout.NORTH);
-		panelNoteNull.add(labelImageIcon, BorderLayout.CENTER);
-
-		return panelNoteNull;
-	}
-
-	/**
 	 * Creates add course panel.
 	 *
 	 * @return <tt>Box</tt> object.
@@ -513,6 +571,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 		labelCourseAdd.setFont(new Font("Serif", Font.BOLD, 25));
 
 		textFieldCourseAddCourseName = new JTextField();
+		textFieldCourseAddCourseName.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 		textFieldCourseAddCourseName.setPreferredSize(new Dimension(200, textFieldCourseAddCourseName.getPreferredSize().height));
 
 		buttonCourseAddCancel = new JButton("Cancel");
@@ -564,7 +623,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 		JLabel labelCourseDelete = new JLabel("Delete Course");
 		labelCourseDelete.setFont(new Font("Serif", Font.BOLD, 25));
 
-		comboBoxCourseDeleteCourses = new JComboBox<String>(stringTemporaryCourses);
+		comboBoxCourseDeleteCourses = new JComboBox<String>(new String[0]);
 		comboBoxCourseDeleteCourses.setAlignmentX(LEFT_ALIGNMENT);
 		comboBoxCourseDeleteCourses.setPreferredSize(new Dimension(200, comboBoxCourseDeleteCourses.getPreferredSize().height));
 
@@ -637,11 +696,12 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 		JLabel labelCourseEdit = new JLabel("Edit Course");
 		labelCourseEdit.setFont(new Font("Serif", Font.BOLD, 25));
 
-		comboBoxCourseEditCourses = new JComboBox<String>(stringTemporaryCourses);
+		comboBoxCourseEditCourses = new JComboBox<String>(new String[0]);
 		comboBoxCourseEditCourses.setAlignmentX(LEFT_ALIGNMENT);
 		comboBoxCourseEditCourses.setPreferredSize(new Dimension(200, comboBoxCourseEditCourses.getPreferredSize().height));
 
 		textFieldCourseEditCourseName = new JTextField();
+		textFieldCourseEditCourseName.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 		textFieldCourseEditCourseName.setPreferredSize(new Dimension(200, textFieldCourseEditCourseName.getPreferredSize().height));
 
 		buttonCourseEditCancel = new JButton("Cancel");
@@ -693,243 +753,6 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	}
 
 	/**
-	 * Creates add section panel.
-	 *
-	 * @return <tt>Box</tt> object.
-	 */
-	private Box boxSectionAdd()
-	{
-		// components
-
-		JLabel labelSectionAdd = new JLabel("Add Section");
-		labelSectionAdd.setFont(new Font("Serif", Font.BOLD, 25));
-
-		comboBoxSectionAddCourses = new JComboBox<String>(stringTemporaryCourses);
-		comboBoxSectionAddCourses.setAlignmentX(LEFT_ALIGNMENT);
-		comboBoxSectionAddCourses.setPreferredSize(new Dimension(200, comboBoxSectionAddCourses.getPreferredSize().height));
-
-		textFieldSectionAddSectionName = new JTextField();
-		textFieldSectionAddSectionName.setPreferredSize(new Dimension(200, textFieldSectionAddSectionName.getPreferredSize().height));
-
-		buttonSectionAddCancel = new JButton("Cancel");
-		buttonSectionAddSubmit = new JButton("Submit");
-
-		// containers
-
-		Box boxSectionAddHeader = Box.createHorizontalBox();
-		boxSectionAddHeader.add(Box.createHorizontalGlue());
-		boxSectionAddHeader.add(labelSectionAdd);
-
-		Box boxSectionAddCourseLabel = Box.createHorizontalBox();
-		boxSectionAddCourseLabel.add(Box.createHorizontalGlue());
-		boxSectionAddCourseLabel.add(new JLabel("Select Course"));
-
-		Box boxSectionAddCourseComboBox = Box.createHorizontalBox();
-		boxSectionAddCourseComboBox.add(Box.createHorizontalStrut(358));
-		boxSectionAddCourseComboBox.add(comboBoxSectionAddCourses);
-
-		Box boxSectionAddSectionNameLabel = Box.createHorizontalBox();
-		boxSectionAddSectionNameLabel.add(Box.createHorizontalGlue());
-		boxSectionAddSectionNameLabel.add(new JLabel("Section Name"));
-
-		Box boxSectionAddCourseNameTextField = Box.createHorizontalBox();
-		boxSectionAddCourseNameTextField.add(Box.createHorizontalStrut(358));
-		boxSectionAddCourseNameTextField.add(textFieldSectionAddSectionName);
-
-		Box boxSectionAddButtons = Box.createHorizontalBox();
-		boxSectionAddButtons.add(Box.createHorizontalGlue());
-		boxSectionAddButtons.add(buttonSectionAddCancel);
-		boxSectionAddButtons.add(Box.createHorizontalStrut(10));
-		boxSectionAddButtons.add(buttonSectionAddSubmit);
-
-		Box boxSectionAdd = Box.createVerticalBox();
-		boxSectionAdd.add(boxSectionAddHeader);
-		boxSectionAdd.add(Box.createVerticalStrut(10));
-		boxSectionAdd.add(new JSeparator(JSeparator.HORIZONTAL));
-		boxSectionAdd.add(Box.createVerticalStrut(10));
-		boxSectionAdd.add(boxSectionAddCourseLabel);
-		boxSectionAdd.add(boxSectionAddCourseComboBox);
-		boxSectionAdd.add(Box.createVerticalStrut(10));
-		boxSectionAdd.add(boxSectionAddSectionNameLabel);
-		boxSectionAdd.add(boxSectionAddCourseNameTextField);
-		boxSectionAdd.add(Box.createVerticalStrut(10));
-		boxSectionAdd.add(boxSectionAddButtons);
-		boxSectionAdd.add(Box.createVerticalStrut(279));
-
-		return boxSectionAdd;
-	}
-
-	/**
-	 * Creates delete section panel.
-	 *
-	 * @return <tt>Box</tt> object.
-	 */
-	private Box boxSectionDelete()
-	{
-		// components
-
-		JLabel labelSectionDelete = new JLabel("Delete Section");
-		labelSectionDelete.setFont(new Font("Serif", Font.BOLD, 25));
-
-		comboBoxSectionDeleteCourses = new JComboBox<String>(stringTemporaryCourses);
-		comboBoxSectionDeleteCourses.setAlignmentX(LEFT_ALIGNMENT);
-		comboBoxSectionDeleteCourses.setPreferredSize(new Dimension(200, comboBoxSectionDeleteCourses.getPreferredSize().height));
-
-		comboBoxSectionDeleteSections = new JComboBox<String>(stringTemporarySections);
-		comboBoxSectionDeleteSections.setAlignmentX(LEFT_ALIGNMENT);
-		comboBoxSectionDeleteSections.setPreferredSize(new Dimension(200, comboBoxSectionDeleteSections.getPreferredSize().height));
-
-		checkBoxSectionDelete = new JCheckBox("Please check here to confirm deletion of the section.");
-
-		buttonSectionDeleteCancel = new JButton("Cancel");
-		buttonSectionDeleteSubmit = new JButton("Submit");
-
-		// containers
-
-		Box boxSectionDeleteHeader = Box.createHorizontalBox();
-		boxSectionDeleteHeader.add(Box.createHorizontalGlue());
-		boxSectionDeleteHeader.add(labelSectionDelete);
-
-		Box boxSectionDeleteCourseLabel = Box.createHorizontalBox();
-		boxSectionDeleteCourseLabel.add(Box.createHorizontalGlue());
-		boxSectionDeleteCourseLabel.add(new JLabel("Select Course"));
-
-		Box boxSectionDeleteCourseComboBox = Box.createHorizontalBox();
-		boxSectionDeleteCourseComboBox.add(Box.createHorizontalStrut(358));
-		boxSectionDeleteCourseComboBox.add(comboBoxSectionDeleteCourses);
-
-		Box boxSectionDeleteSectionLabel = Box.createHorizontalBox();
-		boxSectionDeleteSectionLabel.add(Box.createHorizontalGlue());
-		boxSectionDeleteSectionLabel.add(new JLabel("Select Section"));
-
-		Box boxSectionDeleteSectionComboBox = Box.createHorizontalBox();
-		boxSectionDeleteSectionComboBox.add(Box.createHorizontalStrut(358));
-		boxSectionDeleteSectionComboBox.add(comboBoxSectionDeleteSections);
-
-		Box boxSectionDeleteWarningAssociatedLabel = Box.createHorizontalBox();
-		boxSectionDeleteWarningAssociatedLabel.add(Box.createHorizontalGlue());
-		boxSectionDeleteWarningAssociatedLabel.add(new JLabel("Warning: Deleting the section will also delete all associated notes."));
-
-		Box boxSectionDeleteWarningPermanentLabel = Box.createHorizontalBox();
-		boxSectionDeleteWarningPermanentLabel.add(Box.createHorizontalGlue());
-		boxSectionDeleteWarningPermanentLabel.add(new JLabel("Deleting the section cannot be undone."));
-
-		Box boxSectionDeleteCheckBox = Box.createHorizontalBox();
-		boxSectionDeleteCheckBox.add(Box.createHorizontalGlue());
-		boxSectionDeleteCheckBox.add(checkBoxSectionDelete);
-
-		Box boxSectionDeleteButtons = Box.createHorizontalBox();
-		boxSectionDeleteButtons.add(Box.createHorizontalGlue());
-		boxSectionDeleteButtons.add(buttonSectionDeleteCancel);
-		boxSectionDeleteButtons.add(Box.createHorizontalStrut(10));
-		boxSectionDeleteButtons.add(buttonSectionDeleteSubmit);
-
-		Box boxSectionDelete = Box.createVerticalBox();
-		boxSectionDelete.add(boxSectionDeleteHeader);
-		boxSectionDelete.add(Box.createVerticalStrut(10));
-		boxSectionDelete.add(new JSeparator(JSeparator.HORIZONTAL));
-		boxSectionDelete.add(Box.createVerticalStrut(10));
-		boxSectionDelete.add(boxSectionDeleteCourseLabel);
-		boxSectionDelete.add(boxSectionDeleteCourseComboBox);
-		boxSectionDelete.add(Box.createVerticalStrut(10));
-		boxSectionDelete.add(boxSectionDeleteSectionLabel);
-		boxSectionDelete.add(boxSectionDeleteSectionComboBox);
-		boxSectionDelete.add(Box.createVerticalStrut(10));
-		boxSectionDelete.add(boxSectionDeleteWarningAssociatedLabel);
-		boxSectionDelete.add(Box.createVerticalStrut(10));
-		boxSectionDelete.add(boxSectionDeleteWarningPermanentLabel);
-		boxSectionDelete.add(Box.createVerticalStrut(10));
-		boxSectionDelete.add(boxSectionDeleteCheckBox);
-		boxSectionDelete.add(Box.createVerticalStrut(10));
-		boxSectionDelete.add(boxSectionDeleteButtons);
-		boxSectionDelete.add(Box.createVerticalStrut(188));
-
-		return boxSectionDelete;
-	}
-
-	/**
-	 * Creates edit section panel.
-	 *
-	 * @return <tt>Box</tt> object.
-	 */
-	private Box boxSectionEdit()
-	{
-		// components
-
-		JLabel labelSectionEdit = new JLabel("Edit Section");
-		labelSectionEdit.setFont(new Font("Serif", Font.BOLD, 25));
-
-		comboBoxSectionEditCourses = new JComboBox<String>(stringTemporaryCourses);
-		comboBoxSectionEditCourses.setAlignmentX(LEFT_ALIGNMENT);
-		comboBoxSectionEditCourses.setPreferredSize(new Dimension(200, comboBoxSectionEditCourses.getPreferredSize().height));
-
-		comboBoxSectionEditSections = new JComboBox<String>(stringTemporarySections);
-		comboBoxSectionEditSections.setAlignmentX(LEFT_ALIGNMENT);
-		comboBoxSectionEditSections.setPreferredSize(new Dimension(200, comboBoxSectionEditSections.getPreferredSize().height));
-
-		textFieldSectionEditSectionName = new JTextField();
-		textFieldSectionEditSectionName.setPreferredSize(new Dimension(200, textFieldSectionEditSectionName.getPreferredSize().height));
-
-		buttonSectionEditCancel = new JButton("Cancel");
-		buttonSectionEditSubmit = new JButton("Submit");
-
-		// containers
-
-		Box boxSectionEditHeader = Box.createHorizontalBox();
-		boxSectionEditHeader.add(Box.createHorizontalGlue());
-		boxSectionEditHeader.add(labelSectionEdit);
-
-		Box boxSectionEditCourseLabel = Box.createHorizontalBox();
-		boxSectionEditCourseLabel.add(Box.createHorizontalGlue());
-		boxSectionEditCourseLabel.add(new JLabel("Select Course"));
-
-		Box boxSectionEditCourseComboBox = Box.createHorizontalBox();
-		boxSectionEditCourseComboBox.add(Box.createHorizontalStrut(358));
-		boxSectionEditCourseComboBox.add(comboBoxSectionEditCourses);
-
-		Box boxSectionEditSectionLabel = Box.createHorizontalBox();
-		boxSectionEditSectionLabel.add(Box.createHorizontalGlue());
-		boxSectionEditSectionLabel.add(new JLabel("Select Section"));
-
-		Box boxSectionEditSectionComboBox = Box.createHorizontalBox();
-		boxSectionEditSectionComboBox.add(Box.createHorizontalStrut(358));
-		boxSectionEditSectionComboBox.add(comboBoxSectionEditSections);
-
-		Box boxSectionEditSectionNameLabel = Box.createHorizontalBox();
-		boxSectionEditSectionNameLabel.add(Box.createHorizontalGlue());
-		boxSectionEditSectionNameLabel.add(new JLabel("Section Name"));
-
-		Box boxSectionEditCourseNameTextField = Box.createHorizontalBox();
-		boxSectionEditCourseNameTextField.add(Box.createHorizontalStrut(358));
-		boxSectionEditCourseNameTextField.add(textFieldSectionEditSectionName);
-
-		Box boxSectionEditButtons = Box.createHorizontalBox();
-		boxSectionEditButtons.add(Box.createHorizontalGlue());
-		boxSectionEditButtons.add(buttonSectionEditCancel);
-		boxSectionEditButtons.add(Box.createHorizontalStrut(10));
-		boxSectionEditButtons.add(buttonSectionEditSubmit);
-
-		Box boxSectionEdit = Box.createVerticalBox();
-		boxSectionEdit.add(boxSectionEditHeader);
-		boxSectionEdit.add(Box.createVerticalStrut(10));
-		boxSectionEdit.add(new JSeparator(JSeparator.HORIZONTAL));
-		boxSectionEdit.add(Box.createVerticalStrut(10));
-		boxSectionEdit.add(boxSectionEditCourseLabel);
-		boxSectionEdit.add(boxSectionEditCourseComboBox);
-		boxSectionEdit.add(Box.createVerticalStrut(10));
-		boxSectionEdit.add(boxSectionEditSectionLabel);
-		boxSectionEdit.add(boxSectionEditSectionComboBox);
-		boxSectionEdit.add(Box.createVerticalStrut(10));
-		boxSectionEdit.add(boxSectionEditSectionNameLabel);
-		boxSectionEdit.add(boxSectionEditCourseNameTextField);
-		boxSectionEdit.add(Box.createVerticalStrut(10));
-		boxSectionEdit.add(boxSectionEditButtons);
-		boxSectionEdit.add(Box.createVerticalStrut(228));
-
-		return boxSectionEdit;
-	}
-
-	/**
 	 * Creates add note panel.
 	 *
 	 * @return <tt>Box</tt> object.
@@ -941,15 +764,16 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 		JLabel labelNoteAdd = new JLabel("Add Note");
 		labelNoteAdd.setFont(new Font("Serif", Font.BOLD, 25));
 
-		comboBoxNoteAddCourses = new JComboBox<String>(stringTemporaryCourses);
+		comboBoxNoteAddCourses = new JComboBox<String>(new String[0]);
 		comboBoxNoteAddCourses.setAlignmentX(LEFT_ALIGNMENT);
 		comboBoxNoteAddCourses.setPreferredSize(new Dimension(200, comboBoxNoteAddCourses.getPreferredSize().height));
 
-		comboBoxNoteAddSections = new JComboBox<String>(stringTemporarySections);
+		comboBoxNoteAddSections = new JComboBox<String>(new String[0]);
 		comboBoxNoteAddSections.setAlignmentX(LEFT_ALIGNMENT);
 		comboBoxNoteAddSections.setPreferredSize(new Dimension(200, comboBoxNoteAddSections.getPreferredSize().height));
 
 		textFieldNoteAddNoteName = new JTextField();
+		textFieldNoteAddNoteName.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 		textFieldNoteAddNoteName.setPreferredSize(new Dimension(558, textFieldNoteAddNoteName.getPreferredSize().height));
 
 		textAreaNoteAddNoteText = new JTextArea();
@@ -957,6 +781,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 		textAreaNoteAddNoteText.setWrapStyleWord(true);
 
 		JScrollPane scrollPaneNoteAddNoteText = new JScrollPane(textAreaNoteAddNoteText);
+		scrollPaneNoteAddNoteText.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 		scrollPaneNoteAddNoteText.setPreferredSize(new Dimension(558, 202));
 
 		buttonNoteAddCancel = new JButton("Cancel");
@@ -1084,15 +909,16 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 		JLabel labelNoteEdit = new JLabel("Edit Note");
 		labelNoteEdit.setFont(new Font("Serif", Font.BOLD, 25));
 
-		comboBoxNoteEditCourses = new JComboBox<>(stringTemporaryCourses);
+		comboBoxNoteEditCourses = new JComboBox<>(new String[0]);
 		comboBoxNoteEditCourses.setAlignmentX(LEFT_ALIGNMENT);
 		comboBoxNoteEditCourses.setPreferredSize(new Dimension(200, comboBoxNoteEditCourses.getPreferredSize().height));
 
-		comboBoxNoteEditSections = new JComboBox<>(stringTemporarySections);
+		comboBoxNoteEditSections = new JComboBox<>(new String[0]);
 		comboBoxNoteEditSections.setAlignmentX(LEFT_ALIGNMENT);
 		comboBoxNoteEditSections.setPreferredSize(new Dimension(200, comboBoxNoteEditSections.getPreferredSize().height));
 
 		textFieldNoteEditNoteName = new JTextField();
+		textFieldNoteEditNoteName.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 		textFieldNoteEditNoteName.setPreferredSize(new Dimension(558, textFieldNoteEditNoteName.getPreferredSize().height));
 
 		textAreaNoteEditNoteText = new JTextArea();
@@ -1100,6 +926,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 		textAreaNoteEditNoteText.setWrapStyleWord(true);
 
 		JScrollPane scrollPaneNoteEditNoteText = new JScrollPane(textAreaNoteEditNoteText);
+		scrollPaneNoteEditNoteText.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 		scrollPaneNoteEditNoteText.setPreferredSize(new Dimension(558, 202));
 
 		buttonNoteEditCancel = new JButton("Cancel");
@@ -1178,15 +1005,18 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 
 		textFieldNoteViewCourseName = new JTextField();
 		textFieldNoteViewCourseName.setAlignmentX(LEFT_ALIGNMENT);
+		textFieldNoteViewCourseName.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 		textFieldNoteViewCourseName.setEditable(false);
 		textFieldNoteViewCourseName.setPreferredSize(new Dimension(200, textFieldNoteViewCourseName.getPreferredSize().height));
 
 		textFieldNoteViewSectionName = new JTextField();
 		textFieldNoteViewSectionName.setAlignmentX(LEFT_ALIGNMENT);
+		textFieldNoteViewSectionName.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 		textFieldNoteViewSectionName.setEditable(false);
 		textFieldNoteViewSectionName.setPreferredSize(new Dimension(200, textFieldNoteViewSectionName.getPreferredSize().height));
 
 		textFieldNoteViewNoteName = new JTextField();
+		textFieldNoteViewNoteName.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 		textFieldNoteViewNoteName.setEditable(false);
 		textFieldNoteViewNoteName.setPreferredSize(new Dimension(558, textFieldNoteViewNoteName.getPreferredSize().height));
 
@@ -1196,6 +1026,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 		textAreaNoteViewNoteText.setWrapStyleWord(true);
 
 		JScrollPane scrollPaneNoteViewNoteText = new JScrollPane(textAreaNoteViewNoteText);
+		scrollPaneNoteViewNoteText.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 		scrollPaneNoteViewNoteText.setPreferredSize(new Dimension(558, 255));
 
 		// containers
@@ -1249,6 +1080,477 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 		boxNoteView.add(scrollPaneNoteViewNoteText);
 
 		return boxNoteView;
+	}
+
+	/**
+	 * Creates add section panel.
+	 *
+	 * @return <tt>Box</tt> object.
+	 */
+	private Box boxSectionAdd()
+	{
+		// components
+
+		JLabel labelSectionAdd = new JLabel("Add Section");
+		labelSectionAdd.setFont(new Font("Serif", Font.BOLD, 25));
+
+		comboBoxSectionAddCourses = new JComboBox<String>(new String[0]);
+		comboBoxSectionAddCourses.setAlignmentX(LEFT_ALIGNMENT);
+		comboBoxSectionAddCourses.setPreferredSize(new Dimension(200, comboBoxSectionAddCourses.getPreferredSize().height));
+
+		textFieldSectionAddSectionName = new JTextField();
+		textFieldSectionAddSectionName.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+		textFieldSectionAddSectionName.setPreferredSize(new Dimension(200, textFieldSectionAddSectionName.getPreferredSize().height));
+
+		buttonSectionAddCancel = new JButton("Cancel");
+		buttonSectionAddSubmit = new JButton("Submit");
+
+		// containers
+
+		Box boxSectionAddHeader = Box.createHorizontalBox();
+		boxSectionAddHeader.add(Box.createHorizontalGlue());
+		boxSectionAddHeader.add(labelSectionAdd);
+
+		Box boxSectionAddCourseLabel = Box.createHorizontalBox();
+		boxSectionAddCourseLabel.add(Box.createHorizontalGlue());
+		boxSectionAddCourseLabel.add(new JLabel("Select Course"));
+
+		Box boxSectionAddCourseComboBox = Box.createHorizontalBox();
+		boxSectionAddCourseComboBox.add(Box.createHorizontalStrut(358));
+		boxSectionAddCourseComboBox.add(comboBoxSectionAddCourses);
+
+		Box boxSectionAddSectionNameLabel = Box.createHorizontalBox();
+		boxSectionAddSectionNameLabel.add(Box.createHorizontalGlue());
+		boxSectionAddSectionNameLabel.add(new JLabel("Section Name"));
+
+		Box boxSectionAddCourseNameTextField = Box.createHorizontalBox();
+		boxSectionAddCourseNameTextField.add(Box.createHorizontalStrut(358));
+		boxSectionAddCourseNameTextField.add(textFieldSectionAddSectionName);
+
+		Box boxSectionAddButtons = Box.createHorizontalBox();
+		boxSectionAddButtons.add(Box.createHorizontalGlue());
+		boxSectionAddButtons.add(buttonSectionAddCancel);
+		boxSectionAddButtons.add(Box.createHorizontalStrut(10));
+		boxSectionAddButtons.add(buttonSectionAddSubmit);
+
+		Box boxSectionAdd = Box.createVerticalBox();
+		boxSectionAdd.add(boxSectionAddHeader);
+		boxSectionAdd.add(Box.createVerticalStrut(10));
+		boxSectionAdd.add(new JSeparator(JSeparator.HORIZONTAL));
+		boxSectionAdd.add(Box.createVerticalStrut(10));
+		boxSectionAdd.add(boxSectionAddCourseLabel);
+		boxSectionAdd.add(boxSectionAddCourseComboBox);
+		boxSectionAdd.add(Box.createVerticalStrut(10));
+		boxSectionAdd.add(boxSectionAddSectionNameLabel);
+		boxSectionAdd.add(boxSectionAddCourseNameTextField);
+		boxSectionAdd.add(Box.createVerticalStrut(10));
+		boxSectionAdd.add(boxSectionAddButtons);
+		boxSectionAdd.add(Box.createVerticalStrut(279));
+
+		return boxSectionAdd;
+	}
+
+	/**
+	 * Creates delete section panel.
+	 *
+	 * @return <tt>Box</tt> object.
+	 */
+	private Box boxSectionDelete()
+	{
+		// components
+
+		JLabel labelSectionDelete = new JLabel("Delete Section");
+		labelSectionDelete.setFont(new Font("Serif", Font.BOLD, 25));
+
+		comboBoxSectionDeleteCourses = new JComboBox<String>(new String[0]);
+		comboBoxSectionDeleteCourses.setAlignmentX(LEFT_ALIGNMENT);
+		comboBoxSectionDeleteCourses.setPreferredSize(new Dimension(200, comboBoxSectionDeleteCourses.getPreferredSize().height));
+
+		comboBoxSectionDeleteSections = new JComboBox<String>(new String[0]);
+		comboBoxSectionDeleteSections.setAlignmentX(LEFT_ALIGNMENT);
+		comboBoxSectionDeleteSections.setPreferredSize(new Dimension(200, comboBoxSectionDeleteSections.getPreferredSize().height));
+
+		checkBoxSectionDelete = new JCheckBox("Please check here to confirm deletion of the section.");
+
+		buttonSectionDeleteCancel = new JButton("Cancel");
+		buttonSectionDeleteSubmit = new JButton("Submit");
+
+		// containers
+
+		Box boxSectionDeleteHeader = Box.createHorizontalBox();
+		boxSectionDeleteHeader.add(Box.createHorizontalGlue());
+		boxSectionDeleteHeader.add(labelSectionDelete);
+
+		Box boxSectionDeleteCourseLabel = Box.createHorizontalBox();
+		boxSectionDeleteCourseLabel.add(Box.createHorizontalGlue());
+		boxSectionDeleteCourseLabel.add(new JLabel("Select Course"));
+
+		Box boxSectionDeleteCourseComboBox = Box.createHorizontalBox();
+		boxSectionDeleteCourseComboBox.add(Box.createHorizontalStrut(358));
+		boxSectionDeleteCourseComboBox.add(comboBoxSectionDeleteCourses);
+
+		Box boxSectionDeleteSectionLabel = Box.createHorizontalBox();
+		boxSectionDeleteSectionLabel.add(Box.createHorizontalGlue());
+		boxSectionDeleteSectionLabel.add(new JLabel("Select Section"));
+
+		Box boxSectionDeleteSectionComboBox = Box.createHorizontalBox();
+		boxSectionDeleteSectionComboBox.add(Box.createHorizontalStrut(358));
+		boxSectionDeleteSectionComboBox.add(comboBoxSectionDeleteSections);
+
+		Box boxSectionDeleteWarningAssociatedLabel = Box.createHorizontalBox();
+		boxSectionDeleteWarningAssociatedLabel.add(Box.createHorizontalGlue());
+		boxSectionDeleteWarningAssociatedLabel.add(new JLabel("Warning: Deleting the section will also delete all associated notes."));
+
+		Box boxSectionDeleteWarningPermanentLabel = Box.createHorizontalBox();
+		boxSectionDeleteWarningPermanentLabel.add(Box.createHorizontalGlue());
+		boxSectionDeleteWarningPermanentLabel.add(new JLabel("Deleting the section cannot be undone."));
+
+		Box boxSectionDeleteCheckBox = Box.createHorizontalBox();
+		boxSectionDeleteCheckBox.add(Box.createHorizontalGlue());
+		boxSectionDeleteCheckBox.add(checkBoxSectionDelete);
+
+		Box boxSectionDeleteButtons = Box.createHorizontalBox();
+		boxSectionDeleteButtons.add(Box.createHorizontalGlue());
+		boxSectionDeleteButtons.add(buttonSectionDeleteCancel);
+		boxSectionDeleteButtons.add(Box.createHorizontalStrut(10));
+		boxSectionDeleteButtons.add(buttonSectionDeleteSubmit);
+
+		Box boxSectionDelete = Box.createVerticalBox();
+		boxSectionDelete.add(boxSectionDeleteHeader);
+		boxSectionDelete.add(Box.createVerticalStrut(10));
+		boxSectionDelete.add(new JSeparator(JSeparator.HORIZONTAL));
+		boxSectionDelete.add(Box.createVerticalStrut(10));
+		boxSectionDelete.add(boxSectionDeleteCourseLabel);
+		boxSectionDelete.add(boxSectionDeleteCourseComboBox);
+		boxSectionDelete.add(Box.createVerticalStrut(10));
+		boxSectionDelete.add(boxSectionDeleteSectionLabel);
+		boxSectionDelete.add(boxSectionDeleteSectionComboBox);
+		boxSectionDelete.add(Box.createVerticalStrut(10));
+		boxSectionDelete.add(boxSectionDeleteWarningAssociatedLabel);
+		boxSectionDelete.add(Box.createVerticalStrut(10));
+		boxSectionDelete.add(boxSectionDeleteWarningPermanentLabel);
+		boxSectionDelete.add(Box.createVerticalStrut(10));
+		boxSectionDelete.add(boxSectionDeleteCheckBox);
+		boxSectionDelete.add(Box.createVerticalStrut(10));
+		boxSectionDelete.add(boxSectionDeleteButtons);
+		boxSectionDelete.add(Box.createVerticalStrut(188));
+
+		return boxSectionDelete;
+	}
+
+	/**
+	 * Creates edit section panel.
+	 *
+	 * @return <tt>Box</tt> object.
+	 */
+	private Box boxSectionEdit()
+	{
+		// components
+
+		JLabel labelSectionEdit = new JLabel("Edit Section");
+		labelSectionEdit.setFont(new Font("Serif", Font.BOLD, 25));
+
+		comboBoxSectionEditCourses = new JComboBox<String>(new String[0]);
+		comboBoxSectionEditCourses.setAlignmentX(LEFT_ALIGNMENT);
+		comboBoxSectionEditCourses.setPreferredSize(new Dimension(200, comboBoxSectionEditCourses.getPreferredSize().height));
+
+		comboBoxSectionEditSections = new JComboBox<String>(new String[0]);
+		comboBoxSectionEditSections.setAlignmentX(LEFT_ALIGNMENT);
+		comboBoxSectionEditSections.setPreferredSize(new Dimension(200, comboBoxSectionEditSections.getPreferredSize().height));
+
+		textFieldSectionEditSectionName = new JTextField();
+		textFieldSectionEditSectionName.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+		textFieldSectionEditSectionName.setPreferredSize(new Dimension(200, textFieldSectionEditSectionName.getPreferredSize().height));
+
+		buttonSectionEditCancel = new JButton("Cancel");
+		buttonSectionEditSubmit = new JButton("Submit");
+
+		// containers
+
+		Box boxSectionEditHeader = Box.createHorizontalBox();
+		boxSectionEditHeader.add(Box.createHorizontalGlue());
+		boxSectionEditHeader.add(labelSectionEdit);
+
+		Box boxSectionEditCourseLabel = Box.createHorizontalBox();
+		boxSectionEditCourseLabel.add(Box.createHorizontalGlue());
+		boxSectionEditCourseLabel.add(new JLabel("Select Course"));
+
+		Box boxSectionEditCourseComboBox = Box.createHorizontalBox();
+		boxSectionEditCourseComboBox.add(Box.createHorizontalStrut(358));
+		boxSectionEditCourseComboBox.add(comboBoxSectionEditCourses);
+
+		Box boxSectionEditSectionLabel = Box.createHorizontalBox();
+		boxSectionEditSectionLabel.add(Box.createHorizontalGlue());
+		boxSectionEditSectionLabel.add(new JLabel("Select Section"));
+
+		Box boxSectionEditSectionComboBox = Box.createHorizontalBox();
+		boxSectionEditSectionComboBox.add(Box.createHorizontalStrut(358));
+		boxSectionEditSectionComboBox.add(comboBoxSectionEditSections);
+
+		Box boxSectionEditSectionNameLabel = Box.createHorizontalBox();
+		boxSectionEditSectionNameLabel.add(Box.createHorizontalGlue());
+		boxSectionEditSectionNameLabel.add(new JLabel("Section Name"));
+
+		Box boxSectionEditCourseNameTextField = Box.createHorizontalBox();
+		boxSectionEditCourseNameTextField.add(Box.createHorizontalStrut(358));
+		boxSectionEditCourseNameTextField.add(textFieldSectionEditSectionName);
+
+		Box boxSectionEditButtons = Box.createHorizontalBox();
+		boxSectionEditButtons.add(Box.createHorizontalGlue());
+		boxSectionEditButtons.add(buttonSectionEditCancel);
+		boxSectionEditButtons.add(Box.createHorizontalStrut(10));
+		boxSectionEditButtons.add(buttonSectionEditSubmit);
+
+		Box boxSectionEdit = Box.createVerticalBox();
+		boxSectionEdit.add(boxSectionEditHeader);
+		boxSectionEdit.add(Box.createVerticalStrut(10));
+		boxSectionEdit.add(new JSeparator(JSeparator.HORIZONTAL));
+		boxSectionEdit.add(Box.createVerticalStrut(10));
+		boxSectionEdit.add(boxSectionEditCourseLabel);
+		boxSectionEdit.add(boxSectionEditCourseComboBox);
+		boxSectionEdit.add(Box.createVerticalStrut(10));
+		boxSectionEdit.add(boxSectionEditSectionLabel);
+		boxSectionEdit.add(boxSectionEditSectionComboBox);
+		boxSectionEdit.add(Box.createVerticalStrut(10));
+		boxSectionEdit.add(boxSectionEditSectionNameLabel);
+		boxSectionEdit.add(boxSectionEditCourseNameTextField);
+		boxSectionEdit.add(Box.createVerticalStrut(10));
+		boxSectionEdit.add(boxSectionEditButtons);
+		boxSectionEdit.add(Box.createVerticalStrut(228));
+
+		return boxSectionEdit;
+	}
+
+	/**
+	 * Calls associated methods to create graphical user interface.
+	 */
+	private void graphicalUserInterfaceCreate()
+	{
+		setIndex("course", -1);
+		setIndex("section", -1);
+		setIndex("note", -1);
+		setCoursesAll();
+		setSectionsAll(intCourseIndex);
+		setNotesAll(intCourseIndex, intSectionIndex);
+		add(panelCreate());
+		setButtonNoteNullNoteAddEnabled();
+		actionListenersAdd();
+		listSelectionListenersAdd();
+		menuListenersAdd();
+		windowListenersAdd();
+	}
+
+	/**
+	 * Creates menu.
+	 *
+	 * @return <tt>JMenuBar</tt> object.
+	 */
+	private JMenuBar menuCreate()
+	{
+		// components
+
+		menuItemFileQuit = new JMenuItem("Quit", KeyEvent.VK_Q);
+		menuItemCourseAdd = new JMenuItem("Add", KeyEvent.VK_O);
+		menuItemCourseDelete = new JMenuItem("Delete", KeyEvent.VK_U);
+		menuItemCourseEdit = new JMenuItem("Edit", KeyEvent.VK_R);
+		menuItemSectionAdd = new JMenuItem("Add", KeyEvent.VK_T);
+		menuItemSectionDelete = new JMenuItem("Delete", KeyEvent.VK_I);
+		menuItemSectionEdit = new JMenuItem("Edit", KeyEvent.VK_E);
+		menuItemHelpAbout = new JMenuItem("About", KeyEvent.VK_A);
+		menuItemHelpDocumentation = new JMenuItem("Documentation", KeyEvent.VK_D);
+		menuItemHelpShortcutKeys = new JMenuItem("Shortcut Keys", KeyEvent.VK_K);
+
+		menuCourse = new JMenu("Course");
+		menuCourse.add(menuItemCourseAdd);
+		menuCourse.add(menuItemCourseDelete);
+		menuCourse.add(menuItemCourseEdit);
+		menuCourse.setMnemonic(KeyEvent.VK_C);
+
+		menuSection = new JMenu("Section");
+		menuSection.add(menuItemSectionAdd);
+		menuSection.add(menuItemSectionDelete);
+		menuSection.add(menuItemSectionEdit);
+		menuSection.setMnemonic(KeyEvent.VK_S);
+
+		// containers
+
+		JMenuBar menuBar = new JMenuBar();
+
+		JMenu menu = new JMenu("File");
+		menu.add(menuItemFileQuit);
+		menu.setMnemonic(KeyEvent.VK_F);
+
+		menuBar.add(menu);
+
+		menuBar.add(menuCourse);
+		menuBar.add(menuSection);
+
+		menu = new JMenu("Help");
+		menu.add(menuItemHelpAbout);
+		menu.add(menuItemHelpDocumentation);
+		menu.add(menuItemHelpShortcutKeys);
+		menu.setMnemonic(KeyEvent.VK_H);
+
+		menuBar.add(menu);
+
+		return menuBar;
+	}
+
+	/**
+	 * Creates card layout containing the associated panels for each task.
+	 *
+	 * @return <tt>JPanel</tt> object.
+	 */
+	private JPanel panelCards()
+	{
+		panelCards = new JPanel(new CardLayout());
+		panelCards.add(panelNoteNull(), "NoteNull");
+		panelCards.add(boxCourseAdd(), "CourseAdd");
+		panelCards.add(boxCourseDelete(), "CourseDelete");
+		panelCards.add(boxCourseEdit(), "CourseEdit");
+		panelCards.add(boxSectionAdd(), "SectionAdd");
+		panelCards.add(boxSectionDelete(), "SectionDelete");
+		panelCards.add(boxSectionEdit(), "SectionEdit");
+		panelCards.add(boxNoteAdd(), "NoteAdd");
+		panelCards.add(boxNoteDelete(), "NoteDelete");
+		panelCards.add(boxNoteEdit(), "NoteEdit");
+		panelCards.add(boxNoteView(), "NoteView");
+
+		cardLayout = (CardLayout) (panelCards.getLayout());
+
+		JPanel panel = new JPanel(new BorderLayout());
+		panel.add(panelCards, BorderLayout.NORTH);
+
+		return panel;
+	}
+
+	/**
+	 * Calls associated methods to create menu and content cards.
+	 *
+	 * @return <tt>JPanel</tt> object.
+	 */
+	private JPanel panelCreate()
+	{
+		JPanel panelMenu = new JPanel(new BorderLayout());
+		panelMenu.add(menuCreate(), BorderLayout.NORTH);
+
+		Box boxContent = Box.createHorizontalBox();
+		boxContent.add((panelNotesSearch()));
+		boxContent.add(Box.createHorizontalStrut(10));
+		boxContent.add(new JSeparator(JSeparator.VERTICAL));
+		boxContent.add(Box.createHorizontalStrut(10));
+		boxContent.add(panelCards());
+		boxContent.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+		JPanel panel = new JPanel(new BorderLayout());
+		panel.add(panelMenu, BorderLayout.NORTH);
+		panel.add(boxContent, BorderLayout.WEST);
+
+		return panel;
+	}
+
+	/**
+	 * Creates default panel.
+	 *
+	 * @return <tt>JPanel</tt> object.
+	 */
+	private JPanel panelNoteNull()
+	{
+		// components
+
+		JLabel labelImageIcon = new JLabel(new ImageIcon(this.getClass().getResource("/images/AcmeNote.png")));
+		labelImageIcon.setPreferredSize(new Dimension(labelImageIcon.getPreferredSize().width, 419));
+
+		buttonNoteNullNoteAdd = new JButton("Add Note");
+
+		buttonNoteNullNoteDelete = new JButton("Delete Note");
+		buttonNoteNullNoteDelete.setEnabled(false);
+
+		buttonNoteNullNoteEdit = new JButton("Edit Note");
+		buttonNoteNullNoteEdit.setEnabled(false);
+
+		// containers
+
+		Box boxNoteNullHeader = Box.createHorizontalBox();
+		boxNoteNullHeader.add(buttonNoteNullNoteAdd);
+		boxNoteNullHeader.add(Box.createHorizontalGlue());
+		boxNoteNullHeader.add(buttonNoteNullNoteDelete);
+		boxNoteNullHeader.add(Box.createHorizontalStrut(10));
+		boxNoteNullHeader.add(buttonNoteNullNoteEdit);
+
+		Box boxNoteNull = Box.createVerticalBox();
+		boxNoteNull.add(boxNoteNullHeader);
+		boxNoteNull.add(Box.createVerticalStrut(10));
+		boxNoteNull.add(new JSeparator(JSeparator.HORIZONTAL));
+
+		JPanel panelNoteNull = new JPanel(new BorderLayout());
+		panelNoteNull.add(boxNoteNull, BorderLayout.NORTH);
+		panelNoteNull.add(labelImageIcon, BorderLayout.CENTER);
+
+		return panelNoteNull;
+	}
+
+	/**
+	 * Creates notes search panel.
+	 *
+	 * @return <tt>JPanel</tt> object.
+	 */
+	private JPanel panelNotesSearch()
+	{
+		// components
+
+		comboBoxNotesSearchCourses = new JComboBox<String>(stringCourses);
+		comboBoxNotesSearchCourses.setAlignmentX(LEFT_ALIGNMENT);
+		comboBoxNotesSearchCourses.setPreferredSize(new Dimension(200, comboBoxNotesSearchCourses.getPreferredSize().height));
+
+		comboBoxNotesSearchSections = new JComboBox<String>(stringSections);
+		comboBoxNotesSearchSections.setAlignmentX(LEFT_ALIGNMENT);
+		comboBoxNotesSearchSections.setPreferredSize(new Dimension(200, comboBoxNotesSearchSections.getPreferredSize().height));
+
+		textFieldNotesSearch = new JTextField();
+		textFieldNotesSearch.setAlignmentX(LEFT_ALIGNMENT);
+		textFieldNotesSearch.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+		textFieldNotesSearch.setDisabledTextColor(Color.GRAY);
+		textFieldNotesSearch.setPreferredSize(new Dimension(200, textFieldNotesSearch.getPreferredSize().height));
+
+		buttonNotesSearchCancel = new JButton("Cancel");
+		buttonNotesSearchSearch = new JButton("Search");
+
+		listNotes = new JList<String>(stringNotes);
+		listNotes.setLayoutOrientation(JList.VERTICAL);
+		listNotes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+		JScrollPane scrollPaneNotes = new JScrollPane(listNotes);
+		scrollPaneNotes.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+		scrollPaneNotes.setPreferredSize(new Dimension(200, scrollPaneNotes.getPreferredSize().height));
+
+		// containers
+
+		Box boxNotesSearchButtons = Box.createHorizontalBox();
+		boxNotesSearchButtons.add(Box.createHorizontalGlue());
+		boxNotesSearchButtons.add(buttonNotesSearchCancel);
+		boxNotesSearchButtons.add(Box.createHorizontalStrut(10));
+		boxNotesSearchButtons.add(buttonNotesSearchSearch);
+		boxNotesSearchButtons.setAlignmentX(LEFT_ALIGNMENT);
+
+		Box boxNotesSearch = Box.createVerticalBox();
+		boxNotesSearch.add(new JLabel("Select Course"));
+		boxNotesSearch.add(comboBoxNotesSearchCourses);
+		boxNotesSearch.add(Box.createVerticalStrut(10));
+		boxNotesSearch.add(new JLabel("Select Section"));
+		boxNotesSearch.add(comboBoxNotesSearchSections);
+		boxNotesSearch.add(Box.createVerticalStrut(10));
+		boxNotesSearch.add(new JLabel("Search"));
+		boxNotesSearch.add(textFieldNotesSearch);
+		boxNotesSearch.add(Box.createVerticalStrut(10));
+		boxNotesSearch.add(boxNotesSearchButtons);
+		boxNotesSearch.add(Box.createVerticalStrut(10));
+
+		JPanel panelNotesSearch = new JPanel(new BorderLayout());
+		panelNotesSearch.add(boxNotesSearch, BorderLayout.NORTH);
+		panelNotesSearch.add(scrollPaneNotes, BorderLayout.CENTER);
+
+		return panelNotesSearch;
 	}
 
 	// register event listeners
@@ -1354,7 +1656,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 				l.valueChanged(new ListSelectionEvent(listNotes, intNoteIndex, intNoteIndex, false));
 			}
 
-			enableComponents();
+			setEnabled(true);
 		}
 		else if (e.getSource() == buttonCourseAddSubmit)
 		{
@@ -1362,12 +1664,13 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 			{
 				setCoursesAll();
 				setComboBoxSelectedIndex(comboBoxNotesSearchCourses, stringCourses, acmeNote.getCourses().size());
+				setButtonNoteNullNoteAddEnabled();
 				showCard("NoteNull");
-				enableComponents();
+				setEnabled(true);
 			}
 			else
 			{
-				showErrorMessage("Unable to add course. Please try again.");
+				showErrorMessage(this, "Unable to add course. Please try again.");
 			}
 		}
 		else if (e.getSource() == buttonCourseDeleteSubmit)
@@ -1385,12 +1688,13 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 
 				setCoursesAll();
 				setComboBoxSelectedIndex(comboBoxNotesSearchCourses, stringCourses, comboBoxNotesSearchCourses.getSelectedIndex());
+				setButtonNoteNullNoteAddEnabled();
 				showCard("NoteNull");
-				enableComponents();
+				setEnabled(true);
 			}
 			else
 			{
-				showErrorMessage("Unable to delete course. Please try again.");
+				showErrorMessage(this, "Unable to delete course. Please try again.");
 			}
 		}
 		else if (e.getSource() == buttonCourseEditSubmit)
@@ -1400,11 +1704,11 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 				setCoursesAll();
 				setComboBoxSelectedIndex(comboBoxNotesSearchCourses, stringCourses, intCourseIndex + 1);
 				showCard("NoteNull");
-				enableComponents();
+				setEnabled(true);
 			}
 			else
 			{
-				showErrorMessage("Unable to edit course. Please try again.");
+				showErrorMessage(this, "Unable to edit course. Please try again.");
 			}
 		}
 		else if (e.getSource() == buttonNoteAddSubmit)
@@ -1417,12 +1721,13 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 				setComboBoxSelectedIndex(comboBoxNotesSearchCourses, stringCourses, intCourseIndex + 1);
 				setComboBoxSelectedIndex(comboBoxNotesSearchSections, stringSections, section);
 				setListSelectedIndex(listNotes, stringNotes, note);
+				setButtonNoteNullNoteAddEnabled();
 				showCard("NoteView");
-				enableComponents();
+				setEnabled(true);
 			}
 			else
 			{
-				showErrorMessage("Unable to add note. Please try again.");
+				showErrorMessage(this, "Unable to add note. Please try again.");
 			}
 		}
 		else if (e.getSource() == buttonNoteDeleteSubmit)
@@ -1431,72 +1736,53 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 			{
 				setNotesAll(intCourseIndex, intSectionIndex);
 				setListSelectedIndex(listNotes, stringNotes, -1);
+				setButtonNoteNullNoteAddEnabled();
 				showCard("NoteNull");
-				enableComponents();
+				setEnabled(true);
 			}
 			else
 			{
-				showErrorMessage("Unable to delete note. Please try again.");
+				showErrorMessage(this, "Unable to delete note. Please try again.");
 			}
 		}
 		else if (e.getSource() == buttonNoteEditSubmit)
 		{
 			if (intNoteCourses[listNotes.getSelectedIndex()] == intCourseIndex && intNoteSections[listNotes.getSelectedIndex()] == intSectionIndex)
 			{
-				if (acmeNote.getCourse(intCourseIndex).getSection(intSectionIndex).getNote(intNoteIndex).setNoteName(textFieldNoteEditNoteName.getText()) && acmeNote.getCourse(intCourseIndex).getSection(intSectionIndex).getNote(intNoteIndex).setNoteName(textAreaNoteEditNoteText.getText()))
+				if (acmeNote.getCourse(intCourseIndex).getSection(intSectionIndex).getNote(intNoteIndex).setNoteName(textFieldNoteEditNoteName.getText()) && acmeNote.getCourse(intCourseIndex).getSection(intSectionIndex).getNote(intNoteIndex).setNoteText(textAreaNoteEditNoteText.getText()))
 				{
 					setNotesAll(intCourseIndex, intSectionIndex);
 					setListSelectedIndex(listNotes, stringNotes, intNoteIndex);
 				}
 				else
 				{
-					showErrorMessage("Unable to edit note. Please try again.");
+					showErrorMessage(this, "Unable to edit note. Please try again.");
 				}
 			}
 			else
 			{
-				if (acmeNote.getCourse(intCourseIndex).getSection(intSectionIndex).addNote(new Note(textFieldNoteEditNoteName.getText(), textAreaNoteEditNoteText.getText())))
+				if (acmeNote.getCourse(intCourseIndex).getSection(intSectionIndex).addNote(new Note(textFieldNoteEditNoteName.getText(), textAreaNoteEditNoteText.getText())) && acmeNote.getCourse(intNoteCourses[listNotes.getSelectedIndex()]).getSection(intNoteSections[listNotes.getSelectedIndex()]).removeNote(intNotes[listNotes.getSelectedIndex()]))
 				{
-					if (acmeNote.getCourse(intNoteCourses[listNotes.getSelectedIndex()]).getSection(intNoteSections[listNotes.getSelectedIndex()]).removeNote(intNotes[listNotes.getSelectedIndex()]))
-					{
-						int section = intSectionIndex + 1;
-						int note = acmeNote.getCourse(intCourseIndex).getSection(intSectionIndex).getNotes().size() - 1;
+					int section = intSectionIndex + 1;
+					int note = acmeNote.getCourse(intCourseIndex).getSection(intSectionIndex).getNotes().size() - 1;
 
-						setComboBoxSelectedIndex(comboBoxNotesSearchCourses, stringCourses, intCourseIndex + 1);
-						setComboBoxSelectedIndex(comboBoxNotesSearchSections, stringSections, section);
-						setListSelectedIndex(listNotes, stringNotes, note);
-					}
-					else
-					{
-						showErrorMessage("Unable to edit note. Please try again.");
-					}
+					setComboBoxSelectedIndex(comboBoxNotesSearchCourses, stringCourses, intCourseIndex + 1);
+					setComboBoxSelectedIndex(comboBoxNotesSearchSections, stringSections, section);
+					setListSelectedIndex(listNotes, stringNotes, note);
 				}
 				else
 				{
-					showErrorMessage("Unable to edit note. Please try again.");
+					showErrorMessage(this, "Unable to edit note. Please try again.");
 				}
 			}
 
 			showCard("NoteView");
-			enableComponents();
+			setEnabled(true);
 		}
 		else if (e.getSource() == buttonNoteNullNoteAdd || e.getSource() == buttonNoteViewNoteAdd)
 		{
-			disableComponents();
-
-			if (intCourseIndex < 0 && intSectionIndex < 0)
-			{
-				setIndex("course", 0);
-				setIndex("section", 0);
-			}
-			else if (intCourseIndex < 0)
-			{
-				setIndex("course", intSectionCourses[comboBoxNotesSearchSections.getSelectedIndex()]);
-			}
-			else if (intSectionIndex < 0)
-			{
-				setIndex("section", 0);
-			}
+			setEnabled(false);
+			setCourseSectionIndex();
 
 			int section = intSectionIndex;
 
@@ -1504,6 +1790,10 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 			setComboBoxSelectedIndex(comboBoxNoteAddCourses, stringTemporaryCourses, intCourseIndex);
 			setSections(intCourseIndex);
 			setComboBoxSelectedIndex(comboBoxNoteAddSections, stringTemporarySections, section);
+
+			textFieldNoteAddNoteName.setText("");
+			textAreaNoteAddNoteText.setText("");
+
 			showCard("NoteAdd");
 
 			comboBoxNoteAddCourses.requestFocus();
@@ -1529,7 +1819,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 		}
 		else if (e.getSource() == buttonNoteViewNoteDelete)
 		{
-			disableComponents();
+			setEnabled(false);
 
 			buttonNoteDeleteSubmit.setEnabled(false);
 			checkBoxNoteDelete.setSelected(false);
@@ -1540,21 +1830,8 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 		}
 		else if (e.getSource() == buttonNoteViewNoteEdit)
 		{
-			disableComponents();
-
-			if (intCourseIndex < 0 && intSectionIndex < 0)
-			{
-				setIndex("course", 0);
-				setIndex("section", 0);
-			}
-			else if (intCourseIndex < 0)
-			{
-				setIndex("course", intSectionCourses[comboBoxNotesSearchSections.getSelectedIndex()]);
-			}
-			else if (intSectionIndex < 0)
-			{
-				setIndex("section", 0);
-			}
+			setEnabled(false);
+			setCourseSectionIndex();
 
 			int section = intSectionIndex;
 
@@ -1562,6 +1839,10 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 			setComboBoxSelectedIndex(comboBoxNoteEditCourses, stringTemporaryCourses, intCourseIndex);
 			setSections(intCourseIndex);
 			setComboBoxSelectedIndex(comboBoxNoteEditSections, stringTemporarySections, section);
+
+			textFieldNoteEditNoteName.setText(acmeNote.getCourse(intCourseIndex).getSection(intSectionIndex).getNote(intNoteIndex).getNoteName());
+			textAreaNoteEditNoteText.setText(acmeNote.getCourse(intCourseIndex).getSection(intSectionIndex).getNote(intNoteIndex).getNoteText());
+
 			showCard("NoteEdit");
 
 			comboBoxNoteEditCourses.requestFocus();
@@ -1574,12 +1855,13 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 
 				setComboBoxSelectedIndex(comboBoxNotesSearchCourses, stringCourses, intCourseIndex + 1);
 				setComboBoxSelectedIndex(comboBoxNotesSearchSections, stringSections, section);
+				setButtonNoteNullNoteAddEnabled();
 				showCard("NoteNull");
-				enableComponents();
+				setEnabled(true);
 			}
 			else
 			{
-				showErrorMessage("Unable to add section. Please try again.");
+				showErrorMessage(this, "Unable to add section. Please try again.");
 			}
 		}
 		else if (e.getSource() == buttonSectionDeleteSubmit)
@@ -1602,12 +1884,13 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 
 				setSectionsAll(intCourseIndex);
 				setComboBoxSelectedIndex(comboBoxNotesSearchSections, stringSections, comboBoxNotesSearchSections.getSelectedIndex());
+				setButtonNoteNullNoteAddEnabled();
 				showCard("NoteNull");
-				enableComponents();
+				setEnabled(true);
 			}
 			else
 			{
-				showErrorMessage("Unable to delete section. Please try again.");
+				showErrorMessage(this, "Unable to delete section. Please try again.");
 			}
 		}
 		else if (e.getSource() == buttonSectionEditSubmit)
@@ -1623,52 +1906,31 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 				setSectionsAll(intCourseIndex);
 				setComboBoxSelectedIndex(comboBoxNotesSearchSections, stringSections, comboBoxNotesSearchSections.getSelectedIndex());
 				showCard("NoteNull");
-				enableComponents();
+				setEnabled(true);
 			}
 			else
 			{
-				showErrorMessage("Unable to edit section. Please try again.");
+				showErrorMessage(this, "Unable to edit section. Please try again.");
 			}
 		}
 		else if (e.getSource() == checkBoxCourseDelete)
 		{
-			if (checkBoxCourseDelete.isSelected() == true)
-			{
-				buttonCourseDeleteSubmit.setEnabled(true);
-			}
-			else
-			{
-				buttonCourseDeleteSubmit.setEnabled(false);
-			}
+			setCheckBoxIsSelected(checkBoxCourseDelete, buttonCourseDeleteSubmit);
 		}
 		else if (e.getSource() == checkBoxNoteDelete)
 		{
-			if (checkBoxNoteDelete.isSelected() == true)
-			{
-				buttonNoteDeleteSubmit.setEnabled(true);
-			}
-			else
-			{
-				buttonNoteDeleteSubmit.setEnabled(false);
-			}
+			setCheckBoxIsSelected(checkBoxNoteDelete, buttonNoteDeleteSubmit);
 		}
 		else if (e.getSource() == checkBoxSectionDelete)
 		{
-			if (checkBoxSectionDelete.isSelected() == true)
-			{
-				buttonSectionDeleteSubmit.setEnabled(true);
-			}
-			else
-			{
-				buttonSectionDeleteSubmit.setEnabled(false);
-			}
+			setCheckBoxIsSelected(checkBoxSectionDelete, buttonSectionDeleteSubmit);
 		}
 		else if (e.getSource() == comboBoxCourseDeleteCourses)
 		{
 			setIndex("course", intTemporaryCourses[comboBoxCourseDeleteCourses.getSelectedIndex()]);
 
-			buttonCourseDeleteSubmit.setEnabled(false);
 			checkBoxCourseDelete.setSelected(false);
+			buttonCourseDeleteSubmit.setEnabled(false);
 		}
 		else if (e.getSource() == comboBoxCourseEditCourses)
 		{
@@ -1682,6 +1944,21 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 			setIndex("section", 0);
 			setSections(intCourseIndex);
 			setComboBoxSelectedIndex(comboBoxNoteAddSections, stringTemporarySections, intSectionIndex);
+
+			if (acmeNote.getCourse(intCourseIndex).getSections().size() > 0)
+			{
+				comboBoxNoteAddSections.setEnabled(true);
+				textFieldNoteAddNoteName.setEditable(true);
+				textAreaNoteAddNoteText.setEditable(true);
+				buttonNoteAddSubmit.setEnabled(true);
+			}
+			else
+			{
+				comboBoxNoteAddSections.setEnabled(false);
+				textFieldNoteAddNoteName.setEditable(false);
+				textAreaNoteAddNoteText.setEditable(false);
+				buttonNoteAddSubmit.setEnabled(false);
+			}
 		}
 		else if (e.getSource() == comboBoxNoteAddSections)
 		{
@@ -1692,7 +1969,22 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 			setIndex("course", intTemporaryCourses[comboBoxNoteEditCourses.getSelectedIndex()]);
 			setIndex("section", 0);
 			setSections(intCourseIndex);
-			setComboBoxSelectedIndex(comboBoxNoteAddSections, stringTemporarySections, intSectionIndex);
+			setComboBoxSelectedIndex(comboBoxNoteEditSections, stringTemporarySections, intSectionIndex);
+
+			if (acmeNote.getCourse(intCourseIndex).getSections().size() > 0)
+			{
+				comboBoxNoteEditSections.setEnabled(true);
+				textFieldNoteEditNoteName.setEditable(true);
+				textAreaNoteEditNoteText.setEditable(true);
+				buttonNoteEditSubmit.setEnabled(true);
+			}
+			else
+			{
+				comboBoxNoteEditSections.setEnabled(false);
+				textFieldNoteEditNoteName.setEditable(false);
+				textAreaNoteEditNoteText.setEditable(false);
+				buttonNoteEditSubmit.setEnabled(false);
+			}
 		}
 		else if (e.getSource() == comboBoxNoteEditSections)
 		{
@@ -1707,6 +1999,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 			setComboBoxSelectedIndex(comboBoxNotesSearchSections, stringSections, intSectionIndex);
 			setNotesAll(intCourseIndex, intSectionIndex);
 			setListSelectedIndex(listNotes, stringNotes, intNoteIndex);
+			setButtonNoteNullNoteAddEnabled();
 		}
 		else if (e.getSource() == comboBoxNotesSearchSections)
 		{
@@ -1725,27 +2018,14 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 			setIndex("section", 0);
 			setSections(intCourseIndex);
 			setComboBoxSelectedIndex(comboBoxSectionDeleteSections, stringTemporarySections, intSectionIndex);
-
-			if (acmeNote.getCourse(intCourseIndex).getSections().size() > 0)
-			{
-				checkBoxSectionDelete.setEnabled(true);
-				comboBoxSectionDeleteSections.setEnabled(true);
-			}
-			else
-			{
-				checkBoxSectionDelete.setEnabled(false);
-				comboBoxSectionDeleteSections.setEnabled(false);
-			}
-
-			buttonSectionDeleteSubmit.setEnabled(false);
-			checkBoxSectionDelete.setSelected(false);
+			setSectionDeleteEnabledSelected();
 		}
 		else if (e.getSource() == comboBoxSectionDeleteSections)
 		{
 			setIndex("section", intTemporarySections[comboBoxSectionDeleteSections.getSelectedIndex()]);
 
-			buttonSectionDeleteSubmit.setEnabled(false);
 			checkBoxSectionDelete.setSelected(false);
+			buttonSectionDeleteSubmit.setEnabled(false);
 		}
 		else if (e.getSource() == comboBoxSectionEditCourses)
 		{
@@ -1753,21 +2033,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 			setIndex("section", 0);
 			setSections(intCourseIndex);
 			setComboBoxSelectedIndex(comboBoxSectionEditSections, stringTemporarySections, intSectionIndex);
-
-			if (acmeNote.getCourse(intCourseIndex).getSections().size() > 0)
-			{
-				buttonSectionEditSubmit.setEnabled(true);
-				comboBoxSectionEditSections.setEnabled(true);
-				textFieldSectionEditSectionName.setEnabled(true);
-				textFieldSectionEditSectionName.setText(comboBoxSectionEditSections.getSelectedItem().toString());
-			}
-			else
-			{
-				buttonSectionEditSubmit.setEnabled(false);
-				comboBoxSectionEditSections.setEnabled(false);
-				textFieldSectionEditSectionName.setEnabled(false);
-				textFieldSectionEditSectionName.setText("");
-			}
+			setSectionEditEditableEnabledText();
 		}
 		else if (e.getSource() == comboBoxSectionEditSections)
 		{
@@ -1777,7 +2043,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 		}
 		else if (e.getSource() == menuItemCourseAdd)
 		{
-			disableComponents();
+			setEnabled(false);
 
 			textFieldCourseAddCourseName.setText("");
 
@@ -1787,18 +2053,13 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 		}
 		else if (e.getSource() == menuItemCourseDelete)
 		{
-			disableComponents();
-
-			if (intCourseIndex < 0)
-			{
-				setIndex("course", 0);
-			}
-
+			setEnabled(false);
+			setCourseIndex();
 			setCourses();
 			setComboBoxSelectedIndex(comboBoxCourseDeleteCourses, stringTemporaryCourses, intCourseIndex);
 
-			buttonCourseDeleteSubmit.setEnabled(false);
 			checkBoxCourseDelete.setSelected(false);
+			buttonCourseDeleteSubmit.setEnabled(false);
 
 			showCard("CourseDelete");
 
@@ -1806,13 +2067,8 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 		}
 		else if (e.getSource() == menuItemCourseEdit)
 		{
-			disableComponents();
-
-			if (intCourseIndex < 0)
-			{
-				setIndex("course", 0);
-			}
-
+			setEnabled(false);
+			setCourseIndex();
 			setCourses();
 			setComboBoxSelectedIndex(comboBoxCourseEditCourses, stringTemporaryCourses, intCourseIndex);
 
@@ -1830,7 +2086,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 		}
 		else if (e.getSource() == menuItemHelpAbout)
 		{
-			JOptionPane.showMessageDialog(null, "AcmeNote\nVersion: 1.1\nDate: 2014.04.12\n\nTeam Acme:\nCurtis Nixon\nJason Langevin\nLacey Taylor\nMatt Harker\nMax Marshall\nShaun Christensen", "About", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(this, "AcmeNote\nVersion: 1.3\nDate: 2014.04.14\n\nTeam Acme:\nCurtis Nixon\nJason Langevin\nLacey Taylor\nMatt Harker\nMax Marshall\nShaun Christensen", "About", JOptionPane.PLAIN_MESSAGE);
 		}
 		else if (e.getSource() == menuItemHelpDocumentation)
 		{
@@ -1847,15 +2103,14 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 				JOptionPane.showMessageDialog(null, exception.getMessage(), "URI Syntax Exception", JOptionPane.ERROR_MESSAGE);
 			}
 		}
+		else if (e.getSource() == menuItemHelpShortcutKeys)
+		{
+			JOptionPane.showMessageDialog(this, "Menu: Alt\n\nFile: Alt + F\n     Quit: Alt + F, then Alt + Q\n\nCourse: Alt + C\n     Add: Alt + C, then Alt + O\n     Delete: Alt + C, then Alt + U\n     Edit: Alt + C, then Alt + R\n\nSection: Alt + S\n     Add: Alt + S, then Alt + T\n     Delete: Alt + S, then Alt + I\n     Edit: Alt + S, then Alt + E\n\nHelp: Alt + H\n     About: Alt + H, then Alt + A\n     Documentation: Alt + H, then Alt + D\n     Shortcut Keys: Alt + H, then Alt + K", "Shortcut Keys", JOptionPane.PLAIN_MESSAGE);
+		}
 		else if (e.getSource() == menuItemSectionAdd)
 		{
-			disableComponents();
-
-			if (intCourseIndex < 0)
-			{
-				setIndex("course", 0);
-			}
-
+			setEnabled(false);
+			setCourseIndex();
 			setCourses();
 			setComboBoxSelectedIndex(comboBoxSectionAddCourses, stringTemporaryCourses, intCourseIndex);
 
@@ -1865,27 +2120,10 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 
 			comboBoxSectionAddCourses.requestFocus();
 		}
-		else if (e.getSource() == menuItemHelpShortcutKeys)
-		{
-			JOptionPane.showMessageDialog(null, "Menu: Alt\n\nFile: Alt + F\n     Quit: Alt + F, then Alt + Q\n\nCourse: Alt + C\n     Add: Alt + C, then Alt + O\n     Delete: Alt + C, then Alt + U\n     Edit: Alt + C, then Alt + R\n\nSection: Alt + S\n     Add: Alt + S, then Alt + T\n     Delete: Alt + S, then Alt + I\n     Edit: Alt + S, then Alt + E\n\nHelp: Alt + H\n     About: Alt + H, then Alt + A\n     Documentation: Alt + H, then Alt + D\n     Shortcut Keys: Alt + H, then Alt + K", "Shortcut Keys", JOptionPane.INFORMATION_MESSAGE);
-		}
 		else if (e.getSource() == menuItemSectionDelete)
 		{
-			disableComponents();
-
-			if (intCourseIndex < 0 && intSectionIndex < 0)
-			{
-				setIndex("course", 0);
-				setIndex("section", 0);
-			}
-			else if (intCourseIndex < 0)
-			{
-				setIndex("course", intSectionCourses[comboBoxNotesSearchSections.getSelectedIndex()]);
-			}
-			else if (intSectionIndex < 0)
-			{
-				setIndex("section", 0);
-			}
+			setEnabled(false);
+			setCourseSectionIndex();
 
 			int section = intSectionIndex;
 
@@ -1893,42 +2131,15 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 			setComboBoxSelectedIndex(comboBoxSectionDeleteCourses, stringTemporaryCourses, intCourseIndex);
 			setSections(intCourseIndex);
 			setComboBoxSelectedIndex(comboBoxSectionDeleteSections, stringTemporarySections, section);
-
-			if (acmeNote.getCourse(intCourseIndex).getSections().size() > 0)
-			{
-				checkBoxSectionDelete.setEnabled(true);
-				comboBoxSectionDeleteSections.setEnabled(true);
-			}
-			else
-			{
-				checkBoxSectionDelete.setEnabled(false);
-				comboBoxSectionDeleteSections.setEnabled(false);
-			}
-
-			buttonSectionDeleteSubmit.setEnabled(false);
-			checkBoxSectionDelete.setSelected(false);
-
+			setSectionDeleteEnabledSelected();
 			showCard("SectionDelete");
 
 			comboBoxSectionDeleteCourses.requestFocus();
 		}
 		else if (e.getSource() == menuItemSectionEdit)
 		{
-			disableComponents();
-
-			if (intCourseIndex < 0 && intSectionIndex < 0)
-			{
-				setIndex("course", 0);
-				setIndex("section", 0);
-			}
-			else if (intCourseIndex < 0)
-			{
-				setIndex("course", intSectionCourses[comboBoxNotesSearchSections.getSelectedIndex()]);
-			}
-			else if (intSectionIndex < 0)
-			{
-				setIndex("section", 0);
-			}
+			setEnabled(false);
+			setCourseSectionIndex();
 
 			int section = intSectionIndex;
 
@@ -1936,22 +2147,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 			setComboBoxSelectedIndex(comboBoxSectionEditCourses, stringTemporaryCourses, intCourseIndex);
 			setSections(intCourseIndex);
 			setComboBoxSelectedIndex(comboBoxSectionEditSections, stringTemporarySections, section);
-
-			if (acmeNote.getCourse(intCourseIndex).getSections().size() > 0)
-			{
-				buttonSectionEditSubmit.setEnabled(true);
-				comboBoxSectionEditSections.setEnabled(true);
-				textFieldSectionEditSectionName.setEnabled(true);
-				textFieldSectionEditSectionName.setText(comboBoxSectionEditSections.getSelectedItem().toString());
-			}
-			else
-			{
-				buttonSectionEditSubmit.setEnabled(false);
-				comboBoxSectionEditSections.setEnabled(false);
-				textFieldSectionEditSectionName.setEnabled(false);
-				textFieldSectionEditSectionName.setText("");
-			}
-
+			setSectionEditEditableEnabledText();
 			showCard("SectionEdit");
 
 			comboBoxSectionEditCourses.requestFocus();
@@ -1959,6 +2155,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	}
 
 	// list selection event listener
+
 
 	/**
 	 * Fired by <tt>JList</tt> selection events.
@@ -2009,6 +2206,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	{
 	}
 
+
 	/**
 	 * Fired by <tt>JMenu</tt> selected event.
 	 */
@@ -2049,14 +2247,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 				}
 				else
 				{
-					int i = 0;
-
-					for (int j = 0; j < acmeNote.getCourses().size(); j++)
-					{
-						i += acmeNote.getCourse(j).getSections().size();
-					}
-
-					if (i > 0)
+					if (getSectionCount() > 0)
 					{
 						menuItemSectionDelete.setEnabled(true);
 						menuItemSectionEdit.setEnabled(true);
@@ -2139,37 +2330,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	// utility methods
 
 	/**
-	 * Modal disable of navigation components.  
-	 */
-	private void disableComponents()
-	{
-		buttonNotesSearchCancel.setEnabled(false);
-		buttonNotesSearchSearch.setEnabled(false);
-		comboBoxNotesSearchCourses.setEnabled(false);
-		comboBoxNotesSearchSections.setEnabled(false);
-		menuCourse.setEnabled(false);
-		menuSection.setEnabled(false);
-		listNotes.setEnabled(false);
-		textFieldNotesSearch.setEnabled(false);
-	}
-
-	/**
-	 * Modal enable of navigation components.  
-	 */
-	private void enableComponents()
-	{
-		buttonNotesSearchCancel.setEnabled(true);
-		buttonNotesSearchSearch.setEnabled(true);
-		comboBoxNotesSearchCourses.setEnabled(true);
-		comboBoxNotesSearchSections.setEnabled(true);
-		menuCourse.setEnabled(true);
-		menuSection.setEnabled(true);
-		listNotes.setEnabled(true);
-		textFieldNotesSearch.setEnabled(true);
-	}
-
-	/**
-	 * Extracts <tt>AcmeNote</tt> Javadoc documentation.
+	 * Extracts <tt>AcmeNote</tt> object's Javadoc documentation.
 	 * 
 	 * @return <tt>URI</tt> index of documentation. 
 	 * @throws <tt>IOException</tt> <tt>Exception</tt> if unable to read or write to disk.
@@ -2247,8 +2408,43 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 		return uniformResourceIdentifier;
 	}
 
+
 	/**
-	 * Regular expression search <tt>Note</tt> object note name and note text fields. 
+	 * Sets objects' <tt>Boolean</tt> enabled property.
+	 * 
+	 * @param b <tt>Boolean</tt> enabled value.
+	 */
+	public void setEnabled(boolean b)
+	{
+		menuCourse.setEnabled(b);
+		menuSection.setEnabled(b);
+		comboBoxNotesSearchCourses.setEnabled(b);
+		comboBoxNotesSearchSections.setEnabled(b);
+		textFieldNotesSearch.setEditable(b);
+		buttonNotesSearchCancel.setEnabled(b);
+		buttonNotesSearchSearch.setEnabled(b);
+		listNotes.setEnabled(b);
+	}
+
+	/**
+	 * Gets <tt>Section</tt> objects count.
+	 * 
+	 * @return <tt>Integer</tt> count of sections.
+	 */
+	private int getSectionCount()
+	{
+		int count = 0;
+
+		for (int i = 0; i < acmeNote.getCourses().size(); i++)
+		{
+			count += acmeNote.getCourse(i).getSections().size();
+		}
+
+		return count;
+	}
+
+	/**
+	 * Regular expression search of <tt>Note</tt> objects' note names and note text fields. 
 	 * 
 	 * @param string <tt>String</tt> object containing the desired input value.
 	 */
@@ -2292,6 +2488,39 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	}
 
 	/**
+	 * Sets <tt>JButton</tt> object's <tt>Boolean</tt> enabled property.
+	 */
+	private void setButtonNoteNullNoteAddEnabled()
+	{
+		if (acmeNote.getCourses().size() > 0 && ((intCourseIndex >= 0 && acmeNote.getCourse(intCourseIndex).getSections().size() > 0) || (intCourseIndex == -1 && getSectionCount() > 0)))
+		{
+			buttonNoteNullNoteAdd.setEnabled(true);
+		}
+		else
+		{
+			buttonNoteNullNoteAdd.setEnabled(false);
+		}
+	}
+
+	/**
+	 * Sets <tt>JCheckBox</tt> object's <tt>Boolean</tt> selected property.
+	 * 
+	 * @param checkBox <tt>JCheckBox</tt> object to check if selected.
+	 * @param button <tt>JButton</tt> object to set selected value.
+	 */
+	private void setCheckBoxIsSelected(JCheckBox checkBox, JButton button)
+	{
+		if (checkBox.isSelected() == true)
+		{
+			button.setEnabled(true);
+		}
+		else
+		{
+			button.setEnabled(false);
+		}
+	}
+
+	/**
 	 * Sets the selected index for a <tt>JComboBox</tt>.
 	 * 
 	 * @param comboBox <tt>JComboBox</tt> object to update.
@@ -2300,12 +2529,12 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	 */
 	private void setComboBoxSelectedIndex(JComboBox<String> comboBox, String[] string, int index)
 	{
+		comboBox.setModel(new DefaultComboBoxModel<String>(string));
+
 		if (index < 0)
 		{
 			index = 0;
 		}
-
-		comboBox.setModel(new DefaultComboBoxModel<String>(string));
 
 		if (string.length > 0)
 		{
@@ -2314,7 +2543,18 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	}
 
 	/**
-	 * Sets temporary <tt>Integer</tt> <tt>Array</tt> of <tt>Course</tt> object indices and temporary <tt>String</tt> <tt>Array</tt> of <tt>Course</tt> object course name.
+	 * Sets <tt>Course</tt> object index.
+	 */
+	private void setCourseIndex()
+	{
+		if (intCourseIndex < 0)
+		{
+			setIndex("course", 0);
+		}
+	}
+
+	/**
+	 * Sets temporary <tt>Integer</tt> <tt>Array</tt> of <tt>Course</tt> objects' indices and temporary <tt>String</tt> <tt>Array</tt> of <tt>Course</tt> objects' course names.
 	 */
 	private void setCourses()
 	{
@@ -2329,7 +2569,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	}
 
 	/**
-	 * Sets <tt>Integer</tt> <tt>Array</tt> of <tt>Course</tt> object indices and <tt>String</tt> <tt>Array</tt> of <tt>Course</tt> object course name.
+	 * Sets <tt>Integer</tt> <tt>Array</tt> of <tt>Course</tt> objects' indices and <tt>String</tt> <tt>Array</tt> of <tt>Course</tt> objects' course names.
 	 */
 	private void setCoursesAll()
 	{
@@ -2346,10 +2586,30 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	}
 
 	/**
-	 * Sets <tt>Integer</tt> value of <tt>Course</tt>, <tt>Section</tt>, or <tt>Note</tt> object index.
+	 * Sets <tt>Course</tt> object and <tt>Section</tt> object index.
+	 */
+	private void setCourseSectionIndex()
+	{
+		if (intCourseIndex < 0 && intSectionIndex < 0)
+		{
+			setIndex("course", 0);
+			setIndex("section", 0);
+		}
+		else if (intCourseIndex < 0)
+		{
+			setIndex("course", intSectionCourses[comboBoxNotesSearchSections.getSelectedIndex()]);
+		}
+		else if (intSectionIndex < 0)
+		{
+			setIndex("section", 0);
+		}
+	}
+
+	/**
+	 * Sets <tt>Course</tt>, <tt>Section</tt>, or <tt>Note</tt> object's index.
 	 * 
-	 * @param string <tt>String</tt> <tt>Note</tt>, <tt>Section</tt>, or <tt>Note</tt> object index identifier.
-	 * @param index <tt>Integer</tt> value of index.
+	 * @param string <tt>String</tt> identifier of <tt>Course</tt>, <tt>Section</tt>, or <tt>Note</tt> object.
+	 * @param index <tt>Integer</tt> index of object.
 	 */
 	private void setIndex(String string, int index)
 	{
@@ -2367,7 +2627,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 		}
 		else
 		{
-			System.out.println("Unknown index");
+			showErrorMessage(this, "Unable to set '" + string + "' index. Please try again.");
 		}
 	}
 
@@ -2385,7 +2645,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	}
 
 	/**
-	 * Sets temporary <tt>Integer</tt> <tt>Array</tt> of <tt>Note</tt> object <tt>Course</tt> object indices, temporary <tt>Integer</tt> <tt>Array</tt> of <tt>Note</tt> object <tt>Section</tt> object indices, temporary <tt>Integer</tt> <tt>Array</tt> of <tt>Note</tt> object indices, and temporary <tt>String</tt> <tt>Array</tt> of <tt>Note</tt> object note name and note text.
+	 * Sets temporary <tt>Integer</tt> <tt>Array</tt> of <tt>Note</tt> objects' associated <tt>Course</tt> objects' indices, temporary <tt>Integer</tt> <tt>Array</tt> of <tt>Note</tt> objects' associated <tt>Section</tt> objects' indices, temporary <tt>Integer</tt> <tt>Array</tt> of <tt>Note</tt> objects' indices, and temporary <tt>String</tt> <tt>Array</tt> of <tt>Note</tt> objects' notes names and note text.
 	 * 
 	 * @param course <tt>Integer</tt> index of <tt>Course</tt> object.
 	 * @param section <tt>Integer</tt> index of <tt>Section</tt> object.
@@ -2407,7 +2667,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	}
 
 	/**
-	 * Sets <tt>Integer</tt> <tt>Array</tt> of <tt>Note</tt> object <tt>Course</tt> object indices, temporary <tt>Integer</tt> <tt>Array</tt> of <tt>Note</tt> object <tt>Section</tt> object indices, temporary <tt>Integer</tt> <tt>Array</tt> of <tt>Note</tt> object indices, and temporary <tt>String</tt> <tt>Array</tt> of <tt>Note</tt> object note name and note text.
+	 * Sets <tt>Integer</tt> <tt>Array</tt> of <tt>Note</tt> objects' associated <tt>Course</tt> objects' indices, <tt>Integer</tt> <tt>Array</tt> of <tt>Note</tt> objects' associated <tt>Section</tt> objects' indices, <tt>Integer</tt> <tt>Array</tt> of <tt>Note</tt> objects' indices, and <tt>String</tt> <tt>Array</tt> of <tt>Note</tt> objects' notes names and note text.
 	 * 
 	 * @param course <tt>Integer</tt> index of <tt>Course</tt> object.
 	 * @param section <tt>Integer</tt> index of <tt>Section</tt> object.
@@ -2507,7 +2767,47 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	}
 
 	/**
-	 * Sets temporary <tt>Integer</tt> <tt>Array</tt> of <tt>Section</tt> object <tt>Course</tt> object indices, temporary <tt>Integer</tt> <tt>Array</tt> of <tt>Section</tt> object indices, and temporary <tt>String</tt> <tt>Array</tt> of <tt>Section</tt> object section name.
+	 * Sets objects' <tt>Boolean</tt> enabled and selected properties.
+	 */
+	private void setSectionDeleteEnabledSelected()
+	{
+		if (acmeNote.getCourse(intCourseIndex).getSections().size() > 0)
+		{
+			comboBoxSectionDeleteSections.setEnabled(true);
+			checkBoxSectionDelete.setEnabled(true);
+		}
+		else
+		{
+			comboBoxSectionDeleteSections.setEnabled(false);
+			checkBoxSectionDelete.setEnabled(false);
+		}
+
+		checkBoxSectionDelete.setSelected(false);
+		buttonSectionDeleteSubmit.setEnabled(false);
+	}
+	/**
+	 * Sets objects' <tt>Boolean</tt> editable, enabled, and text properties. 
+	 */
+	private void setSectionEditEditableEnabledText()
+	{
+		if (acmeNote.getCourse(intCourseIndex).getSections().size() > 0)
+		{
+			comboBoxSectionEditSections.setEnabled(true);
+			textFieldSectionEditSectionName.setEditable(true);
+			textFieldSectionEditSectionName.setText(comboBoxSectionEditSections.getSelectedItem().toString());
+			buttonSectionEditSubmit.setEnabled(true);
+		}
+		else
+		{
+			comboBoxSectionEditSections.setEnabled(false);
+			textFieldSectionEditSectionName.setEditable(false);
+			textFieldSectionEditSectionName.setText("");
+			buttonSectionEditSubmit.setEnabled(false);
+		}
+	}
+
+	/**
+	 * Sets temporary <tt>Integer</tt> <tt>Array</tt> of <tt>Section</tt> objects' associated <tt>Course</tt> objects' indices, temporary <tt>Integer</tt> <tt>Array</tt> of <tt>Section</tt> objects' indices, and temporary <tt>String</tt> <tt>Array</tt> of <tt>Section</tt> objects' section names.
 	 * 
 	 * @param course <tt>Integer</tt> index of <tt>Course</tt> object.
 	 */
@@ -2526,7 +2826,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	}
 
 	/**
-	 * Sets <tt>Integer</tt> <tt>Array</tt> of <tt>Section</tt> object <tt>Course</tt> object indices, temporary <tt>Integer</tt> <tt>Array</tt> of <tt>Section</tt> object indices, and temporary <tt>String</tt> <tt>Array</tt> of <tt>Section</tt> object section name.
+	 * Sets <tt>Integer</tt> <tt>Array</tt> of <tt>Section</tt> objects' associated <tt>Course</tt> objects' indices, <tt>Integer</tt> <tt>Array</tt> of <tt>Section</tt> objects' indices, and <tt>String</tt> <tt>Array</tt> of <tt>Section</tt> objects' section names.
 	 * 
 	 * @param course <tt>Integer</tt> index of <tt>Course</tt> object.
 	 */
@@ -2551,12 +2851,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 		}
 		else
 		{
-			int i = 0;
-
-			for (int j = 0; j < acmeNote.getCourses().size(); j++)
-			{
-				i += acmeNote.getCourse(j).getSections().size();
-			}
+			int i = getSectionCount();
 
 			intSectionCourses = new int[i + 1];
 			intSectionCourses[0] = -1;
@@ -2589,7 +2884,14 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	 */
 	private void showCard(String string)
 	{
-		cardLayout.show(panelCards, string);
+		if (string.equals("CourseAdd") || string.equals("CourseDelete") || string.equals("CourseEdit") || string.equals("NoteAdd") || string.equals("NoteDelete") || string.equals("NoteEdit") || string.equals("NoteNull") || string.equals("NoteView") || string.equals("SectionAdd") || string.equals("SectionDelete") || string.equals("SectionEdit"))
+		{
+			cardLayout.show(panelCards, string);
+		}
+		else
+		{
+			showErrorMessage(this, "Unable to show '" + string + "' panel. Please try again.");
+		}
 	}
 
 	/**
@@ -2597,13 +2899,13 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	 * 
 	 * @param string <tt>String</tt> object containing the error message.
 	 */
-	private void showErrorMessage(String string)
+	private void showErrorMessage(AcmeNoteGraphicalUserInterface frame, String string)
 	{
-		JOptionPane.showMessageDialog(null, "Error", string, JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(frame, "Error", string, JOptionPane.ERROR_MESSAGE);
 	}
 
 	// main method
-	
+
 	/**
 	 * Main method to launch graphical user interface.
 	 * 

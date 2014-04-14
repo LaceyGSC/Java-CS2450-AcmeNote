@@ -563,7 +563,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	 *
 	 * @return <tt>Box</tt> object.
 	 */
-	public Box boxCourseAdd()
+	private Box boxCourseAdd()
 	{
 		// components
 
@@ -616,7 +616,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	 *
 	 * @return <tt>Box</tt> object.
 	 */
-	public Box boxCourseDelete()
+	private Box boxCourseDelete()
 	{
 		// components
 
@@ -689,7 +689,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	 *
 	 * @return <tt>Box</tt> object.
 	 */
-	public Box boxCourseEdit()
+	private Box boxCourseEdit()
 	{
 		// components
 
@@ -757,7 +757,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	 *
 	 * @return <tt>Box</tt> object.
 	 */
-	public Box boxNoteAdd()
+	private Box boxNoteAdd()
 	{
 		// components
 
@@ -850,7 +850,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	 *
 	 * @return <tt>Box</tt> object.
 	 */
-	public Box boxNoteDelete()
+	private Box boxNoteDelete()
 	{
 		// components
 
@@ -902,7 +902,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	 *
 	 * @return <tt>Box</tt> object.
 	 */
-	public Box boxNoteEdit()
+	private Box boxNoteEdit()
 	{
 		// components
 
@@ -995,7 +995,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	 *
 	 * @return <tt>Box</tt> object.
 	 */
-	public Box boxNoteView()
+	private Box boxNoteView()
 	{
 		// components
 
@@ -1087,7 +1087,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	 *
 	 * @return <tt>Box</tt> object.
 	 */
-	public Box boxSectionAdd()
+	private Box boxSectionAdd()
 	{
 		// components
 
@@ -1155,7 +1155,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	 *
 	 * @return <tt>Box</tt> object.
 	 */
-	public Box boxSectionDelete()
+	private Box boxSectionDelete()
 	{
 		// components
 
@@ -1243,7 +1243,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	 *
 	 * @return <tt>Box</tt> object.
 	 */
-	public Box boxSectionEdit()
+	private Box boxSectionEdit()
 	{
 		// components
 
@@ -1324,7 +1324,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	/**
 	 * Calls associated methods to create graphical user interface.
 	 */
-	public void graphicalUserInterfaceCreate()
+	private void graphicalUserInterfaceCreate()
 	{
 		setIndex("course", -1);
 		setIndex("section", -1);
@@ -1401,7 +1401,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	 *
 	 * @return <tt>JPanel</tt> object.
 	 */
-	public JPanel panelCards()
+	private JPanel panelCards()
 	{
 		panelCards = new JPanel(new CardLayout());
 		panelCards.add(panelNoteNull(), "NoteNull");
@@ -1429,7 +1429,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	 *
 	 * @return <tt>JPanel</tt> object.
 	 */
-	public JPanel panelCreate()
+	private JPanel panelCreate()
 	{
 		JPanel panelMenu = new JPanel(new BorderLayout());
 		panelMenu.add(menuCreate(), BorderLayout.NORTH);
@@ -1454,7 +1454,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	 *
 	 * @return <tt>JPanel</tt> object.
 	 */
-	public JPanel panelNoteNull()
+	private JPanel panelNoteNull()
 	{
 		// components
 
@@ -1495,7 +1495,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	 *
 	 * @return <tt>JPanel</tt> object.
 	 */
-	public JPanel panelNotesSearch()
+	private JPanel panelNotesSearch()
 	{
 		// components
 
@@ -1558,7 +1558,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	/**
 	 * Register action listeners.
 	 */
-	public void actionListenersAdd()
+	private void actionListenersAdd()
 	{
 		buttonCourseAddCancel.addActionListener(this);
 		buttonCourseAddSubmit.addActionListener(this);
@@ -1619,7 +1619,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	/**
 	 * Register list selection listeners.
 	 */
-	public void listSelectionListenersAdd()
+	private void listSelectionListenersAdd()
 	{
 		listNotes.addListSelectionListener(this);
 	}
@@ -1627,7 +1627,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	/**
 	 * Register menu listeners.
 	 */
-	public void menuListenersAdd()
+	private void menuListenersAdd()
 	{
 		menuCourse.addMenuListener(this);
 		menuSection.addMenuListener(this);
@@ -1636,7 +1636,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	/**
 	 * Register window listeners.
 	 */
-	public void windowListenersAdd()
+	private void windowListenersAdd()
 	{
 		addWindowListener(this);
 	}
@@ -2336,7 +2336,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	 * @throws <tt>IOException</tt> <tt>Exception</tt> if unable to read or write to disk.
 	 * @throws <tt>URISyntaxException</tt> <tt>Exception</tt> if uniform resource identifier is poorly formatted.
 	 */
-	public URI acmeNoteJavadoc() throws IOException, URISyntaxException
+	private URI acmeNoteJavadoc() throws IOException, URISyntaxException
 	{
 		if (uniformResourceIdentifier == null)
 		{
@@ -2413,7 +2413,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	 * 
 	 * @return <tt>Integer</tt> count of sections.
 	 */
-	public int getSectionCount()
+	private int getSectionCount()
 	{
 		int count = 0;
 
@@ -2430,7 +2430,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	 * 
 	 * @param string <tt>String</tt> object containing the desired input value.
 	 */
-	public void searchNotes(String string)
+	private void searchNotes(String string)
 	{
 		if (!string.equals(""))
 		{
@@ -2472,7 +2472,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	/**
 	 * Sets <tt>JButton</tt> object's <tt>Boolean</tt> enabled property.
 	 */
-	public void setButtonNoteNullNoteAddEnabled()
+	private void setButtonNoteNullNoteAddEnabled()
 	{
 		if (acmeNote.getCourses().size() > 0 && ((intCourseIndex >= 0 && acmeNote.getCourse(intCourseIndex).getSections().size() > 0) || (intCourseIndex == -1 && getSectionCount() > 0)))
 		{
@@ -2490,7 +2490,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	 * @param checkBox <tt>JCheckBox</tt> object to check if selected.
 	 * @param button <tt>JButton</tt> object to set selected value.
 	 */
-	public void setCheckBoxIsSelected(JCheckBox checkBox, JButton button)
+	private void setCheckBoxIsSelected(JCheckBox checkBox, JButton button)
 	{
 		if (checkBox.isSelected() == true)
 		{
@@ -2509,7 +2509,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	 * @param string <tt>String</tt> <tt>Array</tt> to insert into <tt>JComboBox</tt>.
 	 * @param index <tt>Integer</tt> index to select.
 	 */
-	public void setComboBoxSelectedIndex(JComboBox<String> comboBox, String[] string, int index)
+	private void setComboBoxSelectedIndex(JComboBox<String> comboBox, String[] string, int index)
 	{
 		comboBox.setModel(new DefaultComboBoxModel<String>(string));
 
@@ -2527,7 +2527,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	/**
 	 * Sets <tt>Course</tt> object index.
 	 */
-	public void setCourseIndex()
+	private void setCourseIndex()
 	{
 		if (intCourseIndex < 0)
 		{
@@ -2538,7 +2538,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	/**
 	 * Sets temporary <tt>Integer</tt> <tt>Array</tt> of <tt>Course</tt> objects' indices and temporary <tt>String</tt> <tt>Array</tt> of <tt>Course</tt> objects' course names.
 	 */
-	public void setCourses()
+	private void setCourses()
 	{
 		intTemporaryCourses = new int[acmeNote.getCourses().size()];
 		stringTemporaryCourses = new String[acmeNote.getCourses().size()];
@@ -2553,7 +2553,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	/**
 	 * Sets <tt>Integer</tt> <tt>Array</tt> of <tt>Course</tt> objects' indices and <tt>String</tt> <tt>Array</tt> of <tt>Course</tt> objects' course names.
 	 */
-	public void setCoursesAll()
+	private void setCoursesAll()
 	{
 		intCourses = new int[acmeNote.getCourses().size() + 1];
 		intCourses[0] = -1;
@@ -2570,7 +2570,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	/**
 	 * Sets <tt>Course</tt> object and <tt>Section</tt> object index.
 	 */
-	public void setCourseSectionIndex()
+	private void setCourseSectionIndex()
 	{
 		if (intCourseIndex < 0 && intSectionIndex < 0)
 		{
@@ -2592,7 +2592,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	 * 
 	 * @param b <tt>Boolean</tt> enabled or editable value.
 	 */
-	public void setEnabledEditable(boolean b)
+	private void setEnabledEditable(boolean b)
 	{
 		menuCourse.setEnabled(b);
 		menuSection.setEnabled(b);
@@ -2610,7 +2610,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	 * @param string <tt>String</tt> identifier of <tt>Course</tt>, <tt>Section</tt>, or <tt>Note</tt> object.
 	 * @param index <tt>Integer</tt> index of object.
 	 */
-	public void setIndex(String string, int index)
+	private void setIndex(String string, int index)
 	{
 		if (string.equals("course"))
 		{
@@ -2637,7 +2637,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	 * @param string <tt>String</tt> <tt>Array</tt> to insert into <tt>JList</tt>.
 	 * @param index <tt>Integer</tt> index to select.
 	 */
-	public void setListSelectedIndex(JList<String> list, String[] string, int index)
+	private void setListSelectedIndex(JList<String> list, String[] string, int index)
 	{
 		list.setModel(new DefaultComboBoxModel<String>(string));
 		list.setSelectedIndex(index);
@@ -2649,7 +2649,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	 * @param course <tt>Integer</tt> index of <tt>Course</tt> object.
 	 * @param section <tt>Integer</tt> index of <tt>Section</tt> object.
 	 */
-	public void setNotes(int course, int section)
+	private void setNotes(int course, int section)
 	{
 		intTemporaryNoteCourses = new int[acmeNote.getCourse(course).getSection(section).getNotes().size()];
 		intTemporaryNoteSections = new int[acmeNote.getCourse(course).getSection(section).getNotes().size()];
@@ -2671,7 +2671,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	 * @param course <tt>Integer</tt> index of <tt>Course</tt> object.
 	 * @param section <tt>Integer</tt> index of <tt>Section</tt> object.
 	 */
-	public void setNotesAll(int course, int section)
+	private void setNotesAll(int course, int section)
 	{
 		if (course >= 0 && section >= 0)
 		{
@@ -2768,7 +2768,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	/**
 	 * Sets objects' <tt>Boolean</tt> enabled and selected properties.
 	 */
-	public void setSectionDeleteEnabledSelected()
+	private void setSectionDeleteEnabledSelected()
 	{
 		if (acmeNote.getCourse(intCourseIndex).getSections().size() > 0)
 		{
@@ -2784,10 +2784,11 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 		checkBoxSectionDelete.setSelected(false);
 		buttonSectionDeleteSubmit.setEnabled(false);
 	}
+
 	/**
 	 * Sets objects' <tt>Boolean</tt> editable, enabled, and text properties. 
 	 */
-	public void setSectionEditEditableEnabledText()
+	private void setSectionEditEditableEnabledText()
 	{
 		if (acmeNote.getCourse(intCourseIndex).getSections().size() > 0)
 		{
@@ -2810,7 +2811,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	 * 
 	 * @param course <tt>Integer</tt> index of <tt>Course</tt> object.
 	 */
-	public void setSections(int course)
+	private void setSections(int course)
 	{
 		intTemporarySectionCourses = new int[acmeNote.getCourse(course).getSections().size()];
 		intTemporarySections = new int[acmeNote.getCourse(course).getSections().size()];
@@ -2829,7 +2830,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	 * 
 	 * @param course <tt>Integer</tt> index of <tt>Course</tt> object.
 	 */
-	public void setSectionsAll(int course)
+	private void setSectionsAll(int course)
 	{
 		if (course >= 0)
 		{
@@ -2881,7 +2882,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	 * 
 	 * @param string <tt>String</tt> <tt>JPanel</tt> identifier.
 	 */
-	public void showCard(String string)
+	private void showCard(String string)
 	{
 		if (string.equals("CourseAdd") || string.equals("CourseDelete") || string.equals("CourseEdit") || string.equals("NoteAdd") || string.equals("NoteDelete") || string.equals("NoteEdit") || string.equals("NoteNull") || string.equals("NoteView") || string.equals("SectionAdd") || string.equals("SectionDelete") || string.equals("SectionEdit"))
 		{
@@ -2899,7 +2900,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	 * @param frame <tt>AcmeNote</tt> object to center message dialog box over.
 	 * @param string <tt>String</tt> object containing the error message.
 	 */
-	public void showErrorMessage(AcmeNoteGraphicalUserInterface frame, String string)
+	private void showErrorMessage(AcmeNoteGraphicalUserInterface frame, String string)
 	{
 		JOptionPane.showMessageDialog(frame, "Error", string, JOptionPane.ERROR_MESSAGE);
 	}

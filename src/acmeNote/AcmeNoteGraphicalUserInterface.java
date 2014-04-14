@@ -2086,7 +2086,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 		}
 		else if (e.getSource() == menuItemHelpAbout)
 		{
-			JOptionPane.showMessageDialog(this, "AcmeNote\nVersion: 1.3\nDate: 2014.04.14\n\nTeam Acme:\nCurtis Nixon\nJason Langevin\nLacey Taylor\nMatt Harker\nMax Marshall\nShaun Christensen", "About", JOptionPane.PLAIN_MESSAGE);
+			JOptionPane.showMessageDialog(this, "AcmeNote\nVersion: 1.4\nDate: 2014.04.14\n\nTeam Acme:\nCurtis Nixon\nJason Langevin\nLacey Taylor\nMatt Harker\nMax Marshall\nShaun Christensen", "About", JOptionPane.PLAIN_MESSAGE);
 		}
 		else if (e.getSource() == menuItemHelpDocumentation)
 		{
@@ -2897,6 +2897,7 @@ public final class AcmeNoteGraphicalUserInterface extends JFrame implements Acti
 	/**
 	 * Displays error message.
 	 * 
+	 * @param frame <tt>AcmeNote</tt> object to center message dialog box over.
 	 * @param string <tt>String</tt> object containing the error message.
 	 */
 	private void showErrorMessage(AcmeNoteGraphicalUserInterface frame, String string)

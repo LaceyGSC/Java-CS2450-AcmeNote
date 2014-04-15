@@ -32,7 +32,7 @@ import javax.swing.JOptionPane;
  * 
  * @author Matthew Harker, Shaun Christensen
  */
-public final class AcmeNote
+public class AcmeNote
 {
 	// fields
 

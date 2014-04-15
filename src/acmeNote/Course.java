@@ -21,7 +21,7 @@ import java.util.ArrayList;
  * 
  * @author Matthew Harker, Shaun Christensen
  */
-public final class Course implements Serializable
+public class Course implements Serializable
 {
 	// fields
 

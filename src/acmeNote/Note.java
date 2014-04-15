@@ -20,7 +20,7 @@ import java.io.Serializable;
  * 
  * @author Matthew Harker, Shaun Christensen
  */
-public final class Note implements Serializable
+public class Note implements Serializable
 {
 	// fields
 

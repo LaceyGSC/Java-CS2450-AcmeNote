@@ -12,7 +12,7 @@
  *           2014.04.11 by Shaun Christensen. Refactored graphical user interface and utility methods.
  *           2014.04.12 by Shaun Christensen. Added javadoc comments to class. Implemented Help About and Documentation methods.
  *           2014.04.13 by Shaun Christensen. Fixed bugs relating to selecting courses without sections when adding or editing notes.
- *           2014.04.14 by Shaun Christensen. Added JUnit test suites for AcmeNote, Course, Section, and Note classes. Set graphical user interface methods to public visibility to provide accessibility to JUnit tests.
+ *           2014.04.14 by Shaun Christensen. Added JUnit test suites for AcmeNote, Course, Section, and Note classes.
  *           
 ********************************************************/
 
@@ -73,7 +73,7 @@ import javax.swing.event.MenuListener;
  * @author Shaun Christensen, Lacey Taylor, Curtis Nixon
  */
 @SuppressWarnings("serial")
-public final class AcmeNoteGraphicalUserInterface extends JFrame implements ActionListener, ListSelectionListener, MenuListener, WindowListener
+public class AcmeNoteGraphicalUserInterface extends JFrame implements ActionListener, ListSelectionListener, MenuListener, WindowListener
 {
 	// components
 
